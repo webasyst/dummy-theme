@@ -3,17 +3,7 @@
 <div class="s-fixed-container" id="s-fixed-header">
     <div class="s-fixed-header">
 
-        <div class="s-column center">
-            <div class="s-search-wrapper" role="search">
-                <form method="get" action="{$wa->getUrl("site/frontend/search")}">
-                    {$_query = $smarty.get.query|default:''|escape}
-                    <input class="s-text-input" type="search" name="query" value="{if !empty($_query)}{$_query}{/if}" placeholder="[`Search`]">
-                    <input class="s-submit-input" type="submit" value="">
-                </form>
-            </div>
-        </div>
         <div class="s-column right">
-
             {if $wa->isAuthEnabled()}
                 <div class="s-info-wrapper s-user-account">
                     <div class="s-info-block">

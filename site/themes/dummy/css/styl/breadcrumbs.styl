@@ -1,10 +1,13 @@
-.s-up-content-wrapper
+.s-breadcrumbs-wrapper
     width $site_width
     margin 1.5em auto
     font-size (12/14)em
     min-height 1em
 
-    .s-breadcrumbs-wrapper
+    & + .s-main-block
+        margin-top 1em
+
+    .s-breadcrumbs-block
         color #888
 
         .s-breadcrumb-item

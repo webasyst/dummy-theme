@@ -117,7 +117,9 @@
             var delta = ( display_height - (footer_top + footer_height) );
 
             if ( delta > 0 ) {
-                $main.height(main_height + delta);
+                $main.css({
+                    "min-height": main_height + delta + "px"
+                });
             } else {
                 $main.removeAttr("style");
             }

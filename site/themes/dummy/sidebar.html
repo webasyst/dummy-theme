@@ -20,11 +20,6 @@
 {if !empty($_pages)}
     <nav class="s-nav-wrapper" role="navigation">
         <ul>
-            {if $wa->currentUrl() != $wa_app_url}
-                <li>
-                    <a href="{$wa_app_url}">[`All posts`]</a>
-                </li>
-            {/if}
             {foreach $_pages as $page}
                 {renderNavItem page=$page}
             {/foreach}

@@ -373,37 +373,41 @@ ul.tree ul a
 //    width: 200px
 
 .wa-captcha
-    padding: 7px 0 10px
+    margin: 1em 0
 
-.wa-captcha p
-    margin: 0
+    p
+        margin: 0
 
-.wa-captcha strong
-    font-size: 1.2em
+        & + p
+            margin .5em 0 0
 
-.wa-captcha p img
-    float: left  !important
-    margin-right: 5px
-    margin-top: -8px
+        img
+            height 36px
+            display: inline-block;
+            vertical-align: middle;
+            border-radius 2px
 
-.wa-captcha .wa-captcha-refresh
-    font-size: 0.8em
-    text-decoration: underline
-    color: #aaa
+    strong
+        font-size: 1.2em
 
-.wa-captcha .wa-captcha-input
-    display: inline  !important
+    .wa-captcha-refresh
+        font-size: 0.8em
+        text-decoration: underline
+        color: #aaa
 
-.wa-captcha .errormsg
-    display: inline-block
-    margin-left: 10px
+    .wa-captcha-input
+        display: inline-block  !important
 
-input.error, textarea.error
+    .errormsg
+        display: inline-block
+        margin-left: 10px
+
+input.error
+textarea.error
     border: 2px solid red
 
 .errormsg
     color: red
-    margin-left: 170px
     display: block
 
 // Multi-column layout
@@ -487,33 +491,33 @@ i.icon16
 
     &.rss
         background-position: -16px 0
-    
+
     &.facebook
         background-position: -32px 0
-    
+
     &.twitter
         background-position: -48px 0
-    
+
     &.vk
         background-position: -64px 0
-    
+
     &.gplus
         background-position: -80px 0
-    
+
     &.pinterest
         background-position: -96px 0
-    
+
     &.youtube
         background-position: -112px 0
-    
+
     &.instagram
         background-position: -128px 0
-    
+
     &.userpic20
         background-position: -2px -2px
         border-radius: 50%
         background-size: 20px 20px
-    
+
     &.color
         border-radius: 50%
         border: 1px solid rgba(0,0,0,0.2)

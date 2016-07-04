@@ -38,18 +38,16 @@
 <body>
 
 {* MAIN SITE WRAPPER *}
-<div class="s-site-wrapper">
+<div class="s-main-wrapper">
 
     {*HEADER*}
     {include file="./header.layout.html" inline}
 
-    <div class="s-up-content-wrapper">
-        {* BREADCRUMBS *}
-        {include file="./breadcrumbs.html" inline}
-    </div>
+    {* BREADCRUMBS *}
+    {include file="`$wa_active_theme_path`/breadcrumbs.html" inline}
 
     {* CONTENT AREA *}
-    <div class="s-main-container">
+    <div class="s-main-block">
 
         {* LEFT SIDEBAR *}
         {$show_sidebar = $wa->globals("hideSidebar")}
