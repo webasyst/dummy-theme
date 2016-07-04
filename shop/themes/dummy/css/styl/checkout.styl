@@ -1,0 +1,429 @@
+.s-checkout-page
+
+    .s-checkout-header
+        margin 0
+
+    .s-checkout-nav
+        $_lift = 4px
+        $_steps_height = 2.5em
+        margin 1em 0 0
+        padding 0
+
+        .s-nav-item
+            display inline-block
+            vertical-align top
+            margin 0 0 0 $_lift
+            padding 0
+            line-height $_steps_height
+
+            &:first-child
+                margin-left 0
+
+                &:before
+                    display none
+
+            &:before
+                display inline-block
+                vertical-align top
+                content "→"
+                padding 0 $_lift 0 0
+
+            a
+                display inline-block
+                vertical-align top
+                padding 0 .75em
+                cursor default
+                border-radius 2px
+                $shadow()
+
+            &.is-done
+                a
+                    color #fff
+                    background #2fa42e
+                    cursor pointer
+
+            &.is-current
+                a
+                    color #fff
+                    background #369
+
+            &.is-next
+                a
+                    color #666
+                    background #fff
+
+    .s-checkout-total
+        margin 1.5em 0 0
+
+        .s-total-label
+            display inline-block
+            margin 0 .5em 0 0
+
+        .s-total
+            display inline-block
+            font-size 1.5em
+
+    .s-steps-wrapper
+        margin: 2em 0 0
+
+        .s-step-wrapper
+
+            .s-authorized-wrapper
+                margin 0 0 2em 0
+                padding 1em
+                background #e6f9e6
+                border-radius 2px
+                $shadow()
+
+                .s-authorized-user
+                    display table
+                    width: 100%
+                    box-sizing border-box
+
+                    .left-column
+                    .right-column
+                        display table-cell
+                        vertical-align middle
+
+                    .left-column
+                        width: 50px;
+                        padding 0 1em 0 0
+                        line-height 0
+
+                        img
+                            border-radius: 50%
+                            $shadow()
+
+                .s-hint
+                    margin .5em 0 0
+                    color #666
+
+                    a
+                        color #369
+
+            .s-step-buttons
+                margin 2em 0 0
+
+            .s-step-content
+                margin: 1em 0 0
+
+                .s-contact-form
+                    .wa-form
+                        width 50%
+
+                        .wa-field
+                            margin: 0.75em 0 0
+                            color: #888
+
+                            &:first-child
+                                margin-top: 0
+
+                            .wa-name
+                                display none
+
+                            .wa-value
+                                margin: 0.5em 0 0
+
+                                .field
+                                    display block
+                                    margin: 0.5em 0 0
+
+                                    &:first-child
+                                        margin-top: 0
+
+                                    span
+                                        margin-right 8px
+
+                            &.wa-field-address-shipping
+                                .wa-value
+                                    .field > span
+                                        display none
+
+                            select
+                                display inline-block
+                                width 200px
+                                margin 1.5em 0
+                                box-sizing border-box
+
+                .s-payment-options
+                    margin: 0
+
+                    .s-payment-item
+                        margin 1em 0 0
+                        padding 1em
+                        border-radius 2px
+                        $shadow()
+
+                        &:first-child
+                            margin-left 0
+
+                        &.has-error
+                            background rgba(255,0,0,.1)
+
+                        .s-payment-header
+                            .s-payment-image
+                            .s-payment-input
+                            .s-payment-name
+                                display inline
+                                vertical-align middle
+
+                            .s-payment-image
+                            .s-payment-input
+                                margin 0 8px 0 0
+
+                        .s-payment-description
+                            color #666
+                            font-size (12/14em)
+                            line-height 1.5em
+
+                        .s-payment-content
+                            margin 1em 0 0
+
+                            &.is-hidden
+                                display block
+
+                .s-shipping-options
+                    margin: 0
+
+                    .s-shipping-item
+                        margin: 1em 0 0
+                        padding: 0
+
+                        overflow hidden
+                        border-radius 2px
+                        $shadow()
+
+                        &:first-child
+                            margin-top: 0
+
+                        &.is-selected
+
+                            .s-shipping-header
+                                color #fff
+                                background: #2fa42e;
+
+                            .s-shipping-details
+                                background rgba(47, 164, 46, 0.1);
+
+                        .s-shipping-header
+                            background: rgba(226, 244, 255, 0.5);
+                            padding: 0.5em;
+                            margin 0
+
+                            .s-shipping-label
+                                .s-shipping-image
+                                .s-shipping-input
+                                    vertical-align middle
+
+                                .s-shipping-input
+                                    margin 0 0 0 .25em
+
+                                .s-shipping-name
+                                    margin 0 4px 0 .25em
+
+                        .s-shipping-details
+                            padding 1em
+
+                        .s-shipping-select
+                            display inline-block
+                            vertical-align middle
+                            font-size 1rem
+
+                        img
+                            vertical-align middle
+
+                    .s-shipping-controls
+                        margin 0 0 1em
+
+                    .s-shipping-description
+                        margin 0 0 1em 0
+
+                    .s-rate-wrapper
+                        .s-price-wrapper
+                            margin 1em 0 0
+
+                            .s-price
+                                margin 0 0 0 4px
+                                font-size (18/14)em
+                                font-weight bold
+
+                        .s-comment
+                            margin 1em 0 0
+
+                        .s-delivery-wrapper
+                            margin 1em 0 0
+
+                            .s-delivery
+                                font-weight bold
+
+                    .wa-address
+                        margin 1em 0 0
+
+                        .wa-name
+                            display none
+                        .wa-value
+                            .field
+                                margin 1em 0 0
+                                display block
+
+                                &:first-child
+                                    margin-top 0
+
+                                & > span:first-child
+                                    margin-right 8px
+
+                                select
+                                    width 200px
+
+                    .s-shipping-error
+                    .error
+                        padding .5em
+                        background rgba(255,0,0,.1)
+                        font-style: italic
+
+                .s-confirm-wrapper
+                    .s-contact-wrapper
+                        display inline-block
+                        width 45%
+                        margin 0 0 0 1em
+
+                        &:first-child
+                            margin-left 0
+
+                        .s-contact-header
+                            margin 0
+
+                        .s-contact-block
+                            display inline-block
+                            margin 1em 0 0
+                            padding 1em
+                            border-radius 2px
+                            $shadow()
+
+                            .s-userpic
+                                display inline-block
+                                border-radius 50%
+                                vertical-align middle
+
+                            .s-user-name
+                                margin 0 0 0 .5em
+                                line-height 1.5em
+                                font-weight bold
+
+                            .s-address-wrapper
+                                margin .5em 0 0
+                                line-height 1.25em
+
+                    .s-cart-wrapper
+                        margin 2em 0 0
+
+                        .s-cart-header
+                            margin 0
+
+                        .s-cart-list
+                            margin: 1em 0 0
+                            border-radius 2px
+                            $shadow()
+
+                            .s-cart-item
+                                display table
+                                table-layout fixed
+                                width 100%
+                                padding 1em
+                                margin 0
+                                box-sizing border-box
+                                color #333
+                                border-top 1px solid rgba(0,0,0,.1)
+                                line-height 1.5em
+
+                                &:first-child
+                                    border-top 0
+
+                                .s-image-column
+                                .s-text-column
+                                    display table-cell
+                                    vertical-align top
+
+                                .s-image-column
+                                    width 96px
+                                    padding 0 1em 0 0
+                                    line-height 0
+
+                                    .s-image
+                                        display inline-block
+                                        font-size 0
+
+                                        img
+                                            border-radius 2px
+
+                                .s-name
+                                    font-weight bold
+                                    margin 0 0 1em 0
+
+                                .s-value
+                                .s-tax
+                                .s-total
+                                    margin 0
+
+                                .bold
+                                    font-weight bold
+
+                            .s-services
+                                margin 1em 0 0 1em
+
+                                .s-service
+                                    margin .25em 0 0
+
+                                    &:first-child
+                                        margin-left 0
+
+                                    .s-service-ornament
+                                        margin 0 .25em 0 0
+
+                                    .s-service-name
+                                        margin 0 .25em 0 0
+
+                                    .s-service-price
+                                        margin 0 .25em
+                                        font-weight bold
+
+                                    .s-service-info
+                                        color #888
+
+                    .s-total-wrapper
+                        margin 2em 0 0
+                        table
+                            tr
+                                td
+                                    width 50%
+                                    padding: 0.5em
+                                    border 0
+
+                                    &.column-1
+                                        text-align right
+
+                                    &.column-2
+                                        white-space nowrap
+
+                                &.s-total-sum
+                                    td
+                                        border-top 1px solid rgba(0,0,0,.1)
+                                        font-weight bold
+                                        font-size: 1.1em
+
+                    .s-textarea-wrapper
+                        margin 2em 0 0
+
+                        textarea
+                            height 100px
+                            resize vertical
+                .s-checkout-success
+                    .s-plugin-wrapper
+                        margin 2em 0 0
+
+                        input
+                            width auto
+
+                .hint
+                    display inline-block
+                    margin 1em 0

@@ -1,0 +1,63 @@
+.s-header-wrapper
+    .s-catalog-wrapper
+        position relative
+        width 250px
+
+        &:hover
+            .s-catalog-list
+                display block
+
+        .s-catalog-button
+            $_icon_size = 28px
+            $_icon_lift = 4px
+            position relative
+            display block
+            margin 0
+            padding 11px 11px 11px ( $_icon_size + ($_icon_lift * 2) )
+            background #369
+            color #fff
+            border-radius 2px
+            text-decoration none
+            $shadow()
+
+            &:before
+                content: ""
+                position absolute
+                left $_icon_lift
+                top 50%
+                height $_icon_size
+                width $_icon_size
+                margin -($_icon_size/2) 0 0
+                background transparent url("../img/icons/hamburger-sprite.png") 0 0 no-repeat
+                background-size $_icon_size auto
+
+        .s-catalog-list
+            display none
+            position absolute
+            top 100%
+            left 0
+            width 100%
+            margin 0
+            padding 0
+            z-index 1
+            background #fff
+            border-radius 0 0 2px 2px
+            border solid rgba(0,0,0,.1)
+            border-width 0 1px 1px 1px
+            box-sizing border-box
+
+            & > li
+                display block
+                margin 0
+                padding 0
+
+                & > a
+                    position relative
+                    display block
+                    margin 0
+                    padding .75em
+                    text-decoration none
+                    transition background 222ms linear
+
+                    &:hover
+                        background rgba(0,0,0,.05)

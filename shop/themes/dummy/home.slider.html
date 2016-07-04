@@ -1,0 +1,67 @@
+{strip}
+
+{$_bestsellers = $wa->shop->productSet('bestsellers')}
+
+{* HOMEPAGE SLIDER *}
+{if (!empty($_bestsellers))}
+    <section class="s-slider-wrapper">
+        <ul class="s-slider-block" id="bestsellers-slider" style="{if $theme_settings.slider_height}height: {$theme_settings.slider_height}px{/if}">
+            {foreach $_bestsellers as $bestseller}
+                {$_product_image_src = $wa->shop->productImgUrl($bestseller, "0x320@2x")}
+                {$_name = $bestseller.name}
+                {if $bestseller.summary}
+                    {$_name = "`$bestseller.name` — {strip_tags($bestseller.summary)|escape}"}
+                {/if}
+
+                <li class="s-slide-wrapper" itemscope itemtype ="http://schema.org/Product">
+                    <a class="s-image" href="{$bestseller.frontend_url}" title="{$_name}" style="background-image: url('{$_product_image_src}');">
+                        {* <img src="{$_product_image_src}" itemprop="image" alt="{$_name}"> *}
+                    </a>
+                    <div class="s-slide-block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <h2 class="s-header" itemprop="name">
+                            <a class="name" href="{$bestseller.frontend_url}" title="{$_name}">{$bestseller.name}</a>
+                        </h2>
+                        <p class="s-description" itemprop="description">
+                            {if $bestseller.summary}{strip_tags($bestseller.summary)|truncate:255}{/if}
+                        </p>
+
+                        <div class="s-price">{shop_currency_html($bestseller.price)}</div>
+                        <meta itemprop="price" content="{$bestseller.price}">
+                        <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
+                        {if !empty($bestseller.summary)}
+                            <meta itemprop="description" content="{strip_tags($bestseller.summary)}">
+                        {/if}
+                    </div>
+
+                    {$badge_html = $wa->shop->badgeHtml($bestseller.badge)}
+                    {if !empty($badge_html)}
+                        <div class="s-badge-wrapper">{$badge_html}</div>
+                    {/if}
+                </li>
+            {/foreach}
+        </ul>
+
+        {* INIT SLIDER *}
+        <script>
+            ( function($) {
+
+                function initSlider() {
+                    $("#bestsellers-slider").bxSlider({
+                        auto: true
+                    });
+                }
+
+                if (!$.fn.bxSlider) {
+                    $.getScript("{$wa_active_theme_url}plugins/bxslider/jquery.bxslider.js?v{$wa_theme_version}", function() {
+                        initSlider();
+                    });
+                } else {
+                    initSlider();
+                }
+
+            })(jQuery);
+        </script>
+    </section>
+{/if}
+
+{/strip}

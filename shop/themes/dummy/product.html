@@ -1,0 +1,237 @@
+{strip}
+
+{* PRODUCT PAGE *}
+<article class="s-product-page" itemscope itemtype="http://schema.org/Product">
+
+    <h1 class="s-product-header" itemprop="name">{$product.name|escape}</h1>
+
+    {* IMAGE GALLERY *}
+    {if $product.images}
+        <figure class="s-product-photos" id="s-product-photos">
+
+            {* MAIN IMAGE *}
+            <div class="s-photo-main">
+                <a id="s-photo-main" href="{$wa->shop->productImgUrl($product, '970')}">
+                    {$wa->shop->productImgHtml($product, '750', [ 'itemprop' => 'image', 'alt' => $product.name|escape ])}
+                </a>
+            </div>
+
+            {* THUMBS *}
+            {if count($product.images) > 1}
+                <ul class="s-photos-list" id="s-photos-list">
+                    {foreach $product.images as $image}
+                        <li class="s-photo-thumb">
+                            <a class="{if $image.id == $product.image_id}is-selected{/if}" href="{$wa->shop->imgUrl($image, '970')}" data-index="{$image@index}">
+                                {$wa->shop->imgHtml($image, '96x96')}
+                            </a>
+                        </li>
+                    {/foreach}
+                </ul>
+            {/if}
+
+            <script>
+                ( function($) {
+                    $.getScript("{$wa_active_theme_url}plugins/swipebox/js/jquery.swipebox.min.js?v{$wa_theme_version}", function() {
+                        new ProductPhotos();
+                    });
+                })(jQuery);
+            </script>
+
+        </figure>
+    {/if}
+
+    {* PRODUCT CART *}
+    <div class="s-cart-wrapper" id="s-cart-wrapper">
+
+        {include file="product.cart.html" inline}
+
+        {if !empty($frontend_product)}
+            {* @event frontend_product.%plugin_id%.cart *}
+            {foreach $frontend_product as $_}{$_.cart}{/foreach}
+
+            {* @event frontend_product.%plugin_id%.block_aux *}
+            <div class="s-product-aux">
+                {foreach $frontend_product as $_}{$_.block_aux}{/foreach}
+            </div>
+        {/if}
+    </div>
+
+    <div class="s-product-info" id="s-product-info">
+        {* TABS *}
+        <section class="s-tabs-wrapper">
+            <a class="s-tab-item is-active" data-content-id="1" href="{$wa->shop->productUrl($product)}">[`Overview`]</a>
+
+            {if $product.features}
+                <a class="s-tab-item" data-content-id="2" href="{$wa->shop->productUrl($product)}">[`Features`]</a>
+            {/if}
+
+            <a class="s-tab-item" data-content-id="3" href="{$wa->shop->productUrl($product, 'reviews')}">[`Reviews`] ({$reviews_total_count})</a>
+
+            {foreach $product.pages as $page}
+                <a class="s-tab-item" href="{$wa->shop->productUrl($product, 'page', ['page_url' => $page.url])}">
+                    {$page.name|escape}
+                </a>
+            {/foreach}
+
+            {* @event frontend_product.%plugin_id%.menu *}
+            {foreach $frontend_product as $_}{$_.menu}{/foreach}
+        </section>
+
+        {* TABS CONTENT *}
+        <section class="s-tabs-content">
+            {* OVERVIEW *}
+            <div class="s-tab-content is-shown" id="tab-content-1">
+                <div class="s-product-overview" id="overview">
+                    {if $product.description}
+                        <div class="s-product-desc" id="s-product-desc" itemprop="description">{$product.description}</div>
+                    {/if}
+
+                    {* CATEGORIES *}
+                    {if count($product.categories) > 1}
+                        <div class="s-product-categories" id="s-product-categories">
+                            [`Categories`]:
+                            {foreach $product.categories as $c}
+                                {if $c.status}
+                                    <a href="{$wa->getUrl('/frontend/category', ['category_url' => $c.full_url])}">{$c.name|escape}</a>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    {/if}
+
+                    {* TAGS *}
+                    {if $product.tags}
+                        <div class="s-tags-wrapper" id="s-product-tags">
+                            [`Tags`]:&nbsp;
+                            {foreach $product.tags as $t}
+                                <a href="{$wa->getUrl('/frontend/tag', ['tag' => urlencode($t)])}">{$t}</a>
+                            {/foreach}
+                        </div>
+                    {/if}
+                </div>
+            </div>
+
+            {* PRODUCT FEATURES *}
+            {if $product.features}
+                <div class="s-tab-content" id="tab-content-2">
+                    <table class="s-features-wrapper" id="s-product-features">
+                        {foreach $product.features as $f_code => $f_value}
+                            <tr class="{if $features[$f_code].type == 'divider'}divider{/if}">
+                                <td class="name">
+                                    {$features[$f_code].name|escape}
+                                </td>
+                                <td class="value" itemprop="{$f_code|escape}">
+                                    {if is_array($f_value)}
+                                        {if $features[$f_code].type == 'color'}
+                                            {implode('<br /> ', $f_value)}
+                                        {else}
+                                            {implode(', ', $f_value)}
+                                        {/if}
+                                    {else}
+                                        {$f_value}
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            {/if}
+
+            {* PRODUCT REVIEWS *}
+            <div class="s-tab-content" id="tab-content-3">
+                <section class="s-product-reviews">
+                    <h3>{sprintf('[`%s reviews`]', $product.name|escape)}</h3>
+
+                    {if !empty($rates)}
+                        {if ($product.rating > 0)}
+                            <div class="s-rating-text">
+                                [`Average customer rating:`]
+                                <span class="stars-wrapper">{$wa->shop->ratingHtml($product.rating, 16)}</span>
+
+                                (<a href="reviews/">{$reviews_total_count}</a>)
+
+                                {if $product.rating > 0}
+                                    <span class="hint">{sprintf('[`%s out of 5 stars`]', $product.rating)}</span>
+                                {/if}
+                            </div>
+                        {/if}
+
+                        <table class="s-rating-distribution">
+                            {$_total_count = 0}
+                            {foreach $rates as $_rate => $_count}
+                                {$_total_count = $_total_count + $_count}
+                            {/foreach}
+
+                            {* foreach $rates as $_rate => $_count *}
+                            {for $i = 5 to 0 step -1}
+                                {if empty($rates[$i]) || !$rates[$i]}{$_count = 0}{else}{$_count = $rates[$i]}{/if}
+                                {if $i || $_count}
+                                    <tr>
+                                        <td class="column-1">{$_count}</td>
+                                        <td class="column-2">
+                                            <div class="bar">
+                                                <div class="filling" style="width: {if $_total_count > 0}{str_replace(',','.', 100*$_count/$_total_count)}{else}0{/if}%;{if !$i} background: #ddd;{/if}"></div>
+                                            </div>
+                                        </td>
+                                        <td class="column-3">
+                                            <div class="stars-wrapper">
+                                                {for $j=1 to $i}
+                                                    <i class="icon16 star"></i>
+                                                {forelse}
+                                                    <span class="">[`no rate`]</span>
+                                                {/for}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {/if}
+                            {/for}
+                        </table>
+                    {/if}
+
+                    <div class="s-reviews-list">
+                        {foreach $reviews as $review}
+                            <div data-id="{$review.id}" data-parent-id="0">
+                                {include file="review.html" reply_allowed=false inline}
+                            </div>
+                        {/foreach}
+                    </div>
+
+                    {if !$reviews}
+                        <div>{sprintf('[`Be the first to <a href="%s">write a review</a> of this product!`]', 'reviews/')}</div>
+                    {/if}
+
+                    <div class="s-buttons-wrapper">
+                        {if !empty($reviews)}
+                            <a class="s-button" href="reviews/">[`Read reviews`] ({$reviews_total_count})</a>
+                        {/if}
+                        <a class="s-button" href="reviews/#publish">[`Write a review`]</a>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </div>
+
+    {* @event frontend_product.%plugin_id%.block *}
+    {foreach $frontend_product as $_}{$_.block}{/foreach}
+
+    {* RELATED PRODUCTS *}
+    {$crossselling = $product->crossSelling(12)}
+    {if !empty($crossselling)}
+        <section class="s-related-products">
+            <h3 class="s-related-header">{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}</h3>
+            {include file="./products.html" products=$crossselling inline}
+        </section>
+    {/if}
+
+    {* RELATED PRODUCTS *}
+    {$upselling = $product->upSelling(12)}
+    {if !empty($upselling)}
+        {$compare_ids = array_merge(array($product.id), array_keys($upselling))}
+        <section class="s-related-products">
+            <h3 class="s-related-header">[`See also`] (<a href="{$wa->getUrl('/frontend/compare', ['id' => implode(',', $compare_ids)])}">[`Compare all`]</a>)</h3>
+            {include file="./products.html" products=$upselling inline}
+        </section>
+    {/if}
+
+</article>
+
+{/strip}

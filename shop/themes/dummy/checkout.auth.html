@@ -1,0 +1,72 @@
+{strip}
+
+<div class="s-auth-wrapper">
+    {if !$wa->user()->isAuth()}
+        <ul>
+            <li><label><input name="user_type" type="radio" {if !$wa->post('wa_auth_login')}checked{/if} value="0"> [`I’m a new customer`]</label></li>
+            <li><label><input name="user_type" type="radio" {if $wa->post('wa_auth_login')}checked{/if} value="1"> [`I already have an account`]</label></li>
+        </ul>
+
+        <div id="login-form" style="{if !$wa->post('wa_auth_login')}display:none;{/if}">
+            {include file="`$wa_parent_theme_path`/login.html" without_form=true}
+        </div>
+
+        <script>
+            ( function($) {
+
+                var $login = $("#login-form");
+
+                if (!$login.length) {
+                    return false
+                }
+
+                var $inputs = $login.find("input"),
+                    $userType = $("input[name='user_type']");
+
+                $userType.on("change", function() {
+                    onChangeUserType( $(this) );
+                });
+
+                $inputs.attr("disabled", "disabled");
+
+                $userType.change();
+
+                function onChangeUserType( $input ) {
+                    var $step = $input.closest(".s-step-wrapper"),
+                        $submitButton = $step.find(".s-step-submit"),
+                        $stepContent = $step.find(".s-step-content"),
+                        is_account_exist = ( $step.find("input[name='user_type']:checked").val() == "1" );
+
+                    if (is_account_exist) {
+                        $stepContent.hide();
+                        $submitButton.hide();
+
+                        $inputs.removeAttr("disabled");
+                        $login.show();
+                    } else {
+                        $stepContent.show();
+                        $submitButton.show();
+
+                        $inputs.attr("disabled", "disabled");
+                        $login.hide();
+                    }
+                }
+            })(jQuery);
+        </script>
+
+    {else}{* AUTHORIZED *}
+        <div class="s-authorized-wrapper">
+            <div class="s-authorized-user">
+                <div class="left-column image">
+                    <img src="{$wa->user()->getPhoto(50)}">
+                </div>
+                <div class="right-column">
+                    <p>{sprintf("[`You are currently authorized as <strong>%s</strong>. Please verify or update your contact information using the form below. Your existing contact info will be automatically updated.`]", $wa->user('name'))}</p>
+                </div>
+            </div>
+            <p class="s-hint">[`If you want to place an order on behalf of another customer, <a href="?logout">log out</a> from your current profile and proceed to checkout again.`]</p>
+        </div>
+    {/if}
+</div>
+
+{/strip}

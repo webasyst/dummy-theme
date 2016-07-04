@@ -1,0 +1,170 @@
+.s-reviews-page
+
+    .s-reviews-header
+        margin 0
+
+    .s-form-wrapper
+        margin 1em 0 0
+
+        .s-review-button
+            margin: 0
+
+            .s-button
+                &.is-active
+                    color #fff
+                    background #2fa42e
+
+        .s-review-form
+            display none
+            margin: 1em 0 0;
+            padding 1em
+            border-radius 2px
+            $shadow()
+
+            &.is-shown
+                display block
+
+            .s-review-field
+                margin: 1em 0 0
+
+                .header-block
+                    margin 0
+
+                label
+                    text-transform uppercase
+                    font-size: 0.8em
+
+                &:first-child
+                    margin-top: 0
+
+                &.user-name-block
+                    img
+                        display inline-block
+                        vertical-align middle
+                        width: 20px
+                        margin: 0 4px 0 0;
+                        border-radius 50%
+
+                    .s-logout-link
+                        margin 0 .5em
+                        color #888
+
+                &.reply-notification
+                    display none;
+
+                .wa-captcha
+                    img
+                        border-radius 5px
+
+                    strong
+                        display: none
+
+                    input[type="text"]
+                        margin: 0.6em 0 0;
+
+                .s-rates-wrapper
+                    margin: 0.25em 0 0
+
+                    .s-rate-item
+                        cursor pointer
+
+            .s-errors-wrapper
+                display none
+                margin 1em 0 0
+                padding .5em
+                border-radius 2px
+                background rgba(255,0,0,.1)
+
+                &.is-shown
+                    display inline-block
+
+                .error
+                    margin: 0.5em 0 0
+                    line-height 1.25em
+                    font-style italic
+
+                    &:first-child
+                        margin-top 0
+
+    .s-reviews-wrapper
+        margin 2em 0 0
+
+        .s-reviews-count
+            margin: 0
+
+        .s-reviews-list
+            margin 1em 0 0
+
+.s-reviews-list
+    margin: 0
+
+    & > .s-review-item
+        margin: 2em 0 0.5em
+
+        &:first-child
+            margin-top: 0
+
+    .s-review-item
+        padding: 0.5em
+        background rgba(222,222,222,0.1)
+        border-radius 2px
+        $shadow()
+
+        &.is-active
+            background rgb(255, 242, 209);
+
+        .s-review-header
+            margin: 0
+            padding: 0 0 .25em
+            border-bottom: 1px solid rgba(0,0,0,0.05)
+
+            .s-review-name
+                display inline-block
+                margin 0 .25em 0 0
+
+            .staff-wrapper
+            .username-wrapper
+            .date-wrapper
+                display inline-block
+                margin 0 0 0 .5em
+
+                &:first-child
+                    margin-left 0
+
+            .staff-wrapper
+                padding .25em
+                background #369
+                color #fff
+                border-radius 2px
+
+            .date-wrapper
+                color: #b4b4b4
+
+        .description-wrapper
+            margin 1em 0 0
+
+        .actions-wrapper
+            color #888
+            text-align right
+
+    .inner-review-wrapper
+        padding: 0 0 0 3em
+
+        .review-item
+            margin: 0 0 2em
+            position relative
+
+            .review-header
+                display none
+
+            &:after
+                position absolute
+                top: -0.2em;
+                right: 100%;
+                margin: 0 0.5em 0 0
+                content: ""
+                opacity: 0.33
+                width: 2.5em
+                height: 2.5em
+                background #000
+                background-size: 1em

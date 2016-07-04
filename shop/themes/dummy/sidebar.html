@@ -1,0 +1,91 @@
+{strip}
+
+<nav class="s-nav-wrapper" role="navigation">
+
+    {* Display user area links *}
+    {$_is_presonal_area = ( !empty($my_nav_selected) || !empty($frontend_my_nav) )}
+    {if $wa->user()->isAuth() && $_is_presonal_area}
+
+        {if empty($my_nav_selected)}
+            {$my_nav_selected = ""}
+        {/if}
+
+        <ul>
+            <li class="{if $my_nav_selected == 'profile'}is-selected{/if}">
+                <a href="{$wa->getUrl('/frontend/myProfile')}">[s`My profile`]</a>
+            </li>
+            <li class="{if $my_nav_selected == 'orders'}is-selected{/if}">
+                <a href="{$wa->getUrl('/frontend/myOrders')}">[`My orders`]</a>
+            </li>
+
+            {if shopAffiliate::isEnabled()}
+                <li class="{if $my_nav_selected == 'affiliate'}is-selected{/if}">
+                    <a href="{$wa->getUrl('/frontend/myAffiliate')}">[`Affiliate program`]</a>
+                </li>
+            {/if}
+
+            {if !empty($frontend_my_nav)}
+                {* @event frontend_my_nav.%plugin_id% *}
+                {foreach $frontend_my_nav as $_plugin => $_}
+                    <li class="{if waRequest::param('plugin') == str_replace('-plugin', '', $_plugin)}is-selected{/if}">{$_}</li>
+                {/foreach}
+            {/if}
+
+            <li>
+                <a href="?logout">[`Logout`]</a>
+            </li>
+        </ul>
+    {/if}
+
+    {* Show category navigation *}
+    {$_catalogs = []}
+    {if empty($category)}
+        {$_catalogs = $wa->shop->categories(0, 0, false)}
+    {elseif !empty($category.subcategories)}
+        {$_catalogs = $category.subcategories}
+    {/if}
+    {if !empty($_catalogs)}
+        <ul>
+            {foreach $_catalogs as $cat_item}
+                <li>
+                    <a href="{$cat_item.url}">{$cat_item.name}</a>
+                </li>
+            {/foreach}
+        </ul>
+    {/if}
+
+    {* Display category filters *}
+    {if !empty($category) && !empty($filters)}
+        {include file="./category.filters.html" inline}
+    {/if}
+
+    {* Display pages list *}
+    {function renderNavItem page=[]}
+        {$_is_selected = ( strlen($page.url) > 1 && $wa->currentUrl()|strstr:$page.url )}
+
+        <li class="{if !empty($_is_selected)}is-selected{/if} {if !empty($page.childs)}has-sub-menu{/if}">
+            <a href="{$page.url}">{$page.name}</a>
+            {if !empty($page.childs)}
+                <ul>
+                    {foreach $page.childs as $subpage}
+                        {renderNavItem page=$subpage}
+                    {/foreach}
+                </ul>
+            {/if}
+        </li>
+    {/function}
+    {$_pages = $wa->shop->pages()}
+    {if !empty($_pages)}
+        <ul>
+            {foreach $_pages as $page}
+                {renderNavItem page=$page}
+            {/foreach}
+        </ul>
+    {/if}
+
+    {* @event frontend_nav.%plugin_id% *}
+    {foreach $frontend_nav as $_}{$_}{/foreach}
+
+</nav>
+
+{/strip}

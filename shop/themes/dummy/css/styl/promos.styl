@@ -1,0 +1,44 @@
+.s-promos-wrapper
+    margin 1.5em 0 0
+
+    .s-promos-list
+        margin 0
+        padding 0
+
+        .s-promo-item
+            $_space_w = 6
+            display inline-block
+            vertical-align top
+            width: ((100 - $_space_w)/4)%
+            margin: .5em 0 .5em ($_space_w/3)%
+
+            &:nth-child(4n+1)
+                margin-left 0
+
+            a
+                position: relative;
+                display: block;
+                padding: 1em 1em 0;
+                height: 8em;
+                background transparent 50% no-repeat;
+                background-size: cover;
+
+                text-align: center;
+                text-shadow: 0 1px 1px #000;
+                text-decoration none
+                color: #000;
+
+                overflow: hidden;
+                border-radius 2px
+                box-shadow 0 0 6px rgba(0,0,0,.1)
+
+                h5
+                    font-size: 1.3em;
+                    text-shadow: 0 1px 2px #000;
+
+                p
+                    font-size: 0.9em;
+                    line-height 1.25em
+                    text-shadow: 0 1px 2px #000;
+                    max-height: 5em;
+                    overflow hidden

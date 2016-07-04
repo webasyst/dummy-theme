@@ -1,0 +1,171 @@
+{strip}
+
+{if !empty($products)}
+
+    {$add2cart_label = '[`Buy`]'}
+    {if $wa->shop->cart->total() > 0}
+        {$add2cart_label = '[`Add to cart`]'}
+    {/if}
+
+    {if !empty($theme_settings.list_features)}
+        {$features = $wa->shop->features($products)}
+    {/if}
+
+    {$_types = ["thumbs" => "thumbs-view", "table" => "table-view"]}
+    {$_type = $_types["thumbs"]}
+    {if !empty($type)}
+        {$_type = $_types[$type]}
+    {else}
+        {$_settings_type = $theme_settings.related_view_type}
+        {if !empty($_settings_type) && $_settings_type == "table"}
+            {$_type = $_types["table"]}
+        {/if}
+    {/if}
+
+    {$_uniq_ident = rand(0, 1000)}
+
+    <section class="s-products-wrapper" id="s-products-{$_uniq_ident}">
+
+        {if !empty($sorting)}
+            {include file="./products.sorting.html" inline}
+        {/if}
+
+        <ul class="s-products-list {$_type}">
+            {foreach $products as $product}
+                {$available = $wa->shop->settings('ignore_stock_count') || $product.count === null || $product.count > 0}
+                {$badge_html = $wa->shop->badgeHtml($product.badge)}
+
+                {$_product_image_src = $wa->shop->productImgUrl($product, "200")}
+                {if !$_product_image_src}
+                    {$_product_image_src = "`$wa_theme_url`img/dummy200.png"}
+                {/if}
+
+                <li class="s-product-wrapper" data-product-id="{$product.id}" itemscope itemtype ="http://schema.org/Product">
+
+                    <div class="s-image-wrapper">
+                        <a href="{$product.frontend_url}" title="{$product.name}">
+                            <img src="{$_product_image_src}" alt="{$product.name}" itemprop="image">
+                        </a>
+                    </div>
+
+                    <div class="s-info-wrapper">
+                        <h5 class="s-product-header" itemprop="name">
+                            <a href="{$product.frontend_url}" title="{$product.name}">{$product.name}</a>
+                        </h5>
+
+                        {if $product.summary}
+                            <div class="s-product-description" itemprop="description">{strip_tags($product.summary)|truncate:100}</div>
+                        {/if}
+                    </div>
+
+                    <div class="s-offers-wrapper" itemprop="offers" class="offers" itemscope itemtype="http://schema.org/Offer">
+                        {if $available}
+                            <form class="add-to-cart" {if $product.sku_count > 1}data-url="{$product.frontend_url}{if strpos($product.frontend_url, '?')}&{else}?{/if}cart=1"{/if} method="post" action="{$wa->getUrl('/frontendCart/add')}">
+                        {/if}
+
+                            {if $available}
+                                <div class="s-pricing-wrapper">
+                                    <span class="s-price">{shop_currency_html($product.price)}</span>
+                                    {if $product.compare_price > 0}
+                                        <span class="s-compare"> {shop_currency_html($product.compare_price)}</span>
+                                    {/if}
+                                </div>
+
+                                <input type="hidden" name="product_id" value="{$product.id}">
+                                <link itemprop="availability" href="http://schema.org/InStock" />
+                                <meta itemprop="price" content="{$product.price}">
+                                <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
+                            {else}
+                                <div class="s-pricing-wrapper">
+                                    <span class="s-price">{shop_currency_html($product.price)}</span>
+                                </div>
+
+                                <div class="s-out-of-stock">
+                                    <strong>{if $wa->shop->settings('ignore_stock_count')}[`Pre-order only`]{else}[`Out of stock`]{/if}</strong>
+                                </div>
+
+                                <meta itemprop="price" content="{$product.price}">
+                                <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
+                                <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                            {/if}
+
+                            <div class="s-rating-wrapper">
+                                {if $product.rating > 0}
+                                    <span class="s-rating-block nowrap">{$wa->shop->ratingHtml($product.rating, 16)}</span>
+                                    <span class="s-rating-hint">{$product.rating_count} [`Review's`]</span>
+                                {else}
+                                    <span class="s-rating-block nowrap">
+                                        <i class="icon16 star-empty"></i>
+                                        <i class="icon16 star-empty"></i>
+                                        <i class="icon16 star-empty"></i>
+                                        <i class="icon16 star-empty"></i>
+                                        <i class="icon16 star-empty"></i>
+                                    </span>
+                                    <span class="s-rating-hint">No review's</span>
+                                {/if}
+                            </div>
+
+                            {if empty($hide_buttons)}
+                                <div class="s-buttons-wrapper">
+                                    {if empty($disable_compare)}
+                                        <a class="s-button white s-compare-button" href="javascript:void(0);" data-product="{$product.id}" title="[`Compare`]">
+                                            <i class="icon16 compare {if $wa->shop->inComparison($product.id)}active{/if}"></i>
+                                        </a>
+                                    {/if}
+                                    {if $available}
+                                        <input class="s-button s-add-button" type="submit" data-added-text="[`Added`]" value="{$add2cart_label}">
+                                    {/if}
+                                </div>
+                            {/if}
+
+                        {if $available}
+                            </form>
+                        {/if}
+                    </div>
+
+                    {if !empty($badge_html)}
+                        <div class="s-badge-wrapper">{$badge_html}</div>
+                    {/if}
+                </li>
+            {/foreach}
+        </ul>
+
+        {if isset($pages_count) && $pages_count > 1}
+            <div class="s-paging-wrapper {if $theme_settings.pagination == "lazyloading"}is-lazy-loading{/if}" data-loading-text="[`Loading...`]">
+                {wa_pagination total=$pages_count attrs=["class" => "s-paging-list"]}
+            </div>
+        {/if}
+
+        <script>
+            ( function($) {
+                var $products = $("#s-products-{$_uniq_ident}");
+
+                waShop.products = new Products({
+                    $wrapper: $products,
+                    compare: {
+                        url: "{$wa->getUrl("/frontend/compare")}",
+                        title: "[`Compare selected products`]"
+                    }
+                });
+
+                var initLazyLoading = {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
+                if (initLazyLoading) {
+                    waShop.lazyLoading = new LazyLoading({
+                        $wrapper: $products,
+                        names: {
+                            list: ".s-products-list",
+                            items: ".s-product-wrapper",
+                            paging: ".s-paging-wrapper"
+                        }
+                    });
+                }
+
+                $products.removeAttr("id");
+            })(jQuery);
+        </script>
+
+    </section>
+
+{/if}
+
+{/strip}

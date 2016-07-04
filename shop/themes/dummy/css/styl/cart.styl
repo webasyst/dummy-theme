@@ -1,0 +1,157 @@
+.s-cart-page
+
+    .s-cart-header
+        margin 0
+
+    .s-empty-cart
+        margin 1em 0 0
+
+    .s-related-products
+        margin 4em 0 0
+
+        .s-related-header
+            margin 0
+
+    .s-cart-products
+        margin 1em 0 0
+
+        .s-cart-product
+            margin 1em 0 0
+            display table
+            width 100%
+            table-layout fixed
+
+            padding 1em
+            overflow hidden
+            border-radius 2px
+            box-sizing border-box
+            $shadow()
+
+            & > .left-column
+            & > .right-column
+                display table-cell
+                vertical-align top
+
+            & > .left-column
+                width: 96px
+
+            & > .right-column
+                padding 0 0 0 1em
+
+            .s-product-image
+                display block
+
+                img
+                    width 100%
+                    overflow hidden
+                    border-radius 2px
+                    $shadow()
+
+            .s-delete-wrapper
+                margin 1em 0 0
+
+                .s-delete-button
+                    display block
+                    width 100%
+
+            .s-offers-wrapper
+
+                .s-product-name
+                    margin 0
+
+                .s-buttons-wrapper
+                    margin 1em 0 0
+
+                    input
+                        margin 0 0 0 .25em
+
+                        &:first-child
+                            margin-left 0
+
+                    .s-product-quantity
+                        width: 5.3em
+                        height 2.5em
+                        box-sizing border-box
+                        text-align center
+
+                    .s-button
+                        width: 2.5em
+
+                .s-product-services
+                    margin: 1em 0 0
+
+                    .s-service
+                        margin: .5em 0 0
+
+                        &:first-child
+                            margin-top: 0
+
+                .s-product-total
+                    margin: 0.5em 0 0
+                    text-align right
+                    font-size: 1.4em
+
+    .s-cart-total
+        margin 2em 0 0
+
+        .s-coupon-wrapper
+
+            .s-coupon-header
+                display inline-block
+                vertical-align middle
+                margin 0
+                font-size 1.4em
+
+            input
+                vertical-align middle
+
+            .s-text
+                margin 0 0 0 .5em
+                width 150px
+
+            .error-message
+                margin 1em 0
+                color red
+
+        .s-discount-wrapper
+            margin 1em 0 0
+
+            .s-discount-header
+                display inline-block
+                vertical-align middle
+                margin 0 5px 0 0
+
+            .s-cart-discount
+                display inline-block
+                vertical-align middle
+                font-size: 1.2em
+
+        .s-total-wrapper
+            margin 2em 0 0
+            text-align right
+
+            .s-total-header
+                display inline-block
+                vertical-align middle
+                margin 0 .5em 0 0
+
+            .s-total
+                display inline-block
+                vertical-align middle
+                font-size: 1.5em
+                font-weight: bold
+
+        .s-cart-checkout
+            margin 2em 0 0
+            text-align right
+
+            .s-checkout-featured
+                margin 0 1em 0 0
+                display inline-block
+                vertical-align baseline
+
+                img
+                    margin 0 0 0 6px
+
+                    &:first-child
+                        margin-left 0

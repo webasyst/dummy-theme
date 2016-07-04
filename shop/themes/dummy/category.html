@@ -1,0 +1,14 @@
+<div class="s-category-wrapper">
+
+    <h1 class="s-category-header">{$category.name|escape}</h1>
+
+    {* @event frontend_category.%plugin_id% *}
+    {foreach $frontend_category as $_}{$_}{/foreach}
+
+    {*PRODUCT-LIST*}
+    {if !empty($products)}
+        {include file="./products.html" sorting=!empty($category.params.enable_sorting)}
+    {else}
+        [`No products here`]
+    {/if}
+</div>

@@ -1,0 +1,60 @@
+{strip}
+
+<div class="s-review-item review" data-id="{$review.id}" data-parent-id="{$review.parent_id}" itemscope itemprop="review" itemtype="http://schema.org/Review">
+    <div class="summary-wrapper">
+        <div class="s-review-header">
+            <h4 class="s-review-name" itemprop="name">{if $review.title}{$review.title}{/if}</h4>
+            {if !$review.parent_id && !empty($review.rate)}
+                <span class="s-rates-wrapper" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                    {$rate = round($review.rate)}
+
+                    {for $i = 1 to 5}
+                        {$icon_class = "star"}
+                        {if ($rate < $i)}
+                            {$icon_class = "star-empty"}
+                        {/if}
+                        <i class="s-rate-item icon16 {$icon_class}" data-rate-count="{$i}"></i>
+                    {/for}
+
+                    <meta itemprop="worstRating" content = "1">
+                    <meta itemprop="ratingValue" content="{$rate}">
+                    <meta itemprop="bestRating" content = "5">
+                </span>
+            {/if}
+
+            <span class="username-wrapper" itemprop="author">
+                {if empty($review.site)}
+                    {$review.author.name}
+                {else}
+                    <a href="{$review.site}">{$review.author.name}</a>
+                {/if}
+            </span>
+
+            {if ifempty($review.author.is_user) > 0}
+                <span class="staff-wrapper">
+                    {$wa->shop->settings('name')}
+                </span>
+            {/if}
+
+            <span class="date-wrapper" title="{$review.datetime|wa_datetime}">{$review.datetime|wa_datetime:"humandatetime"}</span>
+        </div>
+        <meta itemprop="itemReviewed" content="{$product.name|escape}">
+        <meta itemprop="datePublished" content="{$review.datetime|date_format:'Y-m-d'}">
+    </div>
+
+    {if $review.text}
+        <div class="description-wrapper" itemprop="description">{$review.text}</div>
+    {/if}
+    
+    {if $reply_allowed}
+        <div class="actions-wrapper">
+            {$_link_href = "javascript:void(0);"}
+            {if isset($reply_link)}
+                {$_link_href = $reply_link}
+            {/if}
+            <a class="show-reply-comment-form" href="{$_link_href}">[`reply`]</a>
+        </div>
+    {/if}
+</div>
+
+{/strip}

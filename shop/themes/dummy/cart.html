@@ -1,0 +1,202 @@
+{strip}
+
+<div class="s-cart-page">
+
+    {if !$cart.count}
+
+        <h1 class="s-cart-header">[`Shopping cart`]</h1>
+
+        <div class="s-empty-cart">
+            <p>[`Your shopping cart is empty.`]</p>
+        </div>
+
+    {else}
+
+        <h1 class="s-cart-header">[`Shopping cart`]</h1>
+
+        <form method="post">
+
+            {* CART ITEM *}
+            <div class="s-cart-products cart">
+                {foreach $cart.items as $item}
+                    <div class="s-cart-product" data-id="{$item.id}">
+                        <div class="left-column">
+                            <a class="s-product-image" href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}">
+                                {$wa->shop->productImgHtml($item.product, '96x96', ['default' => "`$wa_theme_url`img/dummy48.png"])}
+                            </a>
+
+                            <div class="s-delete-wrapper">
+                                <input class="s-delete-button delete-product" type="button" value="[`Delete`]" title="[`Remove from cart`]">
+                            </div>
+                        </div>
+
+                        <div class="right-column">
+
+                            <div class="s-offers-wrapper">
+
+                                <h4 class="s-product-name">
+                                    <a href="{$wa->shop->productUrl($item.product)}">{$item.product.name|escape}</a>
+                                    {if $item.sku_name && $item.sku_name != $item.product.name}{$item.sku_name|escape}{/if}
+                                </h4>
+
+                                <div class="s-buttons-wrapper">
+                                    <input class="s-button decrease-volume" type="button" value="&minus;">
+                                    <input class="s-product-quantity {if !empty($item.error)}error{/if}" type="text" name="quantity[{$item.id}]" value="{$item.quantity}">
+                                    <input class="s-button increase-volume" type="button" value="&plus;">
+                                </div>
+
+                                {* SERVICES *}
+                                {if !empty($item.services)}
+                                    <div class="s-product-services">
+                                        {foreach $item.services as $service_id => $s}
+                                            <div class="s-service" {if !empty($s.id)}data-id="{$s.id}"{/if}>
+
+                                                <label>
+                                                    <input type="checkbox" name="services[{$item.id}][]" value="{$service_id}" {if !empty($s.id)}checked{/if}>
+                                                    {$s.name|escape}
+                                                    {if $s.price && !isset($s.variants)}
+                                                        (<span>+{shop_currency_html($s.price, $s.currency)}</span>)
+                                                    {/if}
+                                                </label>
+
+                                                {if isset($s.variants)}
+                                                    <select name="service_variant[{$item.id}][{$service_id}]" {if empty($s.id)}disabled{/if}>
+                                                        {foreach $s.variants as $variant_id => $v}
+                                                            <option {if $s.variant_id == $variant_id}selected{/if} value="{$variant_id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
+                                                        {/foreach}
+                                                    </select>
+                                                {/if}
+
+                                            </div>
+                                        {/foreach}
+                                    </div>
+                                {/if}
+
+                                <div class="s-product-total">{shop_currency_html($item.full_price, true)}</div>
+
+                                {if !empty($item.error)}
+                                    <script>
+                                        alert({json_encode($item.error)});
+                                    </script>
+                                {/if}
+
+                            </div>
+
+                        </div>
+                    </div>
+                {/foreach}
+            </div>
+
+            {* CART TOTAL *}
+            <div class="s-cart-total">
+
+                {* DISCOUNT BLOCK *}
+                <div class="cart-discount-wrapper" {if !shopDiscounts::isEnabled('coupons') && !$discount}style="display:none"{/if} id="cart-discount-wrapper">
+
+                    {* COUPONS *}
+                    {if shopDiscounts::isEnabled('coupons')}
+                        <div class="s-coupon-wrapper">
+                            {if !$coupon_code}
+                                <div class="s-coupon-apply">
+                                    <input class="s-button" id="use-coupon" type="button" value="[`I have a coupon!`]">
+                                </div>
+                            {/if}
+
+                            <div {if !$coupon_code}style="display: none;"{/if} id="apply-coupon-code">
+                                <span class="s-coupon-header">[`Coupon code`]</span>
+
+                                <input class="s-text" type="text" name="coupon_code" value="{$coupon_code|escape}">
+                                <input type="submit" value="[`Apply`]">
+
+                                {if $coupon_code && empty($coupon_discount)}
+                                    <div class="error-message">[`Invalid coupon code`]</div>
+                                {/if}
+                            </div>
+                        </div>
+                    {/if}
+
+                    {* DISCOUNT *}
+                    <div class="s-discount-wrapper">
+                        <h5 class="s-discount-header">[`Discount`]</h5>
+                        <div class="s-cart-discount" id="s-cart-discount">&minus; {shop_currency_html($discount, true)}</div>
+                    </div>
+                </div>
+
+                {* AFFILIATE BONUS *}
+                {if shopAffiliate::isEnabled() && $affiliate_bonus > 0}
+                    <div class="affiliate-bonus-wrapper">
+                        <div class="text-block">
+                            {sprintf('[`Your current affiliate bonus of %s points allows you to get an additonal discount of up to %s`]', $affiliate_bonus, shop_currency_html(shopAffiliate::convertBonus($affiliate_bonus)))}
+                        </div>
+                        <div class="affiliate-discount">
+                            &minus; {if $use_affiliate}{shop_currency_html(shopAffiliate::convertBonus($used_affiliate_bonus))}{else}0{/if}
+                        </div>
+                        <div class="button-block">
+                            {if $use_affiliate}
+                                <input id="cancel-affiliate" type="button" value="[`Don’t use bonus discount`]">
+                            {else}
+                                <input type="submit" name="use_affiliate" value="[`Use bonus`]">
+                            {/if}
+                        </div>
+                    </div>
+                {/if}
+
+                {if shopAffiliate::isEnabled() && !empty($add_affiliate_bonus)}
+                    <div class="affiliate-hint-wrapper" id="affiliate-hint-wrapper">
+                        {sprintf("[`This order will add <strong>+%s bonuses</strong> to  your account, which you will be able to spend on getting additional discounts later.`]", $add_affiliate_bonus)}
+                    </div>
+                {/if}
+
+                {* TOTAL *}
+                <div class="s-total-wrapper">
+                    <span class="s-total-header">[`Total`]:</span>
+                    <span class="s-total" id="cart-total">{shop_currency_html($cart.total, true)}</span>
+                </div>
+
+                {* CHECKOUT *}
+                <div class="s-cart-checkout">
+
+                    <div class="s-checkout-featured">
+                        {$availabe_options = $wa->shop->payment()}
+                        {$_cnt = 0}
+                        {foreach $availabe_options as $option name=options}
+                            {if $_cnt == 8}{break}{/if}
+                            {if $option.logo}
+                                <img src="{$option.logo}" alt="{$option.name}">
+                                {$_cnt = $_cnt + 1}
+                            {/if}
+                        {/foreach}
+                    </div>
+
+                    <input name="checkout" type="submit" value="[`Proceed to checkout`] &rarr;">
+                </div>
+            </div>
+
+            {* @event frontend_cart.%plugin_id% *}
+            {foreach $frontend_cart as $_}{$_}{/foreach}
+        </form>
+
+        {* RELATED PRODUCT LIST *}
+        {$related = $wa->shop->crossSelling($cart.items, 'product_id')}
+        {if !empty($related)}
+            <div class="s-related-products">
+                <h3 class="s-related-header">[`Recommended for you`]</h3>
+                {include file="./products.html" products=$related inline}
+            </div>
+        {/if}
+
+    {/if}
+
+</div>
+
+<script>
+( function($) {
+    $.getScript("{$wa_theme_url}js/cart.js", function() {
+        new Cart({
+            $wrapper: $(".s-cart-page")
+        })
+    });
+})(jQuery);
+</script>
+
+{/strip}

@@ -1,0 +1,107 @@
+$_arrow_width = 50px
+
+.s-slider-wrapper
+    .bx-wrapper
+        margin 0 0 2em
+
+        .bx-viewport
+            top 0
+            left 0
+            padding 0
+            border 0
+            border-radius 2px
+            overflow hidden
+            $shadow()
+
+        .bx-pager
+            bottom 1em
+
+        .bx-controls-direction
+            a
+                top 0
+                width $_arrow_width
+                height 100%
+                margin 0
+                background transparent
+                transition background 222ms linear
+                z-index auto
+
+                &:hover
+                    background-color rgba(0,0,0,.1)
+
+                &:after
+                    $_icon_w = 21px
+                    $_icon_h = 41px
+                    content ""
+                    position absolute
+                    top 50%
+                    left (($_arrow_width - $_icon_w)/2)
+                    width $_icon_w
+                    height $_icon_h
+                    margin -($_icon_h/2) 0 0
+                    background transparent 50% no-repeat
+
+                &.bx-prev
+                    left 0
+                    &:after
+                        background-image url("../img/icons/arrow-left.png")
+
+                &.bx-next
+                    right 0
+                    &:after
+                        background-image url("../img/icons/arrow-right.png")
+
+    .s-slider-block
+        margin 0
+        padding 0
+        height 320px
+
+        .s-slide-wrapper
+            position relative
+            margin 0
+            padding 0
+            height 100%
+
+            .s-slide-block
+                position absolute
+                top 0
+                left 0
+                padding 14px 14px 14px ($_arrow_width + 14px)
+                max-width 40%
+                height 100%
+                background rgba(0,0,0,.025)
+                text-shadow: 1px 1px 0 #fff;
+
+            .s-header
+                padding 0
+
+                a
+                    text-decoration none
+
+            .s-description
+                margin 2em 0 0
+                line-height (18/14)em
+
+            .s-image
+                display block
+                width 100%
+                padding 0 $_arrow_width
+                box-sizing border-box
+                height 100%
+                text-align right
+
+                background transparent 80% 50% no-repeat
+                background-size contain
+
+                img
+                    display inline-block
+                    vertical-align middle
+                    max-height 100%
+
+            .s-price
+                margin 28px 0 0
+                font-size 30px
+                font-weight bold
+
+                span
+                    font-size 18px

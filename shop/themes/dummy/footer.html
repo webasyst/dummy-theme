@@ -1,0 +1,36 @@
+{strip}
+
+<div class="s-footer-wrapper">
+
+    <div class="s-footer-block">
+
+        {* @event frontend_footer.%plugin_id% *}
+        {foreach $frontend_footer as $_}{$_}{/foreach}
+
+        <div class="s-footer-columns">
+            <div class="s-column">
+                <div class="copyright">
+                    &copy;&nbsp;{time()|wa_datetime:"Y"}&nbsp;<a href="{$wa_url}">{$wa->accountName()}</a>
+                </div>
+            </div>
+            <div class="s-column">
+                <div style="text-align: center;">
+                    [`<a href="http://www.shop-script.com/">Ecommerce software</a> by Webasyst`]
+                </div>
+            </div>
+            <div class="s-column" style="text-align: right;">
+                {if count($currencies) > 1}
+                    <select id="currency">
+                        {$currency = $wa->shop->currency()}
+                        {foreach $currencies as $c_code => $c}
+                            <option value="{$c_code}" {if $c_code == $currency} selected{/if}>{$c.title}</option>
+                        {/foreach}
+                    </select>
+                {/if}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{/strip}

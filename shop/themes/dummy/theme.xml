@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="dummy" app="shop" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="0.1.1">
+    <name locale="en_US">Dummy Theme</name>
+    <name locale="ru_RU">Тема "Манекен"</name>
+    <files>
+        <!-- parent resources -->
+        <file path="css/dummy.css" parent="1">
+        </file>
+        <file path="js/dummy.js" parent="1">
+        </file>
+        <!-- shop resources -->
+        <file path="css/dummy.shop.css">
+        </file>
+        <file path="js/cart.js">
+        </file>
+        <file path="js/checkout.js">
+        </file>
+        <file path="js/dummy.shop.js">
+        </file>
+        <file path="js/product.js">
+        </file>
+        <file path="js/reviews.js">
+        </file>
+        <!-- parent templates -->
+        <file path="index.html" parent="1">
+        </file>
+        <file path="error.html" parent="1">
+        </file>
+        <file path="signup.html" parent="1">
+        </file>
+        <file path="login.html" parent="1">
+        </file>
+        <file path="forgotpassword.html" parent="1">
+        </file>
+        <file path="page.html" parent="1">
+        </file>
+        <file path="my.profile.html" parent="1">
+        </file>
+        <!-- shop templates -->
+        <file path="cart.html">
+        </file>
+        <file path="category.filters.html">
+        </file>
+        <file path="category.html">
+        </file>
+        <file path="checkout.auth.html">
+        </file>
+        <file path="checkout.confirmation.html">
+        </file>
+        <file path="checkout.contactinfo.html">
+        </file>
+        <file path="checkout.error.html">
+        </file>
+        <file path="checkout.html">
+        </file>
+        <file path="checkout.payment.html">
+        </file>
+        <file path="checkout.shipping.html">
+        </file>
+        <file path="checkout.success.html">
+        </file>
+        <file path="compare.html">
+        </file>
+        <file path="footer.html">
+        </file>
+        <file path="head.html">
+        </file>
+        <file path="header.html">
+        </file>
+        <file path="home.html">
+        </file>
+        <file path="home.slider.html">
+        </file>
+        <file path="list-thumbs.html">
+        </file>
+        <file path="main.html">
+        </file>
+        <file path="my.affiliate.html">
+        </file>
+        <file path="my.order.html">
+        </file>
+        <file path="my.orders.html">
+        </file>
+        <file path="plugins.header.html">
+        </file>
+        <file path="product.cart.html">
+        </file>
+        <file path="product.html">
+        </file>
+        <file path="products.html">
+        </file>
+        <file path="products.sorting.html">
+        </file>
+        <file path="review.html">
+        </file>
+        <file path="reviews.html">
+        </file>
+        <file path="search.html">
+        </file>
+        <file path="sidebar.html">
+        </file>
+    </files>
+    <settings>
+        <setting var="selectable_features_control" control_type="radio">
+            <value>inline</value>
+            <name locale="ru_RU">Выбор характеристик</name>
+            <name locale="en_US">Selectable features</name>
+            <options>
+                <option value="inline">
+                    <name locale="ru_RU">Показывать все значения крупно в ряд</name>
+                    <name locale="en_US">Display all values inline</name>
+                    <description locale="ru_RU">Для товаров в режиме продажи «Выбор характеристик» значения характеристик будут показаны одной строкой друг за другом. Рекомендуется, если названия значений относительно короткие и по ним однозначно можно определить, о какой характеристике товара идет речь, например, XL, 16 GB, 13”.</description>
+                    <description locale="en_US">For products which are sold in selectable features mode, all feature values will be displayed inline. Great if feature value names are self-explanatory and explicit in context of a product, e.g. XL, 16 GB, 13”.</description>
+                </option>
+                <option value="select">
+                    <name locale="ru_RU"><![CDATA[Выбор из списка &lt;select&gt;]]></name>
+                    <name locale="en_US"><![CDATA[&lt;select&gt; HTML control]]></name>
+                    <description locale="ru_RU"><![CDATA[Для товаров в режиме продажи «Выбор характеристик» значения характеристик будут предложены на выбор с помощью стандартного выбора &lt;select&gt;. Рекомендуется, если названия значений характеристик содержат более одного-двух слов или по значениям нельзя однозначно понять, о какой характеристике товара идет речь, например, «до 10 часов», «не предусмотрено».]]></description>
+                    <description locale="en_US"><![CDATA[For products which are sold in selectable features mode, feature values will be displayed using a &lt;select&gt; HTML control. Recommended if value names are either too long or ambiguous in context of a product, e.g. “up to 10 hours”, “yes”.]]></description>
+                </option>
+            </options>
+        </setting>
+        <setting var="related_view_type" control_type="select">
+            <value>thumbs</value>
+            <name locale="ru_RU">Тип представления связанных товаров</name>
+            <name locale="en_US">Type of related items</name>
+            <options>
+                <option value="table">
+                    <name locale="ru_RU">Список</name>
+                    <name locale="en_US">List</name>
+                </option>
+                <option value="thumbs">
+                    <name locale="ru_RU">Таблица</name>
+                    <name locale="en_US">Table</name>
+                </option>
+            </options>
+        </setting>
+        <setting var="slider_height" control_type="text">
+            <value>320</value>
+            <name locale="ru_RU">Высота слайдера (по умолчанию: 320)</name>
+            <name locale="en_US">Slider height (default: 320)</name>
+        </setting>
+    </settings>
+    <thumbs>
+        <thumb>48x48</thumb>
+        <thumb>96x96</thumb>
+        <thumb>200</thumb>
+        <thumb>0x320</thumb>
+        <thumb>750</thumb>
+        <thumb>970</thumb>
+    </thumbs>
+    <locales>
+        <locale>
+            <msgid>Catalog</msgid>
+            <msgstr locale="ru_RU">Каталог</msgstr>
+        </locale>
+    </locales>
+</theme>

@@ -1,0 +1,86 @@
+{strip}
+
+{$_is_success = ( $checkout_current_step == "success" )}
+
+<div class="s-checkout-page">
+
+    {if !$_is_success}
+        <h2 class="s-checkout-header">[`Checkout`]</h2>
+    {/if}
+
+    {if isset($checkout_steps)}
+        <ul class="s-checkout-nav">
+            {foreach $checkout_steps as $step_id => $s}
+                {$item_class = "is-done"}
+                {$link_href = "{$wa->getUrl('/frontend/checkout')}{$step_id}"}
+
+                {if !empty($_after_current)}
+                    {$item_class = "is-next"}
+                    {$link_href = "javascript:void(0);"}
+                {/if}
+
+                {if $step_id == $checkout_current_step}
+                    {$_after_current = true}
+                    {$item_class = "is-current"}
+                    {$link_href = "javascript:void(0);"}
+                {/if}
+
+                <li class="s-nav-item {$item_class}">
+                    <a class="" href="{$link_href}" data-step-id="{$step_id}" data-step-href="{$link_href}">{$s.name}</a>
+                </li>
+            {/foreach}
+        </ul>
+    {/if}
+
+    {$cart_total = $wa->shop->cart->total()}
+    {if $cart_total > 0}
+        <div class="s-checkout-total">
+            <span class="s-total-label">[`Order total`]:</span>
+            <span class="s-total">{shop_currency_html($cart_total, true)}</span>
+        </div>
+    {/if}
+
+    <div class="s-steps-wrapper">
+        <form method="post" action="">
+
+            {if isset($checkout_steps)}
+                {$_steps_count = count($checkout_steps)}
+                {$_current_step_index = array_search($checkout_current_step, array_keys($checkout_steps))}
+                {$_is_first = ( $_current_step_index == 0 )}
+                {$_is_last = ( $_current_step_index == ($_steps_count - 1) )}
+            {/if}
+
+            <div class="s-step-wrapper" id="step-{$checkout_current_step}" data-step-id="{$checkout_current_step}">
+
+                {if !empty($_is_first) && $wa->isAuthEnabled()}
+                    {include file="checkout.auth.html" inline}
+                {/if}
+
+                <div class="s-step-content {if $wa->post('wa_auth_login')}is-hidden{/if}">
+                    {include file="checkout.`$checkout_current_step`.html"}
+                </div>
+
+                {if !$_is_success}
+                    <div class="s-step-buttons">
+                        <input class="s-step-submit" type="submit" value="{if !empty($_is_last)}[`Place order`]{else}[`Next &rarr;`]{/if}">
+                        <input type="hidden" name="step" value="{$checkout_current_step}">
+                    </div>
+                {/if}
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<script>
+( function($) {
+    $.getScript("{$wa_theme_url}js/checkout.js", function() {
+        new Checkout({
+            $wrapper: $(".s-checkout-page")
+        })
+    });
+})(jQuery);
+</script>
+
+{/strip}

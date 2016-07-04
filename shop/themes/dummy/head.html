@@ -1,0 +1,28 @@
+{strip}
+
+{if !empty($action) && ( $action == "default" )}
+    <meta itemprop="name" content="{$wa->shop->settings('name')}">
+    <meta itemprop="address" content="{$wa->shop->settings('country')}">
+    <meta itemprop="telephone" content="{$wa->shop->settings('phone')}">
+    <meta itemprop="currenciesAccepted" content="{$wa->shop->currency()}">
+{/if}
+
+{* CSS *}
+<link href="{$wa_active_theme_url}css/dummy.shop.css?v{$wa_theme_version}" rel="stylesheet" />
+{if $theme_settings.additional_styles}
+    <style>{$theme_settings.additional_styles}</style>
+{/if}
+
+{* PLUGINS *}
+<link href="{$wa_active_theme_url}plugins/bxslider/jquery.bxslider.css?v{$wa_theme_version}" rel="stylesheet" />
+<link href="{$wa_active_theme_url}plugins/swipebox/css/swipebox.css?v{$wa_theme_version}" rel="stylesheet" />
+
+{* JS *}
+<script src="{$wa_app_static_url}js/lazy.load.js?v{$wa->version()}"></script>
+<script src="{$wa_static_url}wa-content/js/jquery-plugins/jquery.cookie.js?v{$wa->version(true)}"></script>
+<script src="{$wa_active_theme_url}js/dummy.shop.js?v{$wa_theme_version}"></script>
+
+{* @event frontend_head.%plugin_id% *}
+{foreach $frontend_head as $_}{$_}{/foreach}
+
+{/strip}

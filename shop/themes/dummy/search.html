@@ -1,0 +1,18 @@
+{strip}
+
+<div class="s-search-page">
+
+    <h1 class="s-search-header">{$title}</h1>
+
+    {* @event frontend_search.%plugin_id% *}
+    {foreach $frontend_search as $_}{$_}{/foreach}
+
+
+    {if !$products}
+        <p>[`No products were found.`]</p>
+    {else}
+        {include file="./products.html" inline}
+    {/if}
+</div>
+
+{/strip}

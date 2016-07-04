@@ -1,0 +1,41 @@
+{strip}
+
+{$wa->globals("hideSidebar", true)}
+
+<div class="s-home-wrapper">
+    {* SLIDER *}
+    {include file="home.slider.html" inline}
+
+    {* PROMOCARDS *}
+    {$promocards = $wa->shop->promos()}
+    {if !empty($promocards)}
+        <section class="s-promos-wrapper">
+            <ul class="s-promos-list">
+                {foreach $promocards as $promo}
+                    <li class="s-promo-item" id="s-promo-{$promo.id}">
+                        <a href="{$promo.link|escape}" style="background-image: url('{$promo.image}');">
+                            {if !empty($promo.title)}
+                                <h5 style="color: {$promo.color};">{$promo.title|escape}</h5>
+                            {/if}
+                            {if !empty($promo.body)}
+                                <p style="color: {$promo.color};">{$promo.body|escape}</p>
+                            {/if}
+                        </a>
+                    </li>
+                {/foreach}
+            </ul>
+        </section>
+    {/if}
+
+    {* @event frontend_homepage.%plugin_id% *}
+    {foreach $frontend_homepage as $_}{$_}{/foreach}
+
+    {* PROMOS PRODUCT LIST *}
+    {$_promos = $wa->shop->productSet('promo')}
+    {if !empty($_promos)}
+        {include file="./products.html" products=$_promos}
+    {/if}
+
+</div>
+
+{/strip}

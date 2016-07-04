@@ -1,0 +1,46 @@
+{strip}
+
+{$sort_fields = [
+    'name' => '[`Name`]',
+    'price' => '[`Price`]',
+    'total_sales' => '[`Bestsellers`]',
+    'rating' => '[`Customer rating`]',
+    'create_datetime'=>'[`Date added`]',
+    'stock' => '[`In stock`]'
+]}
+
+{if !isset($active_sort)}
+    {$active_sort = $wa->get('sort', 'create_datetime')}
+{/if}
+
+<div class="s-sorting-wrapper">
+
+    <div class="s-sorting-list sort-filters">
+        <span class="s-sort-label">[`Sorting`]:</span>
+        <div class="s-dropdown-wrapper">
+            <span class="s-sort-active">{$sort_fields[$active_sort]}</span>
+            <ul>
+                {if !empty($category) && !$category.sort_products}
+                    <li class="{if !$active_sort}is-active{/if}">
+                        <a href="{$wa->currentUrl(0, 1)}">[`New & Popular`]</a>
+                    </li>
+                {/if}
+                {foreach $sort_fields as $sort => $name}
+                    <li class="{if $active_sort == $sort}is-active{/if}">
+                        {$wa->shop->sortUrl($sort, $name, $active_sort)}
+                    </li>
+                    {if $wa->get('sort') == $sort}
+                        {$wa->title( $wa->title()|cat:' — '|cat:$name)}
+                    {/if}
+                {/foreach}
+            </ul>
+        </div>
+    </div>
+
+    <div class="s-sorting-list view-filters">
+        <a class="set-table-view {if $_type == "table-view"}is-active{/if}" href="javascript:void(0);" title="[`Table`]"><i class="icon table"></i></a>
+        <a class="set-thumbs-view {if $_type == "thumbs-view"}is-active{/if}" href="javascript:void(0);" title="[`Thumbs`]"><i class="icon thumbs"></i></a>
+    </div>
+</div>
+
+{/strip}

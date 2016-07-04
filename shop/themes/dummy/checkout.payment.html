@@ -1,0 +1,55 @@
+{strip}
+
+<ul class="s-payment-options">
+    {foreach $checkout_payment_methods as $m}
+        <li class="s-payment-item {if !empty($m.error)}has-error{/if}" >
+            <h3 class="s-payment-header">
+                <label>
+                    {if !empty($m.logo)}<img class="s-payment-image" src="{$m.logo}">{/if}
+                    <input class="s-payment-input" type="radio" name="payment_id" value="{$m.id}" {if $m.id == $payment_id}checked{/if} {if !empty($m.error)}disabled="disabled"{/if}>
+                    <span class="s-payment-name">{$m.name|escape}</span>
+                </label>
+            </h3>
+
+            {if $m.description}
+                <p class="s-payment-description">{$m.description}</p>
+            {/if}
+            {if !empty($m.error)}
+                <p class="error"><em>{$m.error}</em></p>
+            {/if}
+            {if !empty($m.custom_html)}
+                <div class="s-payment-content {if $m.id != $payment_id}is-hidden{/if} wa-form">{$m.custom_html}</div>
+            {/if}
+        </li>
+    {foreachelse}
+        <li class="s-payment-item">
+            <em class="error">[`Oops! We are sorry, but <strong>we can not offer any payment option for your order</strong>. Checkout can not be completed.`]</em>
+        </li>
+    {/foreach}
+</ul>
+
+<script>
+( function($) {
+    var $payment = $(".s-payment-options"),
+        $radio = $payment.find("input:radio"),
+        hidden_class = "is-hidden";
+
+    $radio.on("change", function () {
+        var $input = $(this);
+
+        if ( $input.is(":checked") ) {
+            $payment.find(".s-payment-content").addClass(hidden_class);
+            $input.closest(".s-payment-item").find(".s-payment-content").removeClass(hidden_class);
+        }
+    });
+})(jQuery);
+</script>
+
+{* @event frontend_checkout.%plugin_id% *}
+{foreach $frontend_checkout as $_}{$_}{/foreach}
+
+{if !empty($error)}
+    <div class="s-checkout-result error">{$error}</div>
+{/if}
+
+{/strip}

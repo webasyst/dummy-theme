@@ -1,0 +1,5 @@
+{strip}
+
+{$content}
+
+{/strip}

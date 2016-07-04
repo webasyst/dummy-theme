@@ -1,0 +1,68 @@
+{strip}
+
+<section class="s-category-filters">
+    <form method="get" action="{$wa->currentUrl(0,1)}">
+        {foreach $filters as $fid => $filter}
+            <div class="s-filter-group">
+                {if $fid == 'price'}
+                    {$c = $wa->shop->currency(true)}
+                    <h5 class="s-filter-header">[`Price`]</h5>
+                    <ul class="s-filter-list">
+                        <div class="s-filter-item filter-price-item">
+                            [`from`]
+                            <input type="text" class="min" name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if} placeholder="{floor($filter.min)}">
+                            [`to`]
+                            <input type="text" class="max" name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} placeholder="{ceil($filter.max)}">
+                            {$c.sign}
+                        </div>
+                    </ul>
+                {else}
+                    <h5 class="s-filter-header">{$filter.name|escape}</h5>
+                    <div class="s-filter-list">
+                        {if $filter.type == 'boolean'}
+                            <div class="s-filter-item">
+                                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label>
+                            </div>
+                            <div class="s-filter-item">
+                                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code) === '0'} checked{/if} value="0"> [`No`]</label>
+                            </div>
+                            <div class="s-filter-item">
+                                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code, '') === ''} checked{/if} value=""> [`Any`]</label>
+                            </div>
+                        {elseif isset($filter.min)}
+                            {$_v = $wa->get($filter.code)}
+                            <div class="s-filter-item filter-price-item">
+                                [`from`]
+                                <input type="text" class="min" name="{$filter.code}[min]" placeholder="{$filter.min}" {if !empty($_v.min)}value="{$_v.min}"{/if}>
+                                [`to`]
+                                <input type="text" class="max" name="{$filter.code}[max]" placeholder="{$filter.max}" {if !empty($_v.max)}value="{$_v.max}"{/if}>
+                                {if !empty($filter.unit)}
+                                    {$filter.unit.title}
+                                    {if $filter.unit.value != $filter.base_unit.value}<input type="hidden" name="{$filter.code}[unit]" value="{$filter.unit.value}">{/if}
+                                {/if}
+                            </div>
+                        {else}
+                            {foreach $filter.values as $v_id => $v}
+                                <div class="s-filter-item">
+                                    <label>
+                                        <input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}"> {$v}
+                                    </label>
+                                </div>
+                            {/foreach}
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+        {/foreach}
+        
+        <div class="s-buttons-wrapper">
+            <input type="submit" value="[`Filter products`]">
+            {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
+            {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
+        </div>
+        
+    </form>
+
+</section>
+
+{/strip}

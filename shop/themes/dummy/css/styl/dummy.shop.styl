@@ -1,0 +1,90 @@
+@import "nib"
+
+// FONT
+$text-family = "Arial", "Neue Helvetica", "sans-serif";
+$header-family = "Trebuchet MS", "sans-serif";
+
+$site_width = 980px
+$blue = #638392
+
+$shadow()
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1)
+
+@import "slider.styl"
+
+@import "header.catalog.styl"
+
+@import "promos.styl"
+
+@import "products.styl"
+
+@import "category.styl"
+
+@import "filters.styl"
+
+@import "product.styl"
+
+@import "dialog.styl"
+
+@import "reviews.styl"
+
+@import "order.styl"
+
+@import "compare.styl"
+
+@import "cart.styl"
+
+@import "checkout.styl"
+
+.s-badge-wrapper
+    position absolute
+    top 1em
+    right 1em
+
+    .badge
+        display inline-block
+        padding .5em
+        background green
+        color #fff
+
+        overflow hidden
+        border-radius 2px
+        $shadow()
+
+        &.new
+            background green
+
+        &.hit
+            background red
+
+        &.bestseller
+            background blue
+
+        &.low-price
+            background orange
+
+.s-lazyloading-paging
+    ul
+        text-align center
+
+        li
+            display inline-block
+            vertical-align baseline
+            margin: 0 0.25rem
+
+            a
+                display block
+                padding: 0.25rem
+                min-width 2rem
+                box-sizing border-box
+                border-radius 50%
+
+                background #f0f0f0
+                text-decoration none
+                text-align: center
+                cursor pointer
+
+            &.selected
+                a
+                    background transparent
+                    cursor default
