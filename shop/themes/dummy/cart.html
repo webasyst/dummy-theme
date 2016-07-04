@@ -65,6 +65,8 @@
                                                             <option {if $s.variant_id == $variant_id}selected{/if} value="{$variant_id}">{$v.name|escape} (+{shop_currency($v.price, $s.currency)})</option>
                                                         {/foreach}
                                                     </select>
+                                                {else}
+                                                    <input type="hidden" name="service_variant[{$item.id}][{$service_id}]" value="{$s.variant_id}">
                                                 {/if}
 
                                             </div>
@@ -108,7 +110,7 @@
                                 <input class="s-text" type="text" name="coupon_code" value="{$coupon_code|escape}">
                                 <input type="submit" value="[`Apply`]">
 
-                                {if $coupon_code && empty($coupon_discount)}
+                                {if $coupon_code && empty($coupon_discount) && empty($coupon_free_shipping)}
                                     <div class="error-message">[`Invalid coupon code`]</div>
                                 {/if}
                             </div>
@@ -180,7 +182,7 @@
         {$related = $wa->shop->crossSelling($cart.items, 'product_id')}
         {if !empty($related)}
             <div class="s-related-products">
-                <h3 class="s-related-header">[`Recommended for you`]</h3>
+                <h3 class="s-related-header">[`Recommended`]</h3>
                 {include file="./products.html" products=$related inline}
             </div>
         {/if}
@@ -191,11 +193,16 @@
 
 <script>
 ( function($) {
-    $.getScript("{$wa_theme_url}js/cart.js", function() {
+    var js_href = "{$wa_theme_url}js/cart.js",
+        is_loaded = (typeof Cart == "function");
+
+    (is_loaded) ? initCart() :  $.getScript(js_href, initCart);
+
+    function initCart() {
         new Cart({
             $wrapper: $(".s-cart-page")
-        })
-    });
+        });
+    }
 })(jQuery);
 </script>
 

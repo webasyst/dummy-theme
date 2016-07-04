@@ -46,6 +46,17 @@ $_product_h = 200px
                         color #fff
                         background #2fa42e
 
+                        &:after
+                            position relative
+                            top 5px
+                            content ""
+                            display inline-block
+                            vertical-align baseline
+                            border solid transparent
+                            border-width 6px 5px
+                            border-top-color #fff
+                            margin 0 0 0 6px
+
                     & > ul
                         display none
                         position absolute
@@ -188,6 +199,24 @@ $_product_h = 200px
                 .s-out-of-stock
                     margin 1em 0 0
 
+                .s-quantity-wrapper
+                    display none
+                    margin 1em 0 0
+                    text-align right
+                    white-space nowrap
+
+                    .minus-button
+                    .plus-button
+                        width 2.5em
+                        height 2.5em
+                        margin 0
+
+                    .product-quantity-field
+                        width 3em
+                        height 2.5em
+                        margin 0 4px
+                        text-align center
+
                 .s-buttons-wrapper
                     .s-button
                         margin 0 0 0 .5em
@@ -270,6 +299,11 @@ $_product_h = 200px
 
                 .s-offers-wrapper
                     position relative
+
+                    .s-quantity-wrapper
+                        position absolute
+                        right 100%
+                        bottom 1em
 
                     .s-buttons-wrapper
                         position absolute

@@ -1,5 +1,7 @@
 {strip}
 
+{$wa->globals("hideSidebar", true)}
+
 {* PRODUCT PAGE *}
 <article class="s-product-page" itemscope itemtype="http://schema.org/Product">
 
@@ -21,7 +23,8 @@
                 <ul class="s-photos-list" id="s-photos-list">
                     {foreach $product.images as $image}
                         <li class="s-photo-thumb">
-                            <a class="{if $image.id == $product.image_id}is-selected{/if}" href="{$wa->shop->imgUrl($image, '970')}" data-index="{$image@index}">
+                            {* @hint link id needed for change product image on sku change event *}
+                            <a id="s-image-{$image.id}" class="{if $image.id == $product.image_id}is-selected{/if}" href="{$wa->shop->imgUrl($image, '970')}" data-index="{$image@index}">
                                 {$wa->shop->imgHtml($image, '96x96')}
                             </a>
                         </li>
@@ -201,7 +204,7 @@
 
                     <div class="s-buttons-wrapper">
                         {if !empty($reviews)}
-                            <a class="s-button" href="reviews/">[`Read reviews`] ({$reviews_total_count})</a>
+                            <a class="s-button" href="reviews/">[`Reviews`] ({$reviews_total_count})</a>
                         {/if}
                         <a class="s-button" href="reviews/#publish">[`Write a review`]</a>
                     </div>

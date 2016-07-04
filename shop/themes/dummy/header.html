@@ -1,5 +1,8 @@
 {strip}
 
+{* @event frontend_header.%plugin_id% *}
+{foreach $frontend_header as $_}{$_}{/foreach}
+
 <div class="s-fixed-container" id="s-fixed-header">
     <div class="s-fixed-header">
 
@@ -7,7 +10,7 @@
         {if !empty($_catalogs)}
             <div class="s-column left">
                 <div class="s-catalog-wrapper">
-                    <a class="s-catalog-button" href="{$wa_app_url}">[`Catalog`]</a>
+                    <a class="s-catalog-button" href="javascript:void(0);">[`Catalog`]</a>
                     <ul class="s-catalog-list">
                         {foreach $_catalogs as $cat_item}
                             <li>
@@ -15,6 +18,13 @@
                             </li>
                         {/foreach}
                     </ul>
+                    <script>
+                        ( function($) {
+                            new CatalogList({
+                                $wrapper: $("#s-fixed-header .s-catalog-wrapper")
+                            });
+                        })(jQuery);
+                    </script>
                 </div>
             </div>
         {/if}
@@ -23,7 +33,7 @@
             <div class="s-search-wrapper" role="search">
                 <form method="get" action="{$wa->getUrl("shop/frontend/search")}">
                     {$_query = $smarty.get.query|default:''|escape}
-                    <input class="s-text-input" type="search" name="query" value="{if !empty($_query)}{$_query}{/if}" placeholder="[`Search`]">
+                    <input class="s-text-input" type="text" name="query" value="{if !empty($_query)}{$_query}{/if}" placeholder="[`Search`]">
                     <input class="s-submit-input" type="submit" value="">
                 </form>
             </div>
@@ -38,7 +48,7 @@
                         </div>
                         <div class="s-text-wrapper">
                             <div class="s-header">{if $wa->user()->isAuth()}[s`My profile`]{else}[`Login`]{/if}</div>
-                            <div class="s-text">[`Personal area`]</div>
+                            <div class="s-text">[`My account`]</div>
                         </div>
                     </div>
                     <a class="s-link" href="{$wa->getUrl('/frontend/myProfile')}"></a>
@@ -48,7 +58,7 @@
             {if $wa->shop}
                 {$_cart_total = $wa->shop->cart->total()}
                 {$_cart_count = $wa->shop->cart->count()}
-                {$_price_text = "[`Empty`]"}
+                {$_price_text = ""}
                 {if !empty($_cart_total)}
                     {$_price_text = wa_currency_html($_cart_total, $wa->shop->currency())}
                 {/if}

@@ -1,0 +1,30 @@
+{strip}
+
+{$_breadcrumbs = []}
+{$_is_main_page = ( $wa->currentUrl() == $wa_app_url )}
+{$_is_personal_area = ( $wa->currentUrl() == $wa->getUrl('/frontend/my') )}
+
+{if !($_is_main_page || $_is_personal_area || empty($breadcrumbs))}
+    {$_breadcrumbs[] = [
+        "url" => $wa_app_url,
+        "name" =>  "[`Home`]"]
+    }
+    {$_breadcrumbs = array_merge($_breadcrumbs,$breadcrumbs)}
+{/if}
+
+{* BREADCRUMBS *}
+{if !empty($_breadcrumbs)}
+<div class="s-breadcrumbs-wrapper">
+    <ul class="s-breadcrumbs-block" itemprop="breadcrumb">
+        {foreach $_breadcrumbs as $breadcrumb}
+            {if !empty($breadcrumb)}
+                <li class="s-breadcrumb-item">
+                    <a class="s-breadcrumb-link" href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+                </li>
+            {/if}
+        {/foreach}
+    </ul>
+</div>
+{/if}
+
+{/strip}

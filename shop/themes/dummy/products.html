@@ -22,9 +22,7 @@
         {/if}
     {/if}
 
-    {$_uniq_ident = rand(0, 1000)}
-
-    <section class="s-products-wrapper" id="s-products-{$_uniq_ident}">
+    <section class="s-products-wrapper" id="s-products-wrapper">
 
         {if !empty($sorting)}
             {include file="./products.sorting.html" inline}
@@ -101,9 +99,17 @@
                                         <i class="icon16 star-empty"></i>
                                         <i class="icon16 star-empty"></i>
                                     </span>
-                                    <span class="s-rating-hint">No review's</span>
+                                    <span class="s-rating-hint">[`No review's`]</span>
                                 {/if}
                             </div>
+
+                            {if !($product.sku_count > 1)}
+                                <div class="s-quantity-wrapper">
+                                    <input class="minus-button decrease-volume" type="button" value="&minus;">
+                                    <input class="product-quantity-field" type="text" name="quantity" value="1" data-max-quantity="{$product.count}">
+                                    <input class="plus-button increase-volume" type="button" value="+">
+                                </div>
+                            {/if}
 
                             {if empty($hide_buttons)}
                                 <div class="s-buttons-wrapper">
@@ -113,7 +119,7 @@
                                         </a>
                                     {/if}
                                     {if $available}
-                                        <input class="s-button s-add-button" type="submit" data-added-text="[`Added`]" value="{$add2cart_label}">
+                                        <input class="s-button s-add-button" type="submit" data-added-text="[`added`]" value="{$add2cart_label}">
                                     {/if}
                                 </div>
                             {/if}
@@ -138,29 +144,41 @@
 
         <script>
             ( function($) {
-                var $products = $("#s-products-{$_uniq_ident}");
 
-                waShop.products = new Products({
-                    $wrapper: $products,
-                    compare: {
-                        url: "{$wa->getUrl("/frontend/compare")}",
-                        title: "[`Compare selected products`]"
-                    }
-                });
+                var is_products_exist = (typeof Products === "function");
 
-                var initLazyLoading = {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
-                if (initLazyLoading) {
-                    waShop.lazyLoading = new LazyLoading({
+                function initProducts() {
+
+                    var $products = $("#s-products-wrapper").removeAttr("id");
+
+                    new Products({
                         $wrapper: $products,
-                        names: {
-                            list: ".s-products-list",
-                            items: ".s-product-wrapper",
-                            paging: ".s-paging-wrapper"
+                        compare: {
+                            url: "{$wa->getUrl("/frontend/compare")}",
+                            title: "[`Compare selected products`]"
                         }
                     });
+
+                    var initLazyLoading = {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
+                    if (initLazyLoading) {
+                        new LazyLoading({
+                            $wrapper: $products,
+                            names: {
+                                list: ".s-products-list",
+                                items: ".s-product-wrapper",
+                                paging: ".s-paging-wrapper"
+                            }
+                        });
+                    }
                 }
 
-                $products.removeAttr("id");
+                if (!is_products_exist) {
+                    $.getScript("{$wa_theme_url}js/products.js?v{$wa_theme_version}", function() {
+                        initProducts();
+                    });
+                } else {
+                    initProducts();
+                }
             })(jQuery);
         </script>
 

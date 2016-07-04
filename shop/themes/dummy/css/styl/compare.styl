@@ -7,12 +7,35 @@
         margin 0
 
     .s-compare-filter
+        display inline-block
         margin 1em 0 0
+        border-radius: 2px;
+        overflow: hidden;
+        box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1);
 
         .s-button
+            display inline-block
+            vertical-align top
+            line-height 32px
+            min-width 32px
+            padding 0 8px
+            margin 0
+            text-align center
+            border-left: 1px solid rgba(0,0,0,.1)
+            border-radius 0
+
+            &:first-child
+                margin-left 0
+                border-left-color transparent
+
             &.is-selected
+                background: #2fa42e;
                 color #fff
-                background #2fa42e
+                border-left-color transparent
+                cursor default
+
+                & + .s-button
+                    border-left-color transparent
 
     .s-compare-table
         margin 2em 0 0

@@ -9,6 +9,10 @@
     {if !empty($products)}
         {include file="./products.html" sorting=!empty($category.params.enable_sorting)}
     {else}
-        [`No products here`]
+        {if !empty($filters)}
+            [`No products were found.`]
+        {else}
+            [`This category does not contain any products.`]
+        {/if}
     {/if}
 </div>

@@ -3,7 +3,7 @@
 {$_is_dialog = $wa->get('cart')}
 
 <div class="s-product-cart {if $_is_dialog}is-dialog{/if}">
-    <form id="s-product-form" method="post" action="{$wa->getUrl('/frontendCart/add')}">
+    <form id="s-product-form{if $_is_dialog}-dialog{/if}" method="post" action="{$wa->getUrl('/frontendCart/add')}">
 
         <h4>{sprintf('[`Buy %s`]',$product.name|escape)}</h4>
         {if $_is_dialog}
@@ -24,7 +24,7 @@
                         <div class="inline-select {if $f.type == 'color'}color{/if}">
                             {foreach $f.values as $v_id => $v}
                                 {if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
-                                <a class="{if $v_id == ifset($default_sku_features[$f.id])}selected{/if}" data-value="{$v_id}" href="javascript:void(0);" style="{if $f.type == 'color'}{$v->style}{/if}">
+                                <a data-sku-id="{$f.id}:{$v_id};" data-value="{$v_id}" href="javascript:void(0);" style="{if $f.type == 'color'}{$v->style}{/if}">
                                     {if $f.type == 'color'}
                                         <span class="color_name">{strip_tags($v)}</span>
                                     {else}
@@ -72,7 +72,14 @@
                         {$sku_available =  $product.status && $sku.available && ($wa->shop->settings('ignore_stock_count') || $sku.count === null || $sku.count > 0)}
                         <div class="skus-item" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                             <label{if !$sku.available} class="disabled"{/if}>
-                                <input name="sku_id" type="radio" value="{$sku.id}"{if !$sku.available} disabled="true"{/if}{if !$sku_available}data-disabled="1"{/if}{if $sku.id == $product.sku_id} checked="checked"{/if} data-compare-price="{shop_currency($sku.compare_price, $product.currency, null, 0)}" data-price="{shop_currency($sku.price, $product.currency, null, 0)}"{if $sku.image_id} data-image-id="{$sku.image_id}"{/if}> <span itemprop="name">{$sku.name|escape}</span>
+                                <input name="sku_id" type="radio" value="{$sku.id}"
+                                    data-compare-price="{shop_currency($sku.compare_price, $product.currency, null, 0)}"
+                                    data-price="{shop_currency($sku.price, $product.currency, null, 0)}"
+                                    {if !$sku.available} disabled="true"{/if}
+                                    {if !$sku_available}data-disabled="1"{/if}
+                                    {if $sku.id == $product.sku_id}checked="checked"{/if}
+                                    {if $sku.image_id} data-image-id="{$sku.image_id}"{/if}>
+                                <span itemprop="name">{$sku.name|escape}</span>
                                 {if $sku.sku}<span class="hint">{$sku.sku|escape}</span>{/if}
                                 <meta itemprop="price" content="{$sku.price}">
                                 <meta itemprop="priceCurrency" content="{$product.currency}">
@@ -185,14 +192,14 @@
                         <div class="volume-buttons">
                             <input class="minus-link decrease-volume" type="button" value="&minus;">
                         </div>
-                        <input id="product-quantity-field" type="text" name="quantity" value="1" data-max-quantity="{$product.count}">
+                        <input class="product-quantity-field" type="text" name="quantity" value="1" data-max-quantity="{$product.count}">
                         <div class="volume-buttons">
                             <input class=" plus-link increase-volume" type="button" value="+">
                         </div>
                     </div>
 
                     <div class="price-wrapper">
-                        {if $product.compare_price > 0}<span class="compare-at-price nowrap" data-compare-price="{shop_currency_html($product.compare_price, null, null, 0)}" > {shop_currency_html($product.compare_price)} </span>{/if}
+                        <span class="compare-at-price nowrap {if !($product.compare_price > 0)}is-hidden{/if}" data-compare-price="{shop_currency_html($product.compare_price, null, null, 0)}" > {shop_currency_html($product.compare_price)} </span>
                         <span data-price="{shop_currency($product.price, null, null, 0)}" class="price nowrap">{shop_currency_html($product.price)}</span>
                     </div>
 
@@ -208,7 +215,7 @@
                     <div class="">{sprintf('[`%s is now in your shopping cart`]', $product.name|escape, $wa->getUrl('shop/frontend/cart'))}</div>
                     <div class="button-block">
                         {if $_is_dialog}
-                            <a class="s-button white s-close-dialog" href="javascript:void(0);">[`Continue shopping`]</a>
+                            <a class="s-button white s-close-dialog" href="javascript:void(0);">[`Back to the store`]</a>
                         {/if}
                         <a class="s-button" href="{$wa->getUrl('shop/frontend/cart')}">[`Go to shopping cart`]</a>
                     </div>
@@ -221,19 +228,21 @@
 </div>
 
 <script>
-    ( function($) {
-        $.getScript("{$wa_theme_url}js/product.js?v{$wa_theme_version}", function() {
-            var $form = $("#s-product-form"),
-                options = {
-                    is_dialog: {if $_is_dialog}true{else}false{/if},
-                    currency: {json_encode($currency_info)},
-                    services: {if count($product.skus) > 1 or $product.sku_type}{json_encode($sku_services)}{else}false{/if},
-                    features: {if $product.sku_type}{json_encode($sku_features_selectable)}{else}false{/if}
-                };
+( function($) {
+    var is_product_exist = (typeof Product === "function");
 
-            new Product($form, options);
+    (!is_product_exist) ? $.getScript("{$wa_theme_url}js/product.js?v{$wa_theme_version}", initProduct) : initProduct();
+
+    function initProduct() {
+        new Product({
+            $form: $("#s-product-form{if $_is_dialog}-dialog{/if}"),
+            is_dialog: {if $_is_dialog}true{else}false{/if},
+            currency: {json_encode($currency_info)},
+            services: {if count($product.skus) > 1 or $product.sku_type}{json_encode($sku_services)}{else}false{/if},
+            features: {if $product.sku_type}{json_encode($sku_features_selectable)}{else}false{/if}
         });
-    })(jQuery);
+    }
+})(jQuery);
 </script>
 
 {/strip}

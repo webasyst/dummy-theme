@@ -274,16 +274,16 @@ html.swipebox-html.swipebox-touch {
     max-width: 800px;
   }
 }
-/* Skin 
+/* Skin
 --------------------------*/
 #swipebox-overlay {
-  background: #0d0d0d;
+  background: #fff;
 }
 
 #swipebox-bottom-bar,
 #swipebox-top-bar {
   text-shadow: 1px 1px 1px black;
-  background: #000;
+  background: rgba(0,0,0,.2);
   opacity: 0.95;
 }
 

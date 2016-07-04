@@ -1,28 +1,29 @@
 // Product Class
 var Product = ( function($) {
 
-    Product = function($form, options) {
+    Product = function(options) {
         var that = this;
 
         // DOM
-        that.$form = $form;
+        that.$form = options["$form"];
         that.add2cart = that.$form.find(".add2cart");
-        that.button = that.add2cart.find("input[type=submit]");
+        that.$button = that.add2cart.find("input[type=submit]");
         that.$price = that.add2cart.find(".price");
-        that.$quantity = that.$form.find("#product-quantity-field");
+        that.$comparePrice = that.add2cart.find(".compare-at-price");
+        that.$quantity = that.$form.find(".product-quantity-field");
 
         // VARS
         that.is_dialog = ( options["is_dialog"] || false );
         that.volume = 1;
+        that.currency = options["currency"];
+        that.services = options["services"];
+        that.features = options["features"];
+
+        // DYNAMIC VARS
         that.price = parseFloat( that.$price.data("price") );
+        that.compare_price = parseFloat( that.$comparePrice.data("compare-price") );
 
-        // OPTIONS
-        for (var k in options) {
-            if (options.hasOwnProperty(k)) {
-                that[k] = options[k];
-            }
-        }
-
+        // INIT
         that.initProduct();
     };
 
@@ -33,15 +34,151 @@ var Product = ( function($) {
         //
         that.bindEvents();
 
-        //
-        $("#product-skus input[type=radio]:checked").click();
+        initFirstSku();
 
-        that.$form.find(".sku-feature:first").change();
+        function initFirstSku() {
+            var $skuFeature = that.$form.find(".sku-feature:first"),
+                is_buttons_view_type = $skuFeature.length;
 
-        if (!that.$form.find(".skus input:radio:checked").length) {
-            that.$form.find(".skus input:radio:enabled:first").attr('checked', 'checked');
+            // for sku buttons type
+            if (is_buttons_view_type) {
+                initFirstButton( $skuFeature );
+
+            // for sku radio type
+            } else {
+                var $radio = getRadioInput();
+                if ($radio) {
+                    $radio.click();
+                }
+            }
+
+            function getRadioInput() {
+                var $radios = that.$form.find(".skus input[type=radio]"),
+                    result = false;
+
+                $.each($radios, function() {
+                    var $radio = $(this),
+                        is_enabled = !( $radio.attr("disabled") && ($radio.attr("disabled") == "disabled") ),
+                        is_checked = ( $radio.attr("checked") && ($radio.attr("checked") == "checked") );
+
+                    if ( is_enabled && (!result || is_checked) ) {
+                        result = $radio;
+                    }
+                });
+
+                return result;
+            }
+
+            function initFirstButton( $skuFeature ) {
+                var $wrapper = that.$form.find(".s-options-wrapper"),
+                    is_select =  $wrapper.find("select").length;
+
+                if (is_select) {
+                    $skuFeature.change();
+                } else {
+                    var $groups = $wrapper.find(".inline-select"),
+                        groups = getGroupsData( $groups ),
+                        availableSku = getAvailableSku( groups );
+
+                    if (availableSku) {
+                        $.each(availableSku.$links, function() {
+                            $(this).click();
+                        });
+                    }
+
+                    function getGroupsData( $groups ) {
+                        var result = [];
+
+                        $.each($groups, function() {
+                            var $group = $(this),
+                                $links = $group.find("a"),
+                                linkArray = [];
+
+                            $.each($links, function() {
+                                var $link = $(this),
+                                    id = $link.data("sku-id");
+
+                                linkArray.push({
+                                    id: id,
+                                    $link: $link
+                                });
+                            });
+
+                            result.push(linkArray);
+                        });
+
+                        return result;
+                    }
+
+                    function getAvailableSku( groups ) {
+                        function selectionIsGood(prefix) {
+                            var skuData = getSkuData( prefix ),
+                                sku = checkSku( skuData.id ),
+                                result = false;
+
+                            if (sku) {
+                                result = {
+                                    sku: sku,
+                                    $links: skuData.$links
+                                }
+                            }
+                            return result;
+                        }
+
+                        function getFirstWorking(groups, prefix) {
+                            if (!groups.length) {
+                                return selectionIsGood(prefix);
+                            }
+
+                            prefix = prefix || [];
+
+                            var group = groups[0],
+                                other_groups = groups.slice(1);
+
+                            for (var i = 0; i < group.length; i++) {
+                                var new_prefix = prefix.slice();
+                                new_prefix.push(group[i]);
+                                var result = getFirstWorking(other_groups, new_prefix);
+                                if (result) {
+                                    return result;
+                                }
+                            }
+
+                            return null;
+                        }
+
+                        return getFirstWorking(groups);
+
+                        function getSkuData( sku_array ) {
+                            var id = [],
+                                $links = [];
+                            $.each(sku_array, function(index, item) {
+                                id.push(item.id);
+                                $links.push(item.$link);
+                            });
+
+                            return {
+                                id: id.join(""),
+                                $links: $links
+                            };
+                        }
+                    }
+
+                    function checkSku( skus_id ) {
+                        var result = false;
+
+                        if (that.features.hasOwnProperty(skus_id)) {
+                            var sku = that.features[skus_id];
+                            if (sku.available) {
+                                result = sku;
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+            }
         }
-
     };
 
     //
@@ -142,17 +279,14 @@ var Product = ( function($) {
 
     //
     Product.prototype.onSkusChange = function() {
-        var that = this,
-            key = "",
-            sku;
+        var that = this;
 
-        that.$form.find(".sku-feature").each( function () {
-            var $input = $(this);
+        // DOM
+        var $form = that.$form,
+            $button = that.$button;
 
-            key += $input.data("feature-id") + ':' + $input.val() + ';';
-        });
-
-        sku = that.features[key];
+        var key = getKey(),
+            sku = that.features[key];
 
         if (sku) {
 
@@ -160,28 +294,32 @@ var Product = ( function($) {
             that.updateSkuServices(sku.id);
 
             //
-            if (sku.available) {
-                that.button.removeAttr('disabled');
-
-            } else {
-                that.$form.find("div.s-stocks-wrapper div").hide();
-                that.$form.find(".sku-no-stock").show();
-                that.button.attr('disabled', 'disabled');
+            if (sku.image_id) {
+                that.changeImage(sku.image_id);
             }
 
             //
-            that.$price.data('price', sku.price);
+            if (sku.available) {
+                $button.removeAttr('disabled');
+
+            } else {
+                $form.find("div.s-stocks-wrapper div").hide();
+                $form.find(".sku-no-stock").show();
+                $button.attr('disabled', 'disabled');
+            }
 
             //
-            that.updatePrice(sku.price, sku.compare_price);
+            sku["compare_price"] = ( sku["compare_price"] ) ? sku["compare_price"] : 0 ;
+            //
+            that.updatePrice(sku["price"], sku["compare_price"]);
 
         } else {
             //
-            that.$form.find("div.s-stocks-wrapper div").hide();
+            $form.find("div.s-stocks-wrapper div").hide();
             //
-            that.$form.find(".sku-no-stock").show();
+            $form.find(".sku-no-stock").show();
             //
-            that.button.attr('disabled', 'disabled');
+            $button.attr('disabled', 'disabled');
             //
             that.add2cart.find(".compare-at-price").hide();
             //
@@ -190,21 +328,39 @@ var Product = ( function($) {
 
         //
         that.cartButtonVisibility(true);
+
+        function getKey() {
+            var result = "";
+
+            $form.find(".sku-feature").each( function () {
+                var $input = $(this);
+
+                result += $input.data("feature-id") + ':' + $input.val() + ';';
+            });
+
+            return result;
+        }
     };
 
     //
     Product.prototype.onSkusClick = function( $link ) {
         var that = this,
-            sku_id = $link.val();
+            sku_id = $link.val(),
+            price = $link.data("price"),
+            compare_price = $link.data("compare-price"),
+            image_id = $link.data('image-id');
 
-        if ($link.data('image-id')) {
-            //$("#product-image-" + $(this).data('image-id')).click();
+        // DOM
+        var $button = that.$button;
+
+        if (image_id) {
+            that.changeImage(image_id);
         }
 
         if ($link.data('disabled')) {
-            that.button.attr('disabled', 'disabled');
+            $button.attr('disabled', 'disabled');
         } else {
-            that.button.removeAttr('disabled');
+            $button.removeAttr('disabled');
         }
 
         //
@@ -212,7 +368,7 @@ var Product = ( function($) {
         //
         that.cartButtonVisibility(true);
         //
-        that.updatePrice();
+        that.updatePrice(price, compare_price);
     };
 
     //
@@ -233,7 +389,7 @@ var Product = ( function($) {
     //
     Product.prototype.onServiceClick = function( $input ) {
         var that = this,
-            $select = $("select[name=\"service_variant[" + $input.val() + "]\"]");
+            $select = that.$form.find("select[name=\"service_variant[" + $input.val() + "]\"]");
 
         if ($select.length) {
             if ( $input.is(":checked") ) {
@@ -268,9 +424,9 @@ var Product = ( function($) {
     // Change Volume
     Product.prototype.changeVolume = function( type ) {
         var that = this,
-            $volume_input = $("#product-quantity-field"),
-            current_val = parseInt( $volume_input.val() ),
-            input_max_data = parseInt($volume_input.data("max-quantity")),
+            $quantity = that.$quantity,
+            current_val = parseInt( $quantity.val() ),
+            input_max_data = parseInt( $quantity.data("max-quantity")),
             max_val = ( isNaN(input_max_data) || input_max_data === 0 ) ? Infinity : input_max_data,
             new_val;
 
@@ -280,10 +436,8 @@ var Product = ( function($) {
                     new_val = 1;
                 }
 
-            } else if (current_val > max_val) {
-                if ( that.volume != max_val ) {
-                    new_val = max_val;
-                }
+            } else if (current_val >= max_val) {
+                new_val = max_val;
 
             } else {
                 new_val = current_val;
@@ -295,7 +449,7 @@ var Product = ( function($) {
             that.volume = new_val;
 
             // Set new value
-            $volume_input.val(new_val);
+            $quantity.val(new_val);
 
             // Update Price
             that.updatePrice();
@@ -394,8 +548,8 @@ var Product = ( function($) {
 
         that.$quantity
             .val(that.volume)
-            .trigger("change")
-            .data("max-quantity", sku_count);
+            .data("max-quantity", sku_count)
+            .trigger("change");
 
         for (var service_id in that.services[sku_id]) {
 
@@ -447,55 +601,78 @@ var Product = ( function($) {
     };
 
     // Update Price
-    Product.prototype.updatePrice = function (price, compare_price) {
-        var that = this,
-            $compare = that.add2cart.find(".compare-at-price");
+    Product.prototype.updatePrice = function(price, compare_price) {
+        var that = this;
 
-        // Price for One item
-        if (price === undefined) {
-            var input_checked = that.$form.find(".skus input:radio:checked");
+        var hidden_class = "is-hidden";
 
-            if (input_checked.length) {
-                price = parseFloat(input_checked.data('price'));
-            } else {
-                price = that.price;
-            }
+        // DOM
+        var $form = that.$form,
+            $price = that.$price,
+            $compare = that.$comparePrice;
 
-        } else {
+        // VARS
+        var services_price = getServicePrice(),
+            volume = that.volume,
+            price_sum,
+            compare_sum;
+
+        //
+        if (price) {
             that.price = price;
+            $price.data("price", price);
+        } else {
+            price = that.price;
         }
 
-        // Increase price * volume
-        price = price * that.volume;
-
-        // Compare Price
-        if ($compare.length) {
-            compare_price = $compare.data("compare-price") * that.volume;
+        //
+        if (compare_price >= 0) {
+            that.compare_price = compare_price;
+            $compare.data("price", compare_price);
+        } else {
+            compare_price = that.compare_price;
         }
 
-        // Adding price for service
-        that.$form.find(".services input:checked").each(function () {
-            var s = $(this).val(),
-                service_price;
-
-            if (that.$form.find('.service-' + s + '  .service-variants').length) {
-                service_price = parseFloat( that.$form.find('.service-' + s + '  .service-variants :selected').data('price') );
-            } else {
-                service_price = parseFloat( $(this).data('price') );
-            }
-
-            price += service_price * that.volume;
-
-            if ($compare.length) {
-                compare_price += service_price;
-            }
-        });
+        //
+        price_sum = (price + services_price) * volume;
+        compare_sum = (compare_price + services_price) * volume;
 
         // Render Price
-        that.$price.html( that.currencyFormat(price) );
+        $price.html( that.currencyFormat(price_sum) );
+        $compare.html( that.currencyFormat(compare_sum) );
 
-        if ($compare.length) {
-            $compare.html(that.currencyFormat(compare_price));
+        // Render Compare
+        if (compare_price > 0) {
+            $compare.removeClass(hidden_class);
+        } else {
+            $compare.addClass(hidden_class);
+        }
+
+        //
+        function getServicePrice() {
+            // DOM
+            var $checkedServices = $form.find(".services input:checked");
+
+            // DYNAMIC VARS
+            var services_price = 0;
+
+            $checkedServices.each( function () {
+                var $service = $(this),
+                    service_value = $service.val(),
+                    service_price = 0;
+
+                var $serviceVariants = $form.find(".service-" + service_value + " .service-variants");
+
+                if ($serviceVariants.length) {
+                    service_price = parseFloat( $serviceVariants.find(":selected").data("price") );
+                } else {
+                    service_price = parseFloat( $service.data("price") );
+                }
+
+                services_price += service_price;
+            });
+
+            return services_price;
         }
     };
 
@@ -514,7 +691,16 @@ var Product = ( function($) {
         }
     };
 
-    return Product
+    Product.prototype.changeImage = function( image_id ) {
+        if (image_id) {
+            var $imageLink = $("#s-image-" + image_id);
+            if ($imageLink.length) {
+                $imageLink.click();
+            }
+        }
+    };
+
+    return Product;
 
 })(jQuery);
 

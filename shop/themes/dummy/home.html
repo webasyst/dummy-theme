@@ -1,13 +1,26 @@
 {strip}
 
 {$wa->globals("hideSidebar", true)}
+{$promocards = $wa->shop->promos()}
 
 <div class="s-home-wrapper">
+
     {* SLIDER *}
-    {include file="home.slider.html" inline}
+    {$_show_promocards_slider = ( $theme_settings.slider_mode == "promos" )}
+    {$_show_products_slider = ( $theme_settings.slider_mode == "products" )}
+    {if $_show_promocards_slider}
+        {if !empty($promocards)}
+            {include file="home.slider.html" _promocards=$promocards inline}
+        {/if}
+    {elseif $_show_products_slider}
+        {$_bestsellers = $wa->shop->productSet('bestsellers')}
+        {if !empty($_bestsellers)}
+            {include file="home.slider.html" _products=$_bestsellers inline}
+        {/if}
+    {/if}
 
     {* PROMOCARDS *}
-    {$promocards = $wa->shop->promos()}
+
     {if !empty($promocards)}
         <section class="s-promos-wrapper">
             <ul class="s-promos-list">

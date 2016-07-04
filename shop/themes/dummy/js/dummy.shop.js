@@ -237,6 +237,91 @@
     });
 })(jQuery);
 
+// Shop :: Change Language
+( function($) {
+    $(document).ready( function () {
+        $("#language").change(function () {
+            var href = location.href,
+                url = (href.indexOf('?') == -1) ? href += '?' : href += '&';
+            location.href = url + 'locale=' + $(this).val();
+        });
+    });
+})(jQuery);
+
+// Shop :: Header Catalog List
+var CatalogList = ( function($) {
+
+    CatalogList = function(options) {
+        var that = this;
+
+        // DOM
+        that.$wrapper = options["$wrapper"];
+        that.$button = that.$wrapper.find(".s-catalog-button");
+        that.$list = that.$wrapper.find(".s-catalog-list");
+
+        // VARS
+        that.open_class = "is-opened";
+
+        // DYNAMIC VARS
+        that.is_opened = false;
+        that.is_mobile = false;
+
+        // INIT
+        that.initClass();
+    };
+
+    CatalogList.prototype.initClass = function() {
+        var that = this,
+            button = that.$button[0];
+
+        that.$button.on("mouseenter", onMouseEnter);
+        that.$wrapper.on("mouseleave", onMouseLeave);
+
+        button.addEventListener("touchstart", function () {
+            if (!that.is_mobile) {
+                that.$button.off("mouseenter", onMouseEnter);
+                that.$wrapper.off("mouseleave", onMouseLeave);
+                that.is_mobile = true;
+            }
+            that.toggleView();
+        });
+
+        function onMouseEnter() {
+            that.toggleView("show");
+        }
+
+        function onMouseLeave() {
+            that.toggleView("hide");
+        }
+    };
+
+    CatalogList.prototype.toggleView = function( show ) {
+        var that = this,
+            show_list;
+
+        if (show) {
+            if (show == "show") {
+                show_list = true;
+            } else if (show == "hide") {
+                show_list = false;
+            }
+        } else {
+            show_list = !that.is_opened;
+        }
+
+        if (show_list) {
+            that.$wrapper.addClass(that.open_class);
+            that.is_opened = true;
+        } else {
+            that.$wrapper.removeClass(that.open_class);
+            that.is_opened = false;
+        }
+    };
+
+    return CatalogList;
+
+})(jQuery);
+
 // Shop :: Header Cart Counter
 var updateHeaderCart = ( function($) {
 
@@ -263,199 +348,6 @@ var updateHeaderCart = ( function($) {
         return updateHeaderCart;
 
     });
-
-})(jQuery);
-
-// Shop :: Products Class
-var Products = ( function($) {
-
-    Products = function(options) {
-        var that = this;
-
-        // DOM
-        that.$wrapper = options["$wrapper"];
-        that.$products = that.$wrapper.find(".s-product-wrapper");
-        that.$sorting = that.$wrapper.find(".s-sorting-wrapper");
-        that.$productList = that.$wrapper.find(".s-products-list");
-
-        // VARS
-        that.added_class = "is-added";
-        that.compare = ( options['compare'] || false );
-
-        // DYNAMIC VARS
-
-        // INIT
-        that.bindEvents();
-    };
-
-    Products.prototype.bindEvents = function() {
-        var that = this,
-            $wrapper = that.$wrapper;
-
-        $wrapper.on("submit", "form.add-to-cart", function(event) {
-            event.preventDefault();
-            that.onSubmitProduct( $(this) );
-        });
-
-        $wrapper.on("click", ".s-add-button", function(event) {
-            event.preventDefault();
-            that.onAddProduct( $(this) );
-        });
-
-        $wrapper.on("click", ".s-compare-button", function(event) {
-            event.preventDefault();
-            that.onCompareProduct( $(this) );
-        });
-
-        $wrapper.on("click", ".set-table-view", function() {
-            that.onChangeView( $(this), true );
-            return false;
-        });
-
-        $wrapper.on("click", ".set-thumbs-view", function() {
-            that.onChangeView( $(this), false );
-            return false;
-        });
-    };
-
-    // SORTING
-
-    Products.prototype.onChangeView = function( $link, is_table ) {
-        var that = this,
-            $list = that.$productList,
-            active_class = "is-active",
-            table_class = "table-view",
-            thumbs_class = "thumbs-view",
-            is_active = $link.hasClass(active_class);
-
-        if (!is_active) {
-
-            if (is_table) {
-                $list
-                    .removeClass(thumbs_class)
-                    .addClass(table_class);
-
-            } else {
-                $list
-                    .removeClass(table_class)
-                    .addClass(thumbs_class);
-            }
-
-            that.$sorting.find(".view-filters ." + active_class).removeClass(active_class);
-            $link.addClass(active_class)
-        }
-    };
-
-    // ADD PRODUCT
-
-    Products.prototype.onSubmitProduct = function($form) {
-        var that = this,
-            $product = $form.closest(".s-product-wrapper"),
-            product_href = $form.data("url");
-
-        if (product_href) {
-            $.post(product_href, function( html ) {
-                var dialog = new Dialog({
-                        html: html
-                    });
-
-                var $dialog = dialog.$dialog;
-
-                $dialog.on("addedToCart", function() {
-                    that.maskProductAsAdded( $product );
-                });
-            });
-
-        } else {
-            $.post($form.attr('action') + '?html=1', $form.serialize(), function (response) {
-                that.maskProductAsAdded( $product );
-
-                // Update Cart at Header
-                if (response["data"]) {
-                    var count = response["data"]["count"],
-                        text = response["data"]["total"];
-
-                    if (text && count >= 0) {
-                        updateHeaderCart({
-                            text: text,
-                            count: count
-                        });
-                    }
-                }
-
-            }, "json");
-        }
-    };
-
-    Products.prototype.onAddProduct = function( $button ) {
-        var that = this,
-            is_active = $button.hasClass(that.added_class);
-
-        if (!is_active) {
-            var $form = $button.closest(".s-product-wrapper").find("form.add-to-cart");
-            $form.submit();
-        }
-    };
-
-    Products.prototype.maskProductAsAdded = function( $product ) {
-        var that = this,
-            $button = $product.find(".s-add-button"),
-            added_text = $button.data("added-text");
-
-        $button
-            .addClass(that.added_class)
-            .val(added_text);
-    };
-
-    // COMPARE
-
-    Products.prototype.onCompareProduct = function( $button ) {
-        var that = this,
-            active_class = "active",
-            $icon = $button.find(".compare"),
-            $product = $button.closest(".s-product-wrapper"),
-            product_id = $product.data("product-id"),
-            is_active = $icon.hasClass(active_class),
-            is_disabled = ( $button.data("is_disabled") || false );
-
-        var compare = $.cookie('shop_compare'); // Product Id's Array @string
-        compare = (compare) ? compare.split(',') : [];
-
-        if (is_active) {
-            //
-            $icon.removeClass(active_class);
-
-            //
-            var index = $.inArray( product_id + '', compare);
-            if (index != -1) {
-                compare.splice(index, 1)
-            }
-            if (compare.length > 0) {
-                $.cookie('shop_compare', compare.join(','), { expires: 30, path: '/'});
-            } else {
-                $.cookie('shop_compare', null, {path: '/'});
-            }
-
-        } else {
-            //
-            $icon.addClass(active_class);
-
-            //
-            compare.push(product_id);
-            $.cookie('shop_compare', compare.join(','), { expires: 30, path: '/'});
-        }
-
-        var compare_url = that.compare["url"];
-        if (compare.length > 0) {
-            compare_url = compare_url.replace(/compare\/.*$/, 'compare/' + compare.join(',') + '/');
-        }
-
-        //compare_url
-
-        $("#s-compare-counter").trigger("checkCompare");
-    };
-
-    return Products;
 
 })(jQuery);
 
@@ -794,5 +686,106 @@ var LazyLoading = ( function($) {
 
 })(jQuery);
 
-// Global container for variables
-var waShop = {};
+// Shop :: Promo CountDown
+var CountDown = ( function($) {
+
+    CountDown = function(options) {
+        var that = this;
+
+        // DOM
+        that.$wrapper = options["$wrapper"];
+
+        // VARS
+        that.start = options["start"];
+        that.end = options["end"];
+        that.format = "%days%:%hours%:%minutes%:%seconds%";
+
+        // DYNAMIC VARS
+        that.period = that.getPeriod();
+        that.time_period = null;
+        that.timer = 0;
+
+        // INIT
+        that.run();
+    };
+
+    CountDown.prototype.getPeriod = function() {
+        var that = this,
+            start_date = new Date( that.start ),
+            end_date = new Date( that.end );
+
+        return (end_date > start_date) ? (end_date - start_date) : 0;
+    };
+
+    CountDown.prototype.getData = function() {
+        var that = this,
+            period = that.period;
+
+        var second = 1000,
+            minute = second * 60,
+            hour = minute * 60,
+            day = hour * 24,
+            residue;
+
+        var days = Math.floor(period/day);
+        residue = ( period - days * day );
+
+        var hours = Math.floor(residue/hour);
+        residue = ( residue - hours * hour );
+
+        var minutes = Math.floor(residue/minute);
+        residue = ( residue - minutes * minute );
+
+        var seconds = Math.floor(residue/second);
+
+        return {
+            days: days,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+        }
+    };
+
+    CountDown.prototype.getTime = function() {
+        var that = this,
+            data = that.getData(),
+            result = that.format;
+
+        return result
+            .replace("%days%", (data.days < 10) ? "0" + data.days : data.days)
+            .replace("%hours%", (data.hours < 10) ? "0" + data.hours : data.hours)
+            .replace("%minutes%", (data.minutes < 10) ? "0" + data.minutes : data.minutes)
+            .replace("%seconds%", (data.seconds < 10) ? "0" + data.seconds : data.seconds);
+    };
+
+    CountDown.prototype.run = function() {
+        var that = this,
+            timer = 1000;
+
+        if (that.period > 0) {
+            var time = that.getTime();
+
+            that.$wrapper.html(time);
+
+            that.period -= timer;
+
+            if (that.period > 0) {
+                that.timer = setTimeout( function () {
+                    that.run();
+                }, timer);
+            }
+
+        } else {
+            that.destroy();
+        }
+    };
+
+    CountDown.prototype.destroy = function() {
+        var that = this;
+
+        that.$wrapper.remove();
+    };
+
+    return CountDown;
+
+})(jQuery);

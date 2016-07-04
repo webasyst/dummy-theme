@@ -5,110 +5,78 @@ var Cart = ( function($) {
 
         // DOM
         that.$wrapper = ( options["$wrapper"] || false );
+        that.$products = that.$wrapper.find(".s-cart-product");
+        that.$services = that.$products.find(".s-product-services");
+        that.$cartAffiliateHint = $("#affiliate-hint-wrapper");
+        that.$cartDiscount = $("#s-cart-discount");
+        that.$cartDiscountWrapper = $("#cart-discount-wrapper");
+        that.$cartTotal = $("#cart-total");
 
         // VARS
+        that.error_class = "has-error";
 
         // INIT
         this.bindEvents();
     };
 
-    // Selectors and Options Storage
-    Cart.prototype.storage = {
-        hasErrorClass: "has-error",
-        getWrapper: function() {
-            return $(".s-cart-page");
-        },
-        getProduct: function() {
-            return this.getWrapper().find(".s-cart-product");
-        },
-        getProductQuantityInput: function( $product ) {
-            return $product.find(".s-product-quantity");
-        },
-        getProductServices: function() {
-            return this.getProduct().find(".s-product-services");
-        },
-        getProductService: function( $target ) {
-            return $target.closest(".s-service");
-        },
-        getProductTotal: function( $product ) {
-            return $product.find(".s-product-total");
-        },
-        getCartTotal: function() {
-            return $("#cart-total");
-        },
-        getCartDiscountWrapper: function() {
-            return $("#cart-discount-wrapper");
-        },
-        getCartDiscount: function() {
-            return $("#s-cart-discount");
-        },
-        getCartAffiliateHint: function() {
-            return $("#affiliate-hint-wrapper");
-        }
-    };
-
     // Events
     Cart.prototype.bindEvents = function() {
         var that = this,
-            $wrapper = that.storage.getWrapper(),
-            $product = that.storage.getProduct(),
-            $productServices = that.storage.getProductServices();
+            $wrapper = that.$wrapper,
+            $product = that.$products,
+            $productServices = that.$services;
 
         $product.on("click", ".increase-volume", function() {
             var $currentProduct = $(this).closest(".s-cart-product");
-            that.changeProductQuantity( that, "positive", $currentProduct);
+            that.changeProductQuantity("positive", $currentProduct);
             return false;
         });
 
         $product.on("click", ".decrease-volume", function() {
             var $currentProduct = $(this).closest(".s-cart-product");
-            that.changeProductQuantity( that, "negative", $currentProduct);
+            that.changeProductQuantity("negative", $currentProduct);
             return false;
         });
 
         $product.on("change", ".s-product-quantity", function() {
-            var $currentProduct = $(this).closest(".s-cart-product");
-            that.onChangeProductQuantity( that, $(this), $currentProduct );
+            that.onChangeProductQuantity( $(this) );
             return false;
         });
 
         $product.on("click", ".delete-product", function() {
-            var $currentProduct = $(this).closest(".s-cart-product");
-            that.deleteProduct(that, $currentProduct);
+            that.deleteProduct( $(this).closest(".s-cart-product") );
             return false;
         });
 
         $productServices.on("change", "select", function() {
-            var $select = $(this),
-                $currentProduct = $select.closest(".s-cart-product");
-            that.onServiceChange(that, $select, $currentProduct);
+            that.onServiceChange( $(this) );
             return false;
         });
 
         $productServices.on("change", "input[type=\"checkbox\"]", function() {
-            var $currentProduct = $(this).closest(".s-cart-product");
-            that.onServiceCheck(that, $(this), $currentProduct);
+            that.onServiceCheck( $(this) );
             return false;
         });
 
         $("#cancel-affiliate").on("click", function () {
-            that.cancelAffiliate( that, $(this) );
+            that.cancelAffiliate( $(this) );
             return false;
         });
 
         $("#use-coupon").on("click", function () {
-            that.useCoupon( that, $(this) );
+            that.useCoupon( $(this) );
             return false;
         });
 
         $wrapper.on("click", ".add-to-cart-link", function() {
-            that.onAddToCart(that, $(this));
+            that.onAddToCart( $(this) );
             return false;
         });
     };
 
-    Cart.prototype.onAddToCart = function(that, $target) {
-        var $deferred = $.Deferred(),
+    Cart.prototype.onAddToCart = function( $target ) {
+        var that = this,
+            $deferred = $.Deferred(),
             request_href = $target.data("request-href"),
             request_data = {
                 html: 1,
@@ -126,21 +94,23 @@ var Cart = ( function($) {
         });
     };
 
-    Cart.prototype.onServiceCheck = function(that, $input, $product) {
-        var $deferred = $.Deferred(),
+    Cart.prototype.onServiceCheck = function($input) {
+        var that = this,
+            $product = $input.closest(".s-cart-product"),
+            $deferred = $.Deferred(),
             product_id = $product.data("id"),
             is_checked = $input.is(":checked"),
             input_val = $input.val(),
-            $innerSelect = $('select[name="service_variant[' + product_id + '][' + input_val + ']"]'),
-            $service = that.storage.getProductService( $input),
+            $field = $('[name="service_variant[' + product_id + '][' + input_val + ']"]'),
+            $service = $input.closest(".s-service"),
             request_data = {};
 
         // Toggle service <select>
-        if ($innerSelect.length) {
+        if ($field.length) {
             if (is_checked) {
-                $innerSelect.removeAttr('disabled');
+                $field.removeAttr('disabled');
             } else {
-                $innerSelect.attr('disabled', 'disabled');
+                $field.attr('disabled', 'disabled');
             }
         }
 
@@ -152,9 +122,8 @@ var Cart = ( function($) {
             };
 
             // If variants exits, adding to request_data
-            var variants = $("select[name=\"service_variant[" + product_id + "][" + input_val + "]\"]");
-            if (variants.length) {
-                request_data["service_variant_id"] = variants.val();
+            if ($field.length) {
+                request_data["service_variant_id"] = $field.val();
             }
 
             $.post('add/', request_data, function(response) {
@@ -166,11 +135,11 @@ var Cart = ( function($) {
                 $service.data("id", response.data.id);
 
                 // Set Product Total
-                var $productTotal = that.storage.getProductTotal( $product );
+                var $productTotal = $product.find(".s-product-total");
                 $productTotal.html(response.data.item_total);
 
                 // Update Cart Total
-                that.updateCart(that, $product, response.data);
+                that.updateCart($product, response.data);
             });
 
         } else {
@@ -189,18 +158,19 @@ var Cart = ( function($) {
                 $service.data('id', null);
 
                 // Set Product Total
-                var $productTotal = that.storage.getProductTotal( $product );
+                var $productTotal = $product.find(".s-product-total");
                 $productTotal.html(response.data.item_total);
 
                 // Update Cart Total
-                that.updateCart(that, $product, response.data);
+                that.updateCart($product, response.data);
             });
         }
 
     };
 
-    Cart.prototype.useCoupon = function(that, $target ) {
-        var $discountWrapper = that.storage.getCartDiscountWrapper();
+    Cart.prototype.useCoupon = function($target ) {
+        var that = this,
+            $discountWrapper = that.$cartDiscountWrapper;
 
         // Hide link
         $target.hide();
@@ -212,8 +182,9 @@ var Cart = ( function($) {
         $("#apply-coupon-code").show();
     };
 
-    Cart.prototype.cancelAffiliate = function(that, $link) {
-        var $form = $link.closest('form');
+    Cart.prototype.cancelAffiliate = function($link) {
+        var that = this,
+            $form = $link.closest('form');
 
         // Adding Affiliate Field
         $form.append("<input type=\"hidden\" name=\"use_affiliate\" value=\"0\">");
@@ -222,9 +193,11 @@ var Cart = ( function($) {
         $form.submit();
     };
 
-    Cart.prototype.onServiceChange = function(that, $select, $product) {
-        var $deferred = $.Deferred(),
-            $service = that.storage.getProductService( $select ),
+    Cart.prototype.onServiceChange = function($select) {
+        var that = this,
+            $product = $select.closest(".s-cart-product"),
+            $deferred = $.Deferred(),
+            $service = $select.closest(".s-service"),
             request_data = {
                 html: 1,
                 id: $service.data("id"),
@@ -241,15 +214,16 @@ var Cart = ( function($) {
             $product.find('.s-product-total').html(response.data.item_total);
 
             // Render Cart Total
-            that.updateCart(that, $product, response.data);
+            that.updateCart($product, response.data);
         });
     };
 
-    Cart.prototype.updateCart = function(that, $product, data ) {
-        var $cartTotal = that.storage.getCartTotal(),
-            $cartDiscountWrapper = that.storage.getCartDiscountWrapper(),
-            $cartAffiliateBonus = that.storage.getCartAffiliateHint(),
-            $cartDiscount = that.storage.getCartDiscount(),
+    Cart.prototype.updateCart = function($product, data ) {
+        var that = this,
+            $cartTotal = that.$cartTotal,
+            $cartDiscountWrapper = that.$cartDiscountWrapper,
+            $cartAffiliateBonus = that.$cartAffiliateHint,
+            $cartDiscount = that.$cartDiscount,
             text = data["total"],
             count = data["count"];
 
@@ -283,8 +257,9 @@ var Cart = ( function($) {
         }
     };
 
-    Cart.prototype.changeProductQuantity = function( that, type, $product ) {
-        var $quantityInput = that.storage.getProductQuantityInput( $product ),
+    Cart.prototype.changeProductQuantity = function(type, $product) {
+        var that = this,
+            $quantityInput = $product.find(".s-product-quantity"),
             current_val = parseInt( $quantityInput.val() ),
             is_disabled = ( $quantityInput.attr("disabled") === "disabled"),
             disable_time = 800,
@@ -314,14 +289,16 @@ var Cart = ( function($) {
                 // If volume is zero => remove item from basket
             } else {
 
-                this.deleteProduct(that, $product );
+                this.deleteProduct($product );
             }
         }
     };
 
-    Cart.prototype.onChangeProductQuantity = function( that, $input, $product ) {
-        var $deferred = $.Deferred(),
-            $sum_wrapper = that.storage.getProductTotal($product),
+    Cart.prototype.onChangeProductQuantity = function( $input ) {
+        var that = this,
+            $product = $input.closest(".s-cart-product"),
+            $deferred = $.Deferred(),
+            $sum_wrapper = $product.find(".s-product-total"),
             product_quantity = parseInt( $input.val() ),
             request_data;
 
@@ -353,28 +330,29 @@ var Cart = ( function($) {
                 }
 
                 if (response.data.error) {
-                    $input.addClass(that.storage.hasErrorClass);
+                    $input.addClass(that.error_class);
 
                     // at Future make it better ( renderErrors(errors) )
                     alert(response.data.error);
 
                 } else {
 
-                    $input.removeClass(that.storage.hasErrorClass);
+                    $input.removeClass(that.error_class);
 
                 }
 
-                that.updateCart(that, $product, response.data);
+                that.updateCart($product, response.data);
             });
 
         // Delete Product
         } else if (product_quantity == 0) {
-            that.deleteProduct(that, $product );
+            that.deleteProduct($product );
         }
     };
 
-    Cart.prototype.deleteProduct = function(that, $product ) {
-        var $deferred = $.Deferred(),
+    Cart.prototype.deleteProduct = function($product ) {
+        var that = this,
+            $deferred = $.Deferred(),
             request_data = {
                 html: 1,
                 id: $product.data('id')
@@ -389,7 +367,7 @@ var Cart = ( function($) {
                 location.reload();
             } else {
                 $product.remove();
-                that.updateCart(that, $product, response.data);
+                that.updateCart($product, response.data);
             }
         });
 

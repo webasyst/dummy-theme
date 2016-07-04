@@ -1,67 +1,98 @@
 {strip}
 
-{$_bestsellers = $wa->shop->productSet('bestsellers')}
+<section class="s-slider-wrapper {if !empty($_promocards)}is-promo-slider{/if}">
+    {if !empty($_promocards)}
+        <ul class="s-slider-block" id="s-home-slider" style="{if $theme_settings.slider_height}height: {$theme_settings.slider_height}px{/if}">
+            {foreach $_promocards as $slide}
+                <li class="s-promocard-slide" style="
+                {if $slide.color}color: {$slide.color};{/if}
+                {if $slide.image}background-image: url({$slide.image});{/if}
+                    ">
+                    <h3 class="s-header">{$slide.title|escape}</h3>
+                    <p class="s-text">{$slide.body|escape}</p>
+                    <div class="s-counter">
+                        <span class="s-promo-countdown" data-start="{date('Y-m-d H:i:s')}" data-end="{$slide.countdown_datetime}"></span>
+                    </div>
+                    <a class="s-link" href="{$slide.link}"></a>
+                </li>
+            {/foreach}
+        </ul>
+        <script>
+            ( function($) {
+                $(".s-promo-countdown").each( function() {
+                    var $wrapper = $(this),
+                        options = {
+                            $wrapper: $wrapper,
+                            start: $wrapper.data('start').replace(/-/g, '/'),
+                            end: $wrapper.data('end').replace(/-/g, '/')
+                        };
 
-{* HOMEPAGE SLIDER *}
-{if (!empty($_bestsellers))}
-    <section class="s-slider-wrapper">
-        <ul class="s-slider-block" id="bestsellers-slider" style="{if $theme_settings.slider_height}height: {$theme_settings.slider_height}px{/if}">
-            {foreach $_bestsellers as $bestseller}
-                {$_product_image_src = $wa->shop->productImgUrl($bestseller, "0x320@2x")}
-                {$_name = $bestseller.name}
-                {if $bestseller.summary}
-                    {$_name = "`$bestseller.name` — {strip_tags($bestseller.summary)|escape}"}
+                    if (typeof CountDown == "function") {
+                        new CountDown(options);
+                    } else {
+                        $wrapper.remove();
+                    }
+                });
+            })(jQuery);
+        </script>
+    {elseif !empty($_products)}
+        <ul class="s-slider-block" id="s-home-slider" style="{if $theme_settings.slider_height}height: {$theme_settings.slider_height}px{/if}">
+            {foreach $_products as $product}
+                {$_product_image_src = $wa->shop->productImgUrl($product, "0x320@2x")}
+                {$_name = $product.name}
+                {if $product.summary}
+                    {$_name = "`$product.name` — {strip_tags($product.summary)|escape}"}
                 {/if}
 
-                <li class="s-slide-wrapper" itemscope itemtype ="http://schema.org/Product">
-                    <a class="s-image" href="{$bestseller.frontend_url}" title="{$_name}" style="background-image: url('{$_product_image_src}');">
+                <li class="s-product-slide" itemscope itemtype ="http://schema.org/Product">
+                    <a class="s-image" href="{$product.frontend_url}" title="{$_name}" style="background-image: url('{$_product_image_src}');">
                         {* <img src="{$_product_image_src}" itemprop="image" alt="{$_name}"> *}
                     </a>
                     <div class="s-slide-block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                         <h2 class="s-header" itemprop="name">
-                            <a class="name" href="{$bestseller.frontend_url}" title="{$_name}">{$bestseller.name}</a>
+                            <a class="name" href="{$product.frontend_url}" title="{$_name}">{$product.name}</a>
                         </h2>
                         <p class="s-description" itemprop="description">
-                            {if $bestseller.summary}{strip_tags($bestseller.summary)|truncate:255}{/if}
+                            {if $product.summary}{strip_tags($product.summary)|truncate:255}{/if}
                         </p>
 
-                        <div class="s-price">{shop_currency_html($bestseller.price)}</div>
-                        <meta itemprop="price" content="{$bestseller.price}">
+                        <div class="s-price">{shop_currency_html($product.price)}</div>
+                        <meta itemprop="price" content="{$product.price}">
                         <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
-                        {if !empty($bestseller.summary)}
-                            <meta itemprop="description" content="{strip_tags($bestseller.summary)}">
+                        {if !empty($product.summary)}
+                            <meta itemprop="description" content="{strip_tags($product.summary)}">
                         {/if}
                     </div>
 
-                    {$badge_html = $wa->shop->badgeHtml($bestseller.badge)}
+                    {$badge_html = $wa->shop->badgeHtml($product.badge)}
                     {if !empty($badge_html)}
                         <div class="s-badge-wrapper">{$badge_html}</div>
                     {/if}
                 </li>
             {/foreach}
         </ul>
+    {/if}
 
-        {* INIT SLIDER *}
-        <script>
-            ( function($) {
+    <script>
+        ( function($) {
+            var href = "{$wa_active_theme_url}plugins/bxslider/jquery.bxslider.js?v{$wa_theme_version}";
 
-                function initSlider() {
-                    $("#bestsellers-slider").bxSlider({
-                        auto: true
-                    });
-                }
+            (!$.fn.bxSlider) ? $.getScript(href, initSlider) : initSlider();
 
-                if (!$.fn.bxSlider) {
-                    $.getScript("{$wa_active_theme_url}plugins/bxslider/jquery.bxslider.js?v{$wa_theme_version}", function() {
-                        initSlider();
-                    });
-                } else {
-                    initSlider();
-                }
+            function initSlider() {
+                var $slider = $("#s-home-slider"),
+                    slide_count = $slider.find("li").length;
 
-            })(jQuery);
-        </script>
-    </section>
-{/if}
+                $slider.bxSlider({
+                    auto : slide_count > 1,
+                    touchEnabled: true,
+                    pause : 5000,
+                    autoHover : true,
+                    pager: slide_count > 1
+                });
+            }
+        })(jQuery);
+    </script>
+</section>
 
 {/strip}
