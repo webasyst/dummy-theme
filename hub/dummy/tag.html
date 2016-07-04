@@ -1,0 +1,20 @@
+{strip}
+
+<div class="h-tag-page">
+
+    <h1 class="h-tag-header">{$tag|escape}</h1>
+
+    {* @event frontend_tag.%plugin_id% *}
+    {foreach $frontend_tag as $_}{$_}{/foreach}
+
+    <div class="h-tag-sorting h-button-list">
+        <a class="h-button {if $sort == 'popular'}is-selected{/if}" href="?sort=popular">[`Popular topics`]</a>
+        <a class="h-button {if $sort == 'recent'}is-selected{/if}" href="?sort=recent">[`Most recent`]</a>
+        <a class="h-button {if $sort == 'unanswered'}is-selected{/if}" href="?sort=unanswered">[`Unanswered`]</a>
+    </div>
+
+    {include file="topics.html"}
+
+</div>
+
+{/strip}

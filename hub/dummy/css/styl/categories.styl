@@ -1,0 +1,81 @@
+.h-category-page
+    .h-category-header
+        margin 0
+
+    .h-category-sorting
+        margin 1em 0
+
+    .h-topics-wrapper
+        margin 1em 0 0
+
+.h-category-list
+    margin 0
+
+    .h-category-wrapper
+        display inline-block
+        vertical-align top
+        width 49.99%
+        margin 1em 0
+        padding 0 12px 0 0
+        box-sizing border-box
+
+        .h-category-item
+            display table
+            width 100%
+
+            &.is-new
+                a.category-name,
+                .count
+                    font-weight: bold;
+
+            .h-image-wrapper
+                display table-cell
+                vertical-align middle
+                width 48px
+                padding-right 14px
+                text-align center
+
+                .h-image
+                    max-width: 100%;
+                    max-height: 48px;
+
+            .h-text-wrapper
+                display table-cell
+                vertical-align middle
+
+                .h-category-date
+                    margin .5em 0 0
+                    color: #aaa;
+                    font-size 13px
+
+                .h-category-header
+                    text-decoration: none;
+                    font-size: 1.5em;
+
+                    a:visited
+                        color: #006bd8
+
+                .h-category-description
+                    margin .5em 0 0
+                    color: #aaa;
+                    font-size 13px
+
+                    a
+                        color: #aaa;
+
+                .h-featured-topics
+                    margin .5em 0 0
+                    font-size 13px
+
+                    li
+                        margin .25em 0 0
+
+                        &:before
+                            content "–"
+                            margin 0 4px 0 0
+
+                        &:first-child
+                            margin-top 0
+
+                        a
+                            color: #2e6da4;

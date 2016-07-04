@@ -1,0 +1,34 @@
+{strip}
+
+{* JQUERY UI *}
+<link rel="stylesheet" href="{$wa_app_static_url}css/jquery-ui-1.10.3.custom.css">
+<script src="{$wa_app_static_url}js/vendors/jquery-ui-1.10.3.custom.min.js"></script>
+
+{* REDACTOR *}
+<link href="{$wa_static_url}wa-content/js/redactor/redactor.css?v{$wa->version(true)}" rel="stylesheet">
+<script src="{$wa_static_url}wa-content/js/redactor/redactor.min.js?v{$wa->version(true)}"></script>
+{if substr($wa->locale(), 0, 2)!='en'}
+    <script src="{$wa_static_url}wa-content/js/redactor/{substr($wa->locale(), 0, 2)}.js?v{$wa->version(true)}"></script>
+{/if}
+<script src="{$wa_app_static_url}js/redactor/redactor.codeblock.js?v{$wa->version()}"></script>
+
+{* THEME *}
+<link href="{$wa_static_url}wa-apps/hub/css/glyphs.css?v{$wa->version()}" rel="stylesheet">
+<link href="{$wa_active_theme_url}css/dummy.hub.css?v{$wa_theme_version}" rel="stylesheet">
+<script src="{$wa_active_theme_url}js/dummy.hub.js?v{$wa_theme_version}"></script>
+
+{* LOCALE *}
+<script>
+    ( function($) {
+        $.hub.locale = $.extend($.hub.locale || {}, {
+            'Insert code block': "[`Insert code block`]",
+            'Insert quote': "[`Insert quote`]",
+            'Insert': "[`Insert`]"
+        });
+    })(jQuery);
+</script>
+
+{* @event frontend_head.%plugin_id% *}
+{foreach $frontend_head as $_}{$_}{/foreach}
+
+{/strip}

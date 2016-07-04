@@ -1,0 +1,120 @@
+.h-topic-wrapper
+    .h-topic-block
+        .h-topic-header
+            margin 0
+            line-height 1em
+
+            .h-badge
+                position relative
+                top -.175em
+                margin 0 0 0 8px
+                font-size: .5em
+                line-height 1em
+
+        .h-columns
+            margin 2em 0
+            display table
+            width 100%
+            table-layout fixed
+
+            .h-image-column
+            .h-vote-column
+            .h-middle-column
+                display table-cell
+                vertical-align top
+
+            .h-image-column
+                width 50px
+                padding .4em 1em 0 1em
+                text-align center
+
+                img
+                    width 100%
+                    border-radius 50%
+
+            .h-vote-column
+                width 50px
+                padding 0 1em
+                text-align center
+
+                .h-vote-block
+                    font-size 30px
+
+            .h-credentials
+                margin 2em 0 0
+                line-height 20px
+
+                .h-userpic
+                .h-user-name
+                    display inline-block
+                    vertical-align top
+
+                .h-userpic
+                    margin 0 4px 0 0
+                    position relative
+                    top 0
+                    line-height 0
+
+                    img
+                        width 20px
+
+                .h-user-name
+                    color #777
+
+                .h-staff
+                    padding: 0 0.5em;
+                    margin: 0 0 0 4px;
+                    line-height: 18px;
+
+                .h-date
+                    display inline-block
+                    margin 0 0 0 4px
+                    font-size 12px
+                    color #aaa
+
+            .h-topic-content
+                font-size 18px
+                line-height 1.4em
+                word-wrap break-word
+
+            .h-topic-tags
+                margin .5em 0 0
+
+                a
+                    display inline-block
+                    vertical-align top
+                    margin 0 0 0 4px
+                    color #2fa42e
+
+                    &:before
+                        content: "#"
+
+                    &:first-child
+                        margin-left 0
+
+            .h-actions
+                margin 1em 0 0
+
+                button
+                .s-button
+                    height: 1.75em;
+                    padding: 0.25em 0.5em;
+
+    .h-helpful-vote
+        margin 1em 0 0
+        padding 1em
+        background #eee
+        transition all 200ms linear
+        overflow hidden
+        border-radius 3px
+
+        .vote-form-question
+            line-height 35px
+
+            .h-vote-button
+                min-width 60px
+                margin 0 0 0 8px
+
+        .vote-form-yes
+        .vote-form-no-sent
+            line-height 35px

@@ -1,0 +1,64 @@
+{strip}
+
+<div class="h-authors-page">
+
+    <h1 class="h-authors-header">[`Authors`]</h1>
+
+    <div class="h-authors-wrapper" id="h-authors-wrapper">
+        <ul class="h-authors">
+            {foreach $authors as $author}
+                <li class="h-author">
+                    <div class="h-author-block">
+                        <div class="h-image-wrapper">
+                            <a href="{$author.url}">
+                                <img src="{$author.photo_url_50|default:sprintf('%swa-content/img/userpic50@2x.jpg',$wa_static_url)}" class="userpic" alt="{$author.name|escape}">
+                            </a>
+                        </div>
+                        <div class="h-text-wrapper">
+                            <div class="">
+                                {if $author.name}
+                                    <span class="h-name">{$author.name|escape}</span>
+                                {/if}
+                                {if !empty($author.badge)}
+                                    <span class="h-staff"{if !empty($author.badge_color)} style="background-color: {$author.badge_color}"{/if}>{$author.badge}</span>
+                                {/if}
+                                {if !empty($hub.params.kudos)}
+                                    <span class="h-kudos {if $author.rate > 0}is-positive{elseif $author.rate < 0}is-negative{/if}" title="{_w('%d kudo', '%d kudos', $author.rate)|escape}">{if $author.rate >= 0}+{else}&minus;{/if}{abs($author.rate)}</span>
+                                {/if}
+                            </div>
+                            <div class="h-hint">{sprintf('[`%d topics, %d answers, and %d comments`]', $author.topics_count, $author.answers_count, $author.comments_count)}</div>
+                        </div>
+                    </div>
+                </li>
+            {/foreach}
+        </ul>
+
+        {if isset($pages_count) && $pages_count > 1}
+            <div class="h-paging-wrapper {if $theme_settings.pagination == "lazyloading"}is-lazy-loading{/if}" data-loading-text="[`Loading...`]">
+                {wa_pagination total=$pages_count attrs=["class" => "h-paging-list"]}
+            </div>
+        {/if}
+    </div>
+
+
+    <script>
+        ( function($) {
+            var $wrapper = $("#h-authors-wrapper");
+
+            var initLazyLoading = {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
+            if (initLazyLoading) {
+                new LazyLoading({
+                    $wrapper: $wrapper,
+                    names: {
+                        list: ".h-authors",
+                        items: ".h-author",
+                        paging: ".h-paging-wrapper"
+                    }
+                });
+            }
+        })(jQuery);
+    </script>
+
+</div>
+
+{/strip}

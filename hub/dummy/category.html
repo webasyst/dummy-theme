@@ -1,0 +1,23 @@
+{strip}
+
+<div class="h-category-page">
+
+    <h1 class="h-category-header">{$category.name|escape}</h1>
+
+    <!-- plugin hook: 'frontend_category' -->
+    {* @event frontend_category.%plugin_id% *}
+    {foreach $frontend_category as $_}{$_}{/foreach}
+
+    {if $category.enable_sorting && $sorting}
+        <div class="h-category-sorting h-button-list">
+            {foreach $sorting as $_k => $_name}
+                <a class="h-button {if $sort == $_k}is-selected{/if}" href="?sort={$_k}">{$_name}</a>
+            {/foreach}
+        </div>
+    {/if}
+
+    {include file="topics.html"}
+
+</div>
+
+{/strip}

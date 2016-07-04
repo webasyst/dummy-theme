@@ -1,0 +1,215 @@
+// LABELS
+
+.h-staff
+.h-kudos
+.h-badge
+    display inline-block
+    padding: .25em .5em
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.1);
+    white-space: nowrap;
+
+.h-staff
+    background: #eeb;
+    color: #345;
+
+.h-badge
+    background: #eee;
+    color: #345;
+
+    &.badge-none
+        background: #fff;
+        color: #aaa;
+
+    &.badge-answered
+        background: #dfd;
+        color: green;
+        font-weight: bold;
+
+    &.badge-pending
+        background: #eee;
+        color: #777;
+
+    &.badge-accepted
+        background: #dfd;
+        color: green;
+
+    &.badge-confirmed
+        background: #cfc;
+        color: green;
+
+    &.badge-inprogress
+        background: #cfc;
+        color: green;
+        font-style: italic;
+
+    &.badge-rejected
+        background: #fdd;
+        color: #a00;
+
+    &.badge-complete
+        background: #dfd;
+        color: green;
+        font-weight: bold;
+
+    &.badge-fixed
+        background: #dfd;
+        color: green;
+        font-weight: bold;
+
+    &.badge-archived
+        background: #eed;
+        color: #aa7;
+
+.h-kudos
+    background #eee
+
+    &.is-positive
+        background $_green
+        color #fff
+
+    &.is-negative
+        background $_brown
+        color #fff
+
+
+
+
+// PAGING
+
+.h-paging-wrapper
+    margin 2em 0 0
+    text-align center
+
+    &.is-lazy-loading
+        .h-paging-list
+            display none
+
+    .h-paging-list
+        margin 0
+
+        li
+            display inline-block
+            margin 0 0 0 .5em
+
+            &:first-child
+                margin-left 0
+
+            &.selected a
+            a:hover
+                background rgba(0,0,0,.1)
+
+            a
+                display inline-block
+                min-width 1.25em
+                line-height 1.25em
+                text-align center
+                padding .5em
+                border-radius 50%
+
+// BUTTON LIST
+
+.h-button-list
+    display inline-block
+    margin 0
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1);
+
+    .h-button
+        display inline-block
+        vertical-align top
+        line-height 32px
+        min-width 32px
+        padding 0 8px
+        text-align center
+
+        &.is-selected
+            background: #2fa42e;
+            color #fff
+            cursor default
+
+        &:first-child
+            margin-left 0
+
+        .h-hint
+            line-height 0
+
+//
+.h-vote-block
+    display inline-block
+    min-width 20px
+    text-align center
+    font-size 20px
+
+    .h-vote-button
+        $_size = 13px
+
+        display block
+        width 100%
+        height $_size
+        padding 0
+        margin 0
+
+        background transparent 50% 0 no-repeat
+        background-size auto ( $_size * 2 )
+        box-shadow none
+
+        &.is-up
+            background-image url("../img/icons/vote-up.sprite.png");
+
+            &.is-active
+                background-position 50% ( -($_size) )
+
+        &.is-down
+            background-image url("../img/icons/vote-down.sprite.png");
+
+            &.is-active
+                background-position 50% ( -($_size) )
+
+    .h-vote-value
+        margin .2em 0
+        display block
+
+// REDACTOR: CERTAIN DEFAULT.CSS STRLES RESET
+
+html
+    overflow: auto !important;
+
+.topic-form
+    .redactor-toolbar:after
+        clear: left;
+
+.comment
+    .redactor-toolbar
+        top: 0 !important;
+        visibility: visible !important;
+        width: 100% !important;
+
+        &:after
+            clear: none;
+
+#redactor-modal
+    footer
+        background: #fff;
+        top: 0;
+        position: static;
+        padding: 0;
+        min-height: 0;
+        font-size: 1em;
+        color: #000;
+
+#redactor-modal-close
+    text-align center
+    box-shadow none
+
+.redactor-modal-btn
+    height auto
+
+// TAGS AUTOCOMPLETE
+
+.ui-corner-all
+    border-radius: 0 !important;
+
+.ui-widget-content
+    background: #fff !important;

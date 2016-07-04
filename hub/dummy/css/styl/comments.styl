@@ -1,0 +1,237 @@
+.h-edit-form
+    margin 1em 0 0
+    display none
+
+    &.is-shown
+        display block
+
+    .h-text-wrapper
+        padding 0
+
+    .h-buttons
+        margin .5em 0 0
+
+.h-comment-form
+    margin 2em 0 0
+
+    .h-form-block
+        .h-form-header
+            line-height 20px
+
+            .h-userpic
+            .h-user-name
+            .h-logout
+                display inline-block
+                vertical-align top
+                margin 0 4px 0 0
+
+            .h-user-name
+                color #777
+
+            .h-userpic
+                width 20px
+                img
+                    width 100%
+
+            .h-logout
+                color #aaa
+                text-decoration underline
+
+        .h-comment-body
+            margin 1em 0 0
+
+            .redactor-box
+                margin 0
+
+        .h-actions
+            margin 1em 0 0
+
+            .h-cancel-button
+                visibility hidden
+
+.h-comment-wrapper
+    margin 0
+
+    .h-comment
+        margin 0
+        padding 1em
+        border-radius 2px
+        transition background 200ms linear
+
+        &.is-new
+            background: #ffc;
+
+        &.is-solution
+            background: #dfd;
+
+        &.featured-comment
+            background: #eed;
+
+        &.in-reply-to
+            background: #f8f8f8
+
+        &:hover
+            background: #f3f3f3;
+
+            .h-inner-wrapper
+                .h-actions
+                    visibility visible
+
+        .h-comment-form
+            margin 2em 0 0
+            padding 1em
+
+            .h-header
+                display none
+
+            .h-form-block
+                .h-actions
+                    .h-cancel-button
+                        visibility visible
+
+        .h-inner-wrapper
+            display table
+            width 100%
+            table-layout fixed
+
+            .h-image-column
+            .h-vote-column
+            .h-middle-column
+            .h-right-column
+                display table-cell
+                vertical-align top
+
+            .h-image-column
+                width 50px
+                padding 0 1em 0 0
+                text-align center
+
+                img
+                    width 100%
+                    border-radius 50%
+
+            .h-vote-column
+                width 50px
+                padding 0 0 0 1em
+                text-align center
+
+            .h-right-column
+                padding 0 0 0 1em
+                width 100px
+                text-align right
+
+            .h-actions
+                visibility hidden
+
+        .h-credentials
+            line-height 20px
+
+            .h-userpic
+            .h-user-name
+            .h-solution-badge
+                display inline-block
+                vertical-align top
+
+            .h-userpic
+                margin 0 4px 0 0
+                position relative
+                top 0
+                line-height 0
+
+                img
+                    width 20px
+
+            .h-user-name
+                color #aaa
+
+            .h-staff
+                padding: 0 0.5em;
+                margin: 0 0 0 4px;
+                line-height: 18px;
+
+            .h-solution-badge
+                padding: 0 .5em
+                margin 0 0 0 4px
+                border-radius: 3px;
+                border: 1px solid rgba(0,0,0,0.1);
+                white-space: nowrap;
+                background: #2fa42e;
+                line-height 18px
+                color #fff
+
+        .h-comment-text
+            margin 1em 0 0
+            line-height 1.4em
+            word-wrap break-word
+
+        .h-actions
+            margin 1em 0 0
+
+            .s-button
+                margin 0 0 0 4px
+                height 1.75em
+                padding 0.25em .5em
+
+                &:first-child
+                    margin-left 0
+
+
+        .h-anchor-wrapper
+            font-size 12px
+
+            .h-anchor
+                color #2e6da4
+
+        .h-date-wrapper
+            margin 6px 0 0
+            font-size 10px
+            line-height 1.25em
+            color #aaa
+
+        .h-vote-wrapper
+            margin 4px 0 0
+
+.h-comments-wrapper
+    .h-follow-wrapper
+        padding: 1em;
+        margin 1em 0
+        background: #ffc;
+        line-height 36px;
+
+        input[type="button"]
+            margin 0 8px 0 0
+
+        &.following .h-follow-content
+        &.not-following .h-unfollow-content
+            display: none;
+
+    .h-comments-header
+        margin 1rem 0
+
+    .h-comment-list
+        margin 1em 0 0
+        border-top: 2px solid rgba(0,0,0,0.05);
+        padding: 1em 0 0;
+
+        ul
+            margin 0
+
+    & > .h-comment-list > ul > .h-comment-wrapper > ul
+        padding-left 60px
+
+        & > .h-comment-wrapper > ul
+            padding-left 60px
+
+            & > .h-comment-wrapper > ul
+                padding-left 60px
+
+.comment-form-fields input { width: 20em; }
+.comment-form .comment-redactor .errormsg { margin-left: 0; margin-bottom: 20px; }
+.comments textarea { height: 100px; min-height: 100px; width: 75%; margin-top: 0; }
+.comments ul li ul li .comment.in-reply-to .comment-form-fields label { display: none; }
+.comments ul li ul li .comment.in-reply-to .comment-form .comment-redactor { margin-left: 0; }
+.comments ul li ul li .comment.in-reply-to .comment-form .comment-submit { padding-left: 0; }
+.comments.forum .comment { clear: left; border-top: 1px solid rgba(0,0,0,0.1); padding: 20px 0 30px; margin: 0; min-height: 50px; }
+.comments.forum .text { margin-left: 0; }
+.comments ul li .comment .wa-auth-adapters ul { padding-left: 0; margin-top: 5px; }
+.comments ul li .comment .wa-auth-adapters ul li { list-style: none; clear: none; }

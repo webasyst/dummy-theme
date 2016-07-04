@@ -1,0 +1,134 @@
+{strip}
+
+{$_is_auth = $wa->user()->isAuth()}
+
+{function renderNavItem page=[]}
+    {$_is_selected = ( strlen($page.url) > 1 && $wa->currentUrl()|strstr:$page.url )}
+
+    <li class="{if !empty($_is_selected)}is-selected{/if} {if !empty($page.childs)}has-sub-menu{/if}">
+        <a href="{$page.url}">{$page.name}</a>
+        {if !empty($page.childs)}
+            <ul>
+                {foreach $page.childs as $subpage}
+                    {renderNavItem page=$subpage}
+                {/foreach}
+            </ul>
+        {/if}
+    </li>
+{/function}
+
+<nav class="h-sidebar-wrapper" role="navigation">
+
+    <div class="h-userbox-wrapper">
+        {* IF USER AUTH *}
+        {if $_is_auth}
+            <div class="h-user-info">
+                {* IMAGE *}
+                <div class="h-userpic-wrapper">
+                    <a href="{$wa->getUrl('/frontend/author', ['id' => $user.id])}" title="[`My topics`]">
+                        <img src="{$user.photo_url_96}" class="h-userpic" alt="{$wa->user()->getName()}">
+                    </a>
+                </div>
+
+                {* NAME *}
+                <div class="h-username">{$user.name|escape}</div>
+
+                {* KUDOS *}
+                {if !empty($hub.params.kudos)}
+                    <div class="h-kudos-wrapper">
+                        <span class="h-kudos {if $user.rate > 0}is-positive{elseif $user.rate < 0}is-negative{/if}" title="{_w('%d kudo', '%d kudos', $user.rate)|escape}">
+                            {if $user.rate >= 0}+{else}&minus;{/if}{abs($user.rate)}
+                        </span>
+                    </div>
+                {/if}
+            </div>
+
+            {* ADD BUTTON *}
+            <div class="h-add-topic">
+                <a class="s-button" href="{$wa->getUrl('/frontend/add')}{if !empty($category)}?category={$category.id}{/if}">[`New topic`]</a>
+            </div>
+
+            {* USER NAV *}
+            <ul class="h-user-nav">
+                <li>
+                    <a href="{$wa->getUrl('/frontend/author', ['id' => $user.id])}">
+                        [`My topics`]
+                        <span class="h-count">{$user.topics_count}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{$wa->getUrl('/frontend/authorReplies', ['id' => $user.id])}">
+                        [`My replies`]
+                        <span class="h-count">{$user.comments_count}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{$wa->getUrl('/frontend/authorFollowing', ['id' => $user.id])}">
+                        [`Favorites`]
+                        <span class="h-count"><i class="icon icon16 star"></i></span>
+                    </a>
+                </li>
+            </ul>
+        {else}
+            <div class="h-add-topic">
+                <a class="s-button" href="{$wa->getUrl('/frontend/add')}{if !empty($category)}?category={$category.id}{/if}">[`New topic`]</a>
+            </div>
+        {/if}
+    </div>
+
+    {$comments_stream = $wa->hub->comments(10)}
+    {if !empty($comments_stream)}
+        <aside class="h-aside-block h-comments">
+            <h5>[`Last comments`]</h5>
+            <ul>
+                {foreach $comments_stream as $c}
+                    <li>
+                        <a href="{$wa->getUrl('hub/frontend/topic', [ 'id' => $c.topic.id, 'topic_url' => $c.topic.url ])}#comment{$c.id}">
+                            {strip_tags($c.text)|truncate:100}
+                        </a>
+                        <span class="hint">{$c.datetime|wa_datetime:humandatetime}</span>
+                    </li>
+                {/foreach}
+            </ul>
+        </aside>
+    {/if}
+
+    {* HUB STAFF *}
+    {$staff = $wa->hub->staff()}
+    {if !empty($staff)}
+        <aside class="h-aside-block h-staffs">
+            <h5>[`Staff`]</h5>
+            <ul>
+                {foreach $staff as $s}
+                    <li>
+                        <a href="{$wa_app_url}author/{$s.id}/">
+                            <img src="{$s.photo_url_50}" class="userpic" alt="{$s.name|escape}">
+                            {$s.name|escape}
+                            {if !empty($s.badge)}
+                                <span class="h-staff" {if !empty($s.badge_color)} style="background-color: {$s.badge_color}"{/if}>{$s.badge}</span>
+                            {/if}
+                        </a>
+                    </li>
+                {/foreach}
+            </ul>
+        </aside>
+    {/if}
+
+    {* @event frontend_nav.%plugin_id% *}
+    {foreach $frontend_nav as $_}{$_}{/foreach}
+
+    {* SIDEBAR NAV *}
+    {$_pages = $wa->hub->pages()}
+    {if !empty($_pages)}
+        <div class="s-nav-wrapper">
+            <ul>
+                {foreach $_pages as $page}
+                    {renderNavItem page=$page}
+                {/foreach}
+            </ul>
+        </div>
+    {/if}
+
+</nav>
+
+{/strip}

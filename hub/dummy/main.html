@@ -1,0 +1,33 @@
+{strip}
+
+{* @event frontend_header.%plugin_id% *}
+{foreach $frontend_header as $_}{$_}{/foreach}
+
+<div itemscope itemtype="http://schema.org/WebPage">
+
+    {if empty($topics) && $wa->currentUrl() == $wa_app_url}
+
+        {* User went to frontend before completing the 'welcome' setup in backend. *}
+        {if $wa->setting('welcome')}
+
+            <div class="welcome">
+                <h1>[`Welcome to your new hub!`]</h1>
+                <p>{sprintf('[`Please complete the initial <a href="%s">setup</a> in app backend.`]', $wa_backend_url|cat:'hub/?action=welcome')}</p>
+            </div>
+
+        {* This is a new empty hub. *}
+        {elseif waRequest::param('hub_id')}
+
+            <div class="welcome">
+                <h1>[`Welcome to your new hub!`]</h1>
+                <p>{sprintf('[`Start by <a href="%s">writing a topic</a>.`]', $wa_app_url|cat:'add/')}</p>
+            </div>
+
+        {/if}
+    {else}
+        {$content}
+    {/if}
+
+</div>
+
+{/strip}

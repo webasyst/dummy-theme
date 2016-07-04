@@ -1,0 +1,115 @@
+{strip}
+
+{if !empty($topics)}
+    <div class="h-topics-wrapper" id="h-topics-wrapper">
+
+        <ul class="h-topic-list">
+            {foreach $topics as $t}
+
+                {if !empty($types[$t.type_id])}
+                    {$_topic_type = $types[$t.type_id]}
+                {else}
+                    {* corrupted/missing topic type? fallback to 'custom' *}
+                    {$_topic_type = [ 'glyph' => 'unknown', 'type' => 'custom','name'=> _w('Unknown topic type')]}
+                {/if}
+
+                <li class="h-topic-wrapper {if !empty($t.is_updated)}is-updated{/if}" itemscope itemtype="http://schema.org/{if $_topic_type.type == 'question'}Question{else}Article{/if}">
+                    <div class="h-topic">
+                        <div class="h-topic-icon">
+                            <a href="{$t.url|escape}">{hubHelper::getGlyph($_topic_type.glyph, 32, $t.is_updated, [ title=>$_topic_type.name,contact=>ifempty($t.author,[]) ] )}</a>
+                        </div>
+                        <div class="h-topic-summary">
+                            <div>
+                                {* rating *}
+                                {if $_topic_type.type != 'forum' && $_topic_type.type != 'page' && !empty($_topic_type.settings.voting)}
+                                    <span class="h-rating {if $t.votes_sum > 0}is-positive{elseif $t.votes_sum < 0}is-negative{/if}">{if $t.votes_sum > 0}+{/if}{$t.votes_sum}</span>
+                                {/if}
+
+                                {* title *}
+                                <a class="h-topic-name" href="{$t.url|escape}" itemprop="url" class="">
+                                    <span itemprop="name">{$t.title|escape}</span>
+                                    {if $t.follow}
+                                        <i class="icon16 star" title="[`You are following this topic`]"></i>
+                                    {/if}
+                                </a>
+
+                                {* badge *}
+                                {if !empty($t.badge)}
+                                    <span class="h-badge badge-{$t.badge.id}">{$t.badge.name}</span>
+                                {/if}
+                            </div>
+
+                            {* author & datetime *}
+                            <div class="h-topic-author">
+                                {if !empty($t.author)}
+                                    <span class="h-author-name">{sprintf('[`by %s`]', $t.author.name|escape)}</span>
+                                {/if}
+                                <span class="h-date">{$t.create_datetime|wa_datetime:"humandatetime"}</span>
+                            </div>
+
+                            {* featured comment / solution *}
+                            {if !empty($t.solution)}
+                                <div class="h-topic-solution {if $_topic_type.type == 'question'}is-solution{else}is-featured-comment{/if}">
+                                    {if $t.solution.author.name}
+                                        <div class="h-image">
+                                            <img src="{$t.solution.author.photo_url_20}" class="userpic" title="{$t.solution.author.name|escape}" alt="{$t.solution.author.name|escape}">
+                                        </div>
+                                    {/if}
+                                    <div class="h-text">
+                                        {if $t.solution.author.name}
+                                            <div class="h-comment-author">
+                                                <span class="h-name">{$t.solution.author.name}</span>
+                                                {if !empty($t.solution.author.name.author.badge)}
+                                                    <span class="h-staff" {if !empty($t.solution.author.name.author.badge_color)} style="background-color: {$t.solution.author.name.author.badge_color}"{/if}>{$t.solution.author.name.author.badge}</span>
+                                                {/if}
+                                            </div>
+                                        {/if}
+                                        <div class="h-comment-text">
+                                            {strip_tags($t.solution.text)|truncate:255}
+                                        </div>
+                                    </div>
+                                </div>
+                            {/if}
+                        </div>
+                        <div class="h-topic-replies">
+                            {if $t.comments_count || !empty($_topic_type.settings.commenting) && $_topic_type.settings.commenting == 1}
+                                <span class="hint {if !empty($t.is_updated)}bold{/if}">{_w('%d reply', '%d replies', $t.comments_count)}</span>
+                            {/if}
+                        </div>
+                    </div>
+                    <a class="h-topic-link" title="{$t.title|escape}" href="{$t.url|escape}"></a>
+                </li>
+            {/foreach}
+        </ul>
+
+        {if isset($pages_count) && $pages_count > 1}
+            <div class="h-paging-wrapper {if $theme_settings.pagination == "lazyloading"}is-lazy-loading{/if}" data-loading-text="[`Loading...`]">
+                {wa_pagination total=$pages_count attrs=["class" => "h-paging-list"]}
+            </div>
+        {/if}
+
+        <script>
+            ( function($) {
+                var $wrapper = $("#h-topics-wrapper");
+                $wrapper.removeAttr("id");
+
+                var initLazyLoading = {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
+                if (initLazyLoading) {
+                    new LazyLoading({
+                        $wrapper: $wrapper,
+                        names: {
+                            list: ".h-topic-list",
+                            items: ".h-topic-wrapper",
+                            paging: ".h-paging-wrapper"
+                        }
+                    });
+                }
+            })(jQuery);
+        </script>
+
+    </div>
+{else}
+    <p class="empty-list">[`There are no topics in this view.`]</p>
+{/if}
+
+{/strip}

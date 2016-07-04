@@ -1,0 +1,101 @@
+{strip}
+
+<div class="h-add-topic-wrapper">
+
+    {* TOPIC *}
+    <h1>{if !empty($data.id)}{$data.title}{else}[`New topic`]{/if}</h1>
+
+    {* PROVIDERS *}
+    {if !$wa->user()->isAuth()}
+        <div id="user-auth-provider" data-provider="signup">
+            {sprintf('[`To add new topic please <a href="%s">sign up</a> or <a href="%s">log in</a>`]',$wa->signupUrl(),$wa->loginUrl())}
+        </div>
+
+        {$wa->authAdapters()}
+    {else}
+        {* FORM *}
+        <form method="post" id="topic-form">
+            {if empty($data.id)}
+                {* @event frontend_topic_add.%plugin_id%.top_block *}
+                {foreach $frontend_topic_add as $_}{$_.top_block}{/foreach}
+            {else}
+                {* @event frontend_topic_edit.%plugin_id%.top_block *}
+                {foreach $frontend_topic_edit as $_}{$_.top_block}{/foreach}
+            {/if}
+
+            {* TYPE *}
+            {if empty($data.id)}
+                {if count($types) > 1}
+                    <ul class="h-topic-types">
+                        {foreach $types as $t}
+                            <li class="h-topic-type {if $t.id == $type_id}is-selected{/if}">
+                                <a href="javascript:void(0);" data-type="{$t.id}">{hubHelper::getGlyph($t.glyph, 16, false, ['contact' => $user])}{$t.name|default:'[`(no name)`]'|escape}</a>
+                            </li>
+                        {/foreach}
+                    </ul>
+                {/if}
+                <input type="hidden" name="data[type_id]" value="{$type_id}">
+            {/if}
+
+            {* TITLE *}
+            <input type="text" class="h-topic-title {if !empty($errors.title)}error{/if}" placeholder="[`Your topic title`]" name="data[title]" value="{ifset($data.title)|escape}" />
+
+            {* CATEGORIES *}
+            {if !empty($categories)}
+                <div class="h-topic-category">
+                    [`Category`]
+                    <select name="data[category_id]">
+                        {foreach $categories as $c}
+                            <option {if isset($c.type_id)}data-type="{$c.type_id}"{/if} value="{$c.id}"{if $c.id == ifset($data.category_id)} selected{/if}>
+                                {$c.name|default:'[`(no name)`]'|escape}
+                            </option>
+                        {/foreach}
+                    </select>
+                </div>
+            {/if}
+
+            {* DESCRIPTION *}
+            <div class="h-topic-description {if !empty($errors.content)}error-box{/if}">
+                <textarea data-upload-url="{$wa->getUrl('/frontend/uploadImage')}" class="h-topic-content" name="data[content]">{ifset($data.content)|escape}</textarea>
+            </div>
+
+            {* TAGS *}
+            <div class="h-topic-tags">
+                [`Tags`]
+                <input type="text" name="data[tags]" value="{join(',',ifset($data.tags, []))}" id="ti-topic-form" />
+                {if !empty($errors.tags)}<em class="errormsg">{$errors.tags}</em>{/if}
+            </div>
+
+            {if empty($data.id)}
+                <!-- plugin hook: 'frontend_topic_add.bottom_block' -->
+                {* @event frontend_topic_add.%plugin_id%.bottom_block *}
+                {foreach $frontend_topic_add as $_}{$_.bottom_block}{/foreach}
+            {else}
+                <!-- plugin hook: 'frontend_topic_edit.bottom_block' -->
+                {* @event frontend_topic_edit.%plugin_id%.bottom_block *}
+                {foreach $frontend_topic_edit as $_}{$_.bottom_block}{/foreach}
+            {/if}
+
+            <div class="h-topic-preview" data-url="{$wa->getUrl('/frontend/preview')}" {if empty($preview)}style="display:none"{/if}>{if !empty($preview)}{$preview}{/if}</div>
+
+            <div class="h-buttons-wrapper">
+                <input type="submit" value="{if !empty($data.id)}[`Save`]{else}[`Submit topic`]{/if}">
+                <input class="h-show-preview" type="submit" name="preview" value="[`Preview`]">
+            </div>
+
+            {$wa->csrf()}
+        </form>
+
+        <script>
+            ( function($) {
+                $.hub.initAddTopicForm({
+                    $form: $('#topic-form'),
+                    autocomplete_url: "{$wa->getUrl('hub/frontend/tagAutocomplete')}"
+                });
+            })(jQuery);
+        </script>
+    {/if}
+
+</div>
+
+{/strip}

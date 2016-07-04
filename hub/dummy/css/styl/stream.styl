@@ -1,0 +1,140 @@
+.h-stream-wrapper
+    margin 2em 0 0
+
+    .h-stream-header
+        display table
+        width 100%
+        margin: 0 0 1em 0;
+        padding: 0 0 1em;
+        border-bottom: 2px solid rgba(0,0,0,0.05);
+
+        .left-column
+        .right-column
+            display table-cell
+            vertical-align middle
+
+        .right-column
+            text-align right
+
+        .h-header
+            display inline-block
+            margin 0
+
+        .h-stream-sorting
+            margin 0
+
+.h-topics-wrapper
+    .h-topic-list
+        margin 0
+        border-radius: 2px;
+        box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1);
+        overflow: hidden;
+
+        .h-topic-wrapper
+            position relative
+            margin 0
+            border-top: 1px solid rgba(0,0,0,0.1)
+
+            &:first-child
+                border-top 0
+
+            .h-topic-link
+                position absolute
+                top 0
+                left 0
+                width 100%
+                height 100%
+
+            .h-topic
+                display table
+                width 100%
+                padding 1em
+                box-sizing border-box
+
+                .h-topic-icon
+                .h-topic-replies
+                .h-topic-summary
+                    display table-cell
+                    vertical-align middle
+
+                a:visited
+                    color: #03c;
+
+                .h-topic-icon
+                    width 32px;
+                    padding-right 1em
+
+                .h-topic-replies
+                    text-align right
+                    width 30px
+                    white-space nowrap
+
+                .h-topic-summary
+                    padding 0 1em 0 0
+
+                    .h-badge
+                        margin 0 0 0 4px
+
+                    .h-rating
+                        display inline-block
+                        margin 0 4px 0 0
+
+                        font-weight bold
+                        color: gray;
+                        background: #eee;
+                        border-radius: 3px;
+                        font-size: 12px;
+                        padding: .25em;
+
+                        &.is-positive
+                            color: green;
+                            background: #dfd;
+
+                        &.is-negative
+                            color: brown;
+                            background: #fdd;
+
+                    .h-topic-author
+                        margin 4px 0 0 0
+                        font-size 12px
+                        color #777
+
+                        .h-author-name
+                            font-weight bold
+                            margin 0 4px 0 0
+
+                    .h-topic-solution
+                        display table
+                        width 100%
+                        table-layout fixed
+                        padding 1em
+                        margin 1em 0 0
+                        background #dfd
+                        box-sizing border-box
+                        font-size 12px
+                        border-radius 3px
+
+                        .h-image
+                        .h-text
+                            display table-cell
+                            vertical-align top
+
+                        .h-image
+                            width 16px
+                            padding 0 .75em 0 0
+
+                            .userpic
+                                width 100%
+                        .h-text
+                            .h-comment-author
+                                margin 0 0 .5em
+
+                                .h-name
+                                    color #444
+                                    font-weight bold
+
+                                .h-staff
+                                    margin 0 0 0 4px
+
+                            .h-comment-text
+                                line-height 1.25em

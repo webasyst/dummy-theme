@@ -1,0 +1,64 @@
+{strip}
+
+{* @event frontend_homepage.%plugin_id% *}
+{foreach $frontend_homepage as $_}{$_}{/foreach}
+
+<!-- categories -->
+{$categories = $wa->hub->categories(true)}
+{if $categories}
+    <ul class="h-category-list">
+        {foreach $categories as $category}
+            <li class="h-category-wrapper" title="{if $category.update_datetime}{$category.update_datetime|wa_datetime:"humandatetime"}{/if}">
+                <div class="h-category-item {if $category.is_updated}is-new{/if}">
+                    {if !empty($category.logo_url)}
+                        <div class="h-image-wrapper">
+                            <a href="{$category.url}" title="{$category.name|escape}">
+                                <img class="h-image" src="{$category.logo_url}" alt="{$category.name|escape}">
+                            </a>
+                        </div>
+                    {/if}
+                    <div class="h-text-wrapper">
+
+                        <div class="h-category-header">
+                            <a href="{$category.url}">
+                                {$category.name|default:'[`(no name)`]'|escape}
+                            </a>
+                        </div>
+
+                        <div class="h-category-description">
+                            {$category.description}
+                        </div>
+
+                        {if !empty($category.priority_topics)}
+                            <ul class="h-featured-topics">
+                                {foreach $category.priority_topics as $_featured}
+                                    <li><a href="{$_featured.url|escape}">{$_featured.title|escape}</a></li>
+                                {/foreach}
+                            </ul>
+                        {/if}
+                    </div>
+                </div>
+            </li>
+        {/foreach}
+    </ul>
+{/if}
+
+<section class="h-stream-wrapper">
+
+    <div class="h-stream-header">
+        <div class="left-column">
+            <h3 class="h-header">[`All topics`]</h3>
+        </div>
+        <div class="right-column">
+            <div class="h-stream-sorting h-button-list">
+                <a class="h-button {if $sort == 'recent'}is-selected{/if}" href="?sort=recent">[`Newest`]</a>
+                <a class="h-button {if $sort == 'updated'}is-selected{/if}" href="?sort=updated">[`Updated`]</a>
+                <a class="h-button {if $sort == 'popular'}is-selected{/if}" href="?sort=popular">[`Popular`]</a>
+            </div>
+        </div>
+    </div>
+
+    {include file="topics.html"}
+</section>
+
+{/strip}

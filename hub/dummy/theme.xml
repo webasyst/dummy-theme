@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="dummy" app="hub" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="1.0.0">
+    <name locale="en_US">Dummy</name>
+    <name locale="ru_RU">Dummy</name>
+    <files>
+        <!-- parent resources -->
+        <file path="css/dummy.css" parent="1">
+        </file>
+        <file path="js/dummy.js" parent="1">
+        </file>
+        <!-- hub resources -->
+        <file path="css/dummy.hub.css">
+        </file>
+        <file path="js/dummy.hub.js">
+        </file>
+        <!-- parent templates -->
+        <file path="index.html" parent="1">
+        </file>
+        <file path="error.html" parent="1">
+        </file>
+        <file path="signup.html" parent="1">
+        </file>
+        <file path="login.html" parent="1">
+        </file>
+        <file path="forgotpassword.html" parent="1">
+        </file>
+        <file path="page.html" parent="1">
+        </file>
+        <file path="my.profile.html" parent="1">
+        </file>
+        <!-- hub templates -->
+        <file path="add.html">
+            <description locale="en_US">Add/edit topic form</description>
+            <description locale="ru_RU">Форма создания и редактирования топика</description>
+        </file>
+        <file path="author.comments.html">
+        </file>
+        <file path="author.html">
+            <description locale="en_US">Author profile</description>
+            <description locale="ru_RU">Профиль автора</description>
+        </file>
+        <file path="authors.html">
+            <description locale="en_US">List of all hub authors</description>
+            <description locale="ru_RU">Список всех авторов хаба</description>
+        </file>
+        <file path="breadcrumbs.html">
+        </file>
+        <file path="category.html">
+            <description locale="en_US">Hub category</description>
+            <description locale="ru_RU">Категория хаба</description>
+        </file>
+        <file path="comment.add.html">
+            <description locale="en_US">Add/edit comment form</description>
+            <description locale="ru_RU">Форма добавления комментария</description>
+        </file>
+        <file path="comment.html">
+            <description locale="en_US">Comment to a topic</description>
+            <description locale="ru_RU">Комментарий к топику</description>
+        </file>
+        <file path="comments.html">
+        </file>
+        <file path="footer.html">
+            <description locale="en_US">App specific footer content</description>
+            <description locale="ru_RU">Содержимое футера приложения</description>
+        </file>
+        <file path="head.html">
+            <description locale="en_US">Hub app's &lt;head&gt; instructions</description>
+            <description locale="ru_RU">Блок &lt;head&gt; приложения «Хаб»</description>
+        </file>
+        <file path="header.html">
+            <description locale="en_US">App specific header content</description>
+            <description locale="ru_RU">Содержимое «шапки» приложения</description>
+        </file>
+        <file path="home.html">
+            <description locale="en_US">Hub homepage</description>
+            <description locale="ru_RU">Главная страница хаба</description>
+        </file>
+        <file path="main.html">
+            <description locale="en_US">Main layout and navigation for Hub app content</description>
+            <description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Хаб»</description>
+        </file>
+        <file path="search.html">
+            <description locale="en_US">Wrapper for topic search</description>
+            <description locale="ru_RU">Обертка для страницы поиска топиков</description>
+        </file>
+        <file path="sidebar.html">
+        </file>
+        <file path="tag.html">
+            <description locale="en_US">Wrapper for topic filtering by tag</description>
+            <description locale="ru_RU">Обертка для страницы поиска топиков по тегу</description>
+        </file>
+        <file path="topic.custom.html">
+            <description locale="en_US">Custom topic type</description>
+            <description locale="ru_RU">Произвольный тип топика</description>
+        </file>
+        <file path="topic.feedback.html">
+            <description locale="en_US">Feedback topic type (+/-)</description>
+            <description locale="ru_RU">Топик «Обратная связь» (+/-)</description>
+        </file>
+        <file path="topic.forum.html">
+            <description locale="en_US">Forum topic type</description>
+            <description locale="ru_RU">Топик «Обсуждение»</description>
+        </file>
+        <file path="topic.html">
+            <description locale="en_US">Wrapper for topic page</description>
+            <description locale="ru_RU">Обертка для страницы топика</description>
+        </file>
+        <file path="topic.page.html">
+            <description locale="en_US">Page topic type</description>
+            <description locale="ru_RU">Топик «Страница»</description>
+        </file>
+        <file path="topic.question.html">
+            <description locale="en_US">Question &amp; Answers topic type</description>
+            <description locale="ru_RU">Топик «Вопрос и ответы»</description>
+        </file>
+        <file path="topics.html">
+        </file>
+    </files>
+</theme>

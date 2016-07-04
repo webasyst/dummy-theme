@@ -1,0 +1,128 @@
+{strip}
+
+<div class="h-topic-wrapper" itemscope itemtype="http://schema.org/Question">
+
+    <article class="h-topic-block" id="h-topic-{$topic.id}">
+
+        <h1 class="h-topic-header" itemprop="name">
+            {$topic.title|escape}
+            {* @event frontend_topic.%plugin_id%.title_suffix *}
+            {foreach $frontend_topic as $_}{$_.title_suffix}{/foreach}
+            {if !empty($topic.badge)}
+                <span class="h-badge badge-{$topic.badge.id}">{$topic.badge.name}</span>
+            {/if}
+        </h1>
+
+        <div class="h-columns">
+            <div class="h-middle-column">
+
+                <div class="h-topic-content" itemprop="articleBody">
+                    {$topic.content}
+                </div>
+
+                {* @event frontend_topic.%plugin_id%.body *}
+                {foreach $frontend_topic as $_}{$_.body}{/foreach}
+
+                <div class="h-credentials">
+                    {if !empty($topic.author)}
+                        <a class="h-userpic" href="{$wa->getUrl('/frontend/author', ['id' => $topic.author.id])}">
+                            <img src="{$topic.author.photo_url_20}" class="userpic" alt="">
+                        </a>
+
+                        <a href="{$wa->getUrl('/frontend/author', ['id' => $topic.author.id])}" class="h-user-name" itemprop="author">{$topic.author.name|escape}</a>
+
+                        {if !empty($topic.author.badge)}
+                            <span class="h-staff" {if !empty($topic.author.badge_color)} style="background-color: {$topic.author.badge_color}"{/if}>{$topic.author.badge}</span>
+                        {/if}
+                    {/if}
+
+                    <div class="h-date">
+                        {if $topic.update_datetime|wa_date != $topic.create_datetime|wa_date}
+                            [`Last update`]: {$topic.update_datetime|wa_date:'humandate'}
+                            <meta itemprop="dateModified" content="{$topic.update_datetime|date_format:'Y-m-d\TH:i'}">
+                        {else}
+                            [`Posted`]: {$topic.create_datetime|wa_date:'humandate'}
+                        {/if}
+                        <meta itemprop="datePublished" content="{$topic.create_datetime|date_format:'Y-m-d\TH:i'}">
+                    </div>
+                </div>
+
+                <div class="h-topic-tags">
+                    {foreach $tags as $tag}{if !$tag@first}, {/if}<a href="{$tag.url}">{$tag.name|escape}</a>{/foreach}
+                </div>
+
+                {if !empty($topic.editable)}
+                    <div class="h-actions">
+                        <a class="s-button" href="{$topic.edit_url}">[`Edit topic`]</a>
+                        <button class="h-delete-topic white" data-delete-url="{$topic.delete_url}" data-confirm="[`You are about to delete this record. Are you sure?`]">[`Delete`]</button>
+                    </div>
+                {/if}
+            </div>
+
+        </div>
+
+    </article>
+
+    {if !empty($types[$topic.type_id].settings.voting)}
+        <div class="h-helpful-vote" id="h-helpful-vote">
+
+            {if $wa->user()->isAuth()}
+                <div class="vote-form-question">
+                    [`Was this article helpful?`]
+                    {if !empty($types[$topic.type_id].settings.voting['+'])}<button title="[`Yes`]" class="h-vote-button white is-true">[`Yes`]</button>{/if}
+                    {if !empty($types[$topic.type_id].settings.voting['-'])}<button title="[`No`]" class="h-vote-button white is-false">[`No`]</button>{/if}
+                </div>
+                <div class="vote-form-yes" style="display: none;">
+                    [`Thank you for your feedback!`]
+                </div>
+                <div class="vote-form-no" style="display: none;">
+                    <p>[`In just few words, tell us what you did not like about this article?`]</p>
+                    <p><textarea></textarea></p>
+                    <p>
+                        <input class="h-submit-false" type="button" class="save" value="[`Send`]">
+                    </p>
+                </div>
+            {else}
+                <div>
+                    {sprintf('[`To add a comment please <a href="%s">sign up</a> or <a href="%s">login</a>`]',$wa->signupUrl(),$wa->loginUrl())}
+                </div>
+                <div id="user-auth-provider">
+                    {$wa->authAdapters()}
+                </div>
+            {/if}
+
+        </div>
+    {/if}
+
+    {if !empty($types[$topic.type_id].settings.commenting)}
+
+        {include file="./comments.html" topic=$topic comments=$comments inline}
+
+        {* Add comment form *}
+        {if $comments_allowed}
+            {include file="comment.add.html" inline}
+        {else}
+            {if $topic.badge.id == 'archived'}
+                <p><em>[`This topic is in the archive. Posting new comments is disabled.`]</em></p>
+            {else}
+                <p><em>[`Posting new comments is disabled for this topic.`]</em></p>
+            {/if}
+        {/if}
+
+    {/if}
+
+    <script>
+        ( function($) {
+            $.hub.initPageVotes({
+                $vote: $("#h-helpful-vote"),
+                id: {$topic.id},
+                vote_url: "{$wa->getUrl('/frontend/vote')|escape:js}",
+                login_url: "{$wa->loginUrl()|escape:js}",
+                user_id: {if $wa->user()->getId()}{$wa->user()->getId()}{else}false{/if}
+            });
+        })(jQuery);
+    </script>
+
+</div>
+
+{/strip}

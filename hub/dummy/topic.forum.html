@@ -1,0 +1,108 @@
+{strip}
+
+<div class="h-topic-wrapper" itemscope itemtype="http://schema.org/Question">
+
+    <article class="h-topic-block" id="h-topic-{$topic.id}">
+
+        <h1 class="h-topic-header" itemprop="name">
+            {$topic.title|escape}
+            {* @event frontend_topic.%plugin_id%.title_suffix *}
+            {foreach $frontend_topic as $_}{$_.title_suffix}{/foreach}
+            {if !empty($topic.badge)}
+                <span class="h-badge badge-{$topic.badge.id}">{$topic.badge.name}</span>
+            {/if}
+        </h1>
+
+        <div class="h-columns">
+            <div class="h-image-column">
+                <a class="h-userpic" href="javascript:void(0);">
+                    <img src="{$topic.author.photo_url_50}" class="userpic" alt="{$topic.author.name|escape}" title="{$topic.author.name|escape}">
+                </a>
+            </div>
+
+            <div class="h-middle-column">
+
+                <div class="h-topic-content" itemprop="articleBody">
+                    {$topic.content}
+                </div>
+
+                {* @event frontend_topic.%plugin_id%.body *}
+                {foreach $frontend_topic as $_}{$_.body}{/foreach}
+
+                <div class="h-credentials">
+                    {if !empty($topic.author)}
+                        <a href="{$wa->getUrl('/frontend/author', ['id' => $topic.author.id])}" class="h-user-name" itemprop="author">{$topic.author.name|escape}</a>
+
+                        {if !empty($topic.author.badge)}
+                            <span class="h-staff" {if !empty($topic.author.badge_color)} style="background-color: {$topic.author.badge_color}"{/if}>{$topic.author.badge}</span>
+                        {/if}
+                    {/if}
+
+                    <div class="h-date">
+                        [`Posted`]: <span style="white-space: nowrap;">{$topic.create_datetime|wa_date:'humandate'}</span>
+                        <meta itemprop="datePublished" content="{$topic.create_datetime|date_format:'Y-m-d\TH:i'}">
+                    </div>
+                </div>
+
+                <div class="h-topic-tags">
+                    {foreach $tags as $tag}{if !$tag@first}, {/if}<a href="{$tag.url}">{$tag.name|escape}</a>{/foreach}
+                </div>
+
+                {if !empty($topic.editable)}
+                    <div class="h-actions">
+                        <a class="s-button" href="{$topic.edit_url}">[`Edit topic`]</a>
+                        <button class="h-delete-topic white" data-delete-url="{$topic.delete_url}" data-confirm="[`You are about to delete this record. Are you sure?`]">[`Delete`]</button>
+                    </div>
+                {/if}
+            </div>
+
+        </div>
+
+    </article>
+
+    {include file="./comments.html" topic=$topic comments=$comments linear_view=true inline}
+
+    {if $comments_allowed}
+        <section class="forum-reply-form" id="comment-form">
+            <form method="post">
+
+                {if !$wa->userId()}
+                    <!-- guest users may not post in the Hub, because voting won't work otherwise -->
+                    <div id="user-auth-provider" data-provider="signup">
+                        <br>
+                        <h4>[`Add reply`]</h4>
+                        {sprintf('[`To add a comment please <a href="%s">sign up</a> or <a href="%s">log in</a>`]',$wa->signupUrl(),$wa->loginUrl())}
+                    </div>
+                    {$wa->authAdapters()}
+                {else}
+                    <!-- authorized -->
+                    <div class="comment">
+                        <div class="meta">
+                            <img src="{$user.photo_url_50}" class="userpic" alt="{$wa->user()->get('name')|escape}" title="{$wa->user()->get('name')|escape}">
+                        </div>
+                        <div>
+                            <textarea id="comment-text" data-upload-url="{$wa->getUrl('/frontend/uploadImage')}" name="text" rows="10" cols="45"></textarea>
+                            <input type="submit" class="save" value="[`Add comment`]">
+                            <em class="hint">Ctrl+Enter</em>
+                            {$wa->csrf()}
+                            <input type="hidden" name="parent_id" value="0">
+                            <input type="hidden" name="topic_id" value="{$topic.id}">
+                            <input type="hidden" name="count" value="{$comments_count}">
+                            <input type="hidden" name="type" value="{if $types[$topic.type_id].type == 'question'}answer{else}comment{/if}">
+                        </div>
+                    </div>
+                {/if}
+
+            </form>
+        </section>
+    {else}
+        {if $topic.badge.id == 'archived'}
+            <p><em>[`This topic is in the archive. Posting new comments is disabled.`]</em></p>
+        {else}
+            <p><em>[`Posting new comments is disabled for this topic.`]</em></p>
+        {/if}
+    {/if}
+
+</div>
+
+{/strip}

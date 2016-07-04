@@ -1,0 +1,42 @@
+{strip}
+
+<section class="h-comment-form" id="h-comment-form">
+    <form method="post">
+        <h4 class="h-header">[`Add comment`]</h4>
+
+        {if !$wa->user()->isAuth()}
+            <div id="user-auth-provider" data-provider="signup">
+                {sprintf('[`To add a comment please <a href="%s">sign up</a> or <a href="%s">login</a>`]',$wa->signupUrl(),$wa->loginUrl())}
+            </div>
+            {$wa->authAdapters()}
+        {else}
+            <div class="h-form-block">
+                <div class="h-form-header">
+                    <span class="h-userpic"><img src="{$user.photo_url_20}" class="userpic" alt="{$wa->user()->get('name')|escape}" title="{$wa->user()->get('name')|escape}"></span>
+                    <span class="h-user-name">{$wa->user()->get('name')|escape}</span>
+                    <a class="h-logout" href="?logout">[`log out`]</a>
+                </div>
+                <div class="h-comment-body">
+                    <div class="comment-redactor"><textarea data-upload-url="{$wa->getUrl('/frontend/uploadImage')}" name="text" rows="10" cols="45"></textarea></div>
+                </div>
+                <div class="h-actions">
+                    <button type="submit">[`Add comment`]</button>
+                    <button class="h-cancel-button white">[`Cancel`]</button>
+                    {$wa->csrf()}
+                    <input type="hidden" name="parent_id" value="0">
+                    <input type="hidden" name="topic_id" value="{$topic.id}">
+                </div>
+            </div>
+
+            <script>
+                ( function($) {
+                    $.hub.initCommentForm({
+                        $formWrapper: $("#h-comment-form")
+                    });
+                })(jQuery);
+            </script>
+        {/if}
+    </form>
+</section>
+
+{/strip}

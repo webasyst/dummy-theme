@@ -1,0 +1,130 @@
+{strip}
+
+{if empty($linear_view)}
+    {$linear_view = false}
+{/if}
+
+<section class="h-comments-wrapper" id="h-comments" style="{if empty($comments)}display: none;{/if}">
+
+    {* @event frontend_topic.%plugin_id%.comments *}
+    {foreach $frontend_topic as $_}{$_.comments}{/foreach}
+
+    {if !empty($comments)}
+        {$answers_count = 0}
+        {foreach $comments as $comment}
+            {if !$comment.depth}{$answers_count = $answers_count + 1}{/if}
+        {/foreach}
+
+        {if $wa->userId()}
+            <div class="h-follow-wrapper {if $following}following{else}not-following{/if}">
+                <div class="h-follow-content">
+                    <input type="button" class="s-button" value="[`Follow`]" id="button-follow">
+                    <span class="small">[`New comments will be sent to you by email`]</span>
+                </div>
+                <div class="h-unfollow-content">
+                    <input type="button" class="s-button white" value="[`Unfollow`]" id="button-unfollow">
+                    [`You are following this topic`]<i class="icon16 star"></i>
+                </div>
+                <script>
+                    ( function($) {
+                        $.hub.initFollowingButton("{$wa->getUrl('/frontend/topicFollow')|escape:js}", "{$topic.id}");
+                    })(jQuery);
+                </script>
+            </div>
+        {/if}
+
+        <h3 class="h-comments-header">{_w('%d answer', '%d answers', $answers_count)}</h3>
+
+        {if !$linear_view}
+            <div class="h-comment-sorting h-button-list">
+                <a class="h-button is-selected" data-order="votes" href="javascript:void(0);">[`popular`]</a>
+                <a class="h-button" data-order="newest" href="javascript:void(0);">[`newest`]</a>
+
+                <script>
+                    ( function($) {
+                        var $comments = $("#h-comments");
+                        $.hub.initCommentsSorting({
+                            $comments: $comments,
+                            $sorting: $comments.find(".h-comment-sorting"),
+                            topic_id: "{$topic.id}"
+                        });
+                    })(jQuery);
+                </script>
+            </div>
+
+            <div class="h-comment-list">
+                {$depth=-1}
+                {foreach $comments as $comment}
+                    {if $comment.depth < $depth}
+
+                        {$loop=($depth-$comment.depth)}
+                        {section name="end-comment" loop=$loop}
+                            </li></ul>
+                        {/section}
+
+                        {$depth=$comment.depth}
+                    {/if}
+
+                    {if $comment.depth == $depth}
+                        </li>
+                        <li class="h-comment-wrapper" id="h-comment-wrapper-{$comment.id}">
+                    {/if}
+
+                    {if $comment.depth > $depth}
+                        <ul>
+                            <li class="h-comment-wrapper" id="h-comment-wrapper-{$comment.id}">
+                        {$depth=$comment.depth}
+                    {/if}
+
+                    {include file="comment.html" comment=$comment inline}
+
+                {/foreach}
+
+                {section name="end-comment" loop=$depth + 1}
+                    </li></ul>
+                {/section}
+            </div>
+        {else}
+            <div class="h-comment-list" id="h-comment-list">
+                <ul class="h-list-wrapper">
+                    {foreach $comments as $comment}
+                        <li class="h-comment-wrapper" id="h-comment-wrapper-{$comment.id}">
+                            {include file="comment.html" comment=$comment linear_view=$linear_view inline}
+                        </li>
+                    {/foreach}
+                </ul>
+
+                {if isset($pages_count) && $pages_count > 1}
+                    <div class="h-paging-wrapper {if $theme_settings.pagination == "lazyloading"}is-lazy-loading{/if}" data-loading-text="[`Loading...`]">
+                        {wa_pagination total=$pages_count attrs=["class" => "h-paging-list"]}
+                    </div>
+                {/if}
+
+                <script>
+                    ( function($) {
+                        var initLazyLoading = {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
+                        if (initLazyLoading) {
+                            var $wrapper = $("#h-comment-list");
+                            new LazyLoading({
+                                $wrapper: $wrapper,
+                                names: {
+                                    list: ".h-list-wrapper",
+                                    items: ".h-comment-wrapper",
+                                    paging: ".h-paging-wrapper"
+                                }
+                            });
+                        }
+                    })(jQuery);
+                </script>
+            </div>
+        {/if}
+    {else}
+        <h3 class="h-comments-header"></h3>
+        <div class="h-comment-list">
+            <ul></ul>
+        </div>
+    {/if}
+
+</section>
+
+{/strip}

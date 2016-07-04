@@ -1,0 +1,177 @@
+{strip}
+
+{* COMMENT CLASS *}
+{$_comment_class =["comment"]}
+{if $comment.solution && !empty($topic)}
+    {if $types[$topic.type_id].type == 'question'}
+        {$_comment_class[] = "is-solution"}
+    {else}
+        {$_comment_class[] = "featured-comment"}
+    {/if}
+{/if}
+
+{* META *}
+{$_comment_meta = ""}
+{if !$comment.depth && !empty($topic) && $types[$topic.type_id].type == 'question'}
+    {$_comment_meta = "itemprop=\"suggestedAnswer{if $comment.solution} acceptedAnswer{/if}\" itemscope itemtype=\"http://schema.org/Answer\""}
+{/if}
+
+{* VIEW TYPE *}
+{if empty($linear_view)}
+    {$linear_view = false}
+{/if}
+
+{* SOLUTION *}
+
+{$_solution_enabled = ( !empty($topic) && $types[$topic.type_id].type == 'question' && !$comment.depth ) }
+{$_can_set_solution = ( $_solution_enabled && ( $topic.contact_id == $wa->userId() || $wa->user()->isAdmin('hub') ) && ( empty($topic.badge) || $topic.badge.id != 'archived') )}
+
+{* TEMPLATE *}
+
+{if !empty($ajax_append)}<li class="h-comment-wrapper">{/if}
+
+<div class="h-comment {$_comment_class|join:" "}" id="h-comment-{$comment.id}" {$_comment_meta} data-id="{$comment.id}" data-parent-id="{$comment.parent_id}">
+    <a name="answer-{$comment.id}"></a>
+
+    <div class="h-inner-wrapper">
+        {if $linear_view}
+            <div class="h-image-column">
+                <a href="{$comment.author.url|default:'#comment':$comment.id}">
+                    <img src="{$comment.author.photo_url_50}" class="userpic" alt="{$comment.author.name|escape}" title="{$comment.author.name|escape}">
+                </a>
+            </div>
+        {/if}
+        <div class="h-middle-column">
+
+            <div class="h-credentials">
+                {if !$linear_view}
+                    <a class="h-userpic" name="comment{$comment.id}" href="{$wa->getUrl('/frontend/author', ['id' => $comment.contact_id])}">
+                        <img src="{$comment.author.photo_url_20}" class="userpic" title="{$comment.author.name|escape}" alt="{$comment.author.name|escape}">
+                    </a>
+                {/if}
+                <a class="h-user-name" name="comment{$comment.id}" href="{$wa->getUrl('/frontend/author', ['id' => $comment.contact_id])}">
+                    {if !$comment.depth && !empty($topic) && $types[$topic.type_id].type == 'question'}
+                        <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{$comment.author.name|escape}</span></span>
+                    {else}
+                        <span itemprop="creator">{$comment.author.name|escape}</span>
+                    {/if}
+                </a>
+                {if !empty($comment.author.badge)}
+                    <span class="h-staff "{if !empty($comment.author.badge_color)} style="background-color: {$comment.author.badge_color}"{/if}>{$comment.author.badge}</span>
+                {/if}
+
+                {if $_solution_enabled}
+                    <span class="h-solution-badge" style="{if !$comment.solution}display: none;{/if}">[`Solution`]</span>
+                {/if}
+
+                <meta itemprop="{if !$comment.depth && !empty($topic) && $types[$topic.type_id].type == 'question'}dateCreated{else}commentTime{/if}" content="{date('Y-m-d\TH:i', $comment.datetime_ts)}">
+            </div>
+
+            <div class="h-comment-text">
+
+                <div class="h-text" itemprop="{if !$comment.depth && !empty($topic) && $types[$topic.type_id].type == 'question'}text{else}commentText{/if}">
+                    {$comment.text}
+                </div>
+
+                {if !empty($comment.topic) && empty($just_added)}
+                    <div class="h-reply-info">
+                        [`in reply to`]
+                        <a href="{$wa->getUrl('hub/frontend/topic', [
+                        'id' => $comment.topic.id,
+                        'topic_url' => $comment.topic.url,
+                        'hub_id' => $comment.topic.hub_id
+                        ])}">{$comment.topic.title|escape}</a>
+                    </div>
+                {/if}
+
+                {* @event frontend_comments.%plugin_id% *}
+                {if !empty($comment.plugins)}
+                    {foreach $comment.plugins as $_}{$_}{/foreach}
+                {/if}
+
+            </div>
+
+            {if !empty($comment.editable) || !empty($comments_allowed)}
+                <div class="h-actions">
+                    {if !empty($comment.editable) && !empty($topic)}
+                        <button class="s-button h-delete-comment" data-url="{$wa->getUrl('hub/frontend/commentsDelete', [ 'id' => $topic.id, 'topic_url' => $topic.url ])}" data-confirm="[`You are about to delete this record. Are you sure?`]">[`delete`]</button>
+                        <button class="s-button h-edit-comment" data-save-string="[`Save`]" data-url="{$wa->getUrl('hub/frontend/commentsEdit', [ 'id' => $topic.id, 'topic_url' => $topic.url ])}">[`edit`]</button>
+                    {/if}
+
+                    {if !empty($comments_allowed)}
+                        <button class="s-button h-reply-comment" data-id="{$comment.id}">[`reply`]</button>
+                    {/if}
+
+                    {if $_can_set_solution}
+                        <button class="s-button h-solution-button" data-solution="[`Mark as solution`]" data-cancel="[`Unmark solution`]">{if $comment.solution}[`Unmark solution`]{else}[`Mark as solution`]{/if}</button>
+                    {/if}
+
+                    {$wa->csrf()}
+                </div>
+            {/if}
+
+        </div>
+        <div class="h-right-column">
+
+            <div class="h-anchor-wrapper">
+                <a href="#comment{$comment.id}" class="h-anchor">#{$comment.id}</a>
+            </div>
+            <div class="h-date-wrapper">
+                <span class="h-date">{$comment.datetime|wa_datetime:humandatetime}</span>
+            </div>
+
+            {*
+            {if $linear_view || $comment.parent_id}
+                <div class="h-vote-wrapper">
+                    <div class="h-vote-block is-short">
+                        <button class="h-vote-button is-up {if $comment.my_vote > 0}is-active{/if}" title="+1"></button>
+                        <span class="h-vote-value {if $comment.vote > 0}is-positive{else if $comment.vote < 0}is-negative{/if}" itemprop="upvoteCount">{$comment.vote}</span>
+                        <button class="h-vote-button is-down {if $comment.my_vote < 0}is-active{/if}" title="-1"></button>
+                    </div>
+                </div>
+            {/if}
+            *}
+        </div>
+
+        {*{if !$comment.parent_id}*}
+            <div class="h-vote-column">
+                <div class="h-vote-block">
+                    <button class="h-vote-button is-up {if $comment.my_vote > 0}is-active{/if}" title="+1"></button>
+                    <span class="h-vote-value {if $comment.vote > 0}is-positive{else if $comment.vote < 0}is-negative{/if}" itemprop="upvoteCount">{$comment.vote}</span>
+                    <button class="h-vote-button is-down {if $comment.my_vote < 0}is-active{/if}" title="-1"></button>
+                </div>
+            </div>
+        {*{/if}*}
+    </div>
+
+    <div class="h-actions-content-wrapper">
+        <div class="h-edit-form">
+            <div class="h-text-wrapper">
+                <textarea name="text" cols="1" rows="1"></textarea>
+            </div>
+            <div class="h-buttons">
+                <button class="h-save-edit">[`Save`]</button>
+                <button class="h-cancel-edit white">[`Cancel`]</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        ( function($) {
+            var $comment = $("#h-comment-{$comment.id}");
+            $.hub.initComment({
+                $comment: $comment,
+                is_solution: {if $comment.solution}true{else}false{/if},
+                can_set_solution: {if $_can_set_solution}true{else}false{/if},
+                user_id: {if $wa->user()->getId()}{$wa->user()->getId()}{else}false{/if},
+                login_url: "{$wa->loginUrl()|escape:js}",
+                vote_url: "{$wa->getUrl('/frontend/vote')|escape:js}"
+            });
+        })(jQuery);
+    </script>
+
+</div>
+
+{if !empty($ajax_append)}</li>{/if}
+
+{/strip}
