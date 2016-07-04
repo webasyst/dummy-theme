@@ -1,0 +1,79 @@
+{strip}
+
+{$_my_directory = $wa->globals('isMyAccount')}
+{$_current_url = $wa->currentUrl()}
+
+{function renderNavItem page=[]}
+    {$_is_selected = ( strlen($page.url) > 1 && $wa->currentUrl()|strstr:$page.url )}
+
+    <li class="{if !empty($_is_selected)}is-selected{/if} {if !empty($page.childs)}has-sub-menu{/if}">
+        <a href="{$page.url}">{$page.name}</a>
+        {if !empty($page.childs)}
+            <ul>
+                {foreach $page.childs as $subpage}
+                    {renderNavItem page=$subpage}
+                {/foreach}
+            </ul>
+        {/if}
+    </li>
+{/function}
+
+<nav class="h-sidebar-wrapper" role="navigation">
+    <div class="s-nav-wrapper">
+
+        {if $_my_directory}
+
+            {if empty($my_nav_selected)}
+                {$my_nav_selected = ""}
+            {/if}
+
+            <ul>
+                {if !empty($my_app) && $my_app == $wa->app()}
+                    <li class="{if $my_nav_selected == 'profile'}is-selected{/if}">
+                        <a href="{$wa->getUrl('/frontend/myProfile')}">[`My profile`]</a>
+                    </li>
+                {/if}
+
+                <li class="{if $my_nav_selected == 'requests'}is-selected{/if}">
+                    <a href="{$wa->getUrl('/frontend/myRequests')}">[`My requests`]</a>
+                </li>
+
+                <li>
+                    <a href="?logout">[`Logout`]</a>
+                </li>
+            </ul>
+
+        {else}
+
+            <div class="h-add-request">
+                <button class="h-add-button" onclick="location.href='{$wa->getUrl('/frontend/ask')}'">[`Support request`]</button>
+            </div>
+
+            {if !empty($categories)}
+                <ul class="h-category-list">
+                    {foreach $categories as $_c}
+                        {$_url = "`$wa->getUrl('helpdesk/frontend/faq')``$_c.url`/"}
+                        {$_is_selected = ( $_current_url == $_url )}
+
+                        <li class="{if $_is_selected}is-selected{/if}">
+                            <a href="{$_url}">{$_c.name|escape}</a>
+                        </li>
+                    {/foreach}
+                </ul>
+            {/if}
+
+            {* SIDEBAR NAV *}
+            {$_pages = $wa->helpdesk->pages()}
+            {if !empty($_pages)}
+                <ul>
+                    {foreach $_pages as $page}
+                        {renderNavItem page=$page}
+                    {/foreach}
+                </ul>
+            {/if}
+        {/if}
+
+    </div>
+</nav>
+
+{/strip}

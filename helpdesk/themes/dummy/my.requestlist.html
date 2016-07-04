@@ -1,0 +1,40 @@
+{strip}
+
+{$wa->globals('isMyAccount', true)}
+
+<div class="h-requests-wrapper">
+
+    <h1 class="h-requests-header">[`Requests`]</h1>
+
+    {if $forms}
+        <div class="h-requests-actions">
+            {foreach $forms as $form}
+                <a class="s-button" href="{$wa->getUrl('helpdesk/frontend/myNew', ['id' => $form->getId()])}">{$form->name}</a>
+            {/foreach}
+        </div>
+    {/if}
+
+    {if $requests}
+        <table class="h-requests-table">
+            <tr>
+                <th class="h-id">[`ID`]</th>
+                <th class="h-date">[`Sent`]</th>
+                <th class="h-text">[`Subject`]</th>
+                <th class="h-state">[`Status`]</th>
+            </tr>
+            {foreach $requests as $r}
+                <tr style="{$r.list_row_css}">
+                    <td class="h-id"><a href="{$r.link}">{$r.id}</a></td>
+                    <td class="h-date"><a href="{$r.link}">{$r.dt_formatted}</a></td>
+                    <td class="h-text"><a href="{$r.link}">{$r.summary}</a></td>
+                    <td class="h-state"><a href="{$r.link}">{$r.state}</a></td>
+                </tr>
+            {/foreach}
+        </table>
+    {else}
+        <p><em>[`&lt;no support requests&gt;`]</em></p>
+    {/if}
+
+</div>
+
+{/strip}

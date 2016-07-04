@@ -1,0 +1,10 @@
+{strip}
+
+{if empty($categories)}
+    <div class="welcome">
+        <h1>[`Welcome to new helpdesk section on your site!`]</h1>
+        <p>{sprintf_wp('Start by <a href="%s">filling database of frequently asked questions</a> in your helpdesk backend.', $wa_backend_url|cat:'helpdesk/#/faq/new/')}</p>
+    </div>
+{/if}
+
+{/strip}

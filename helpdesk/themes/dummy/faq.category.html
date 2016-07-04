@@ -1,0 +1,23 @@
+{strip}
+
+<div class="h-category-wrapper">
+
+    <h1 class="h-category-header">{$category.name|escape}</h1>
+
+    {if !empty($faq_list)}
+        <ul class="h-faq-list">
+            {foreach $faq_list as $f}
+                <li class="h-faq-wrapper">
+                    <h3 class="h-faq-name"><a href="{$f.url}/">{$f.question}</a></h3>
+                    {if !empty($category.view_type) && $category.view_type == helpdeskFaqCategoryModel::VIEW_TYPE_COLLECTIVE}
+                        <div class="h-faq-answer">{$f.answer}</div>
+                    {/if}
+                </li>
+            {/foreach}
+        </ul>
+    {else}
+        &lt;[`no records`]&gt;
+    {/if}
+</div>
+
+{/strip}

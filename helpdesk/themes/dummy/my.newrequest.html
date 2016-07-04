@@ -1,0 +1,15 @@
+{strip}
+
+{if empty($is_public_frontend)}
+    {$wa->globals('isMyAccount', true)}
+{/if}
+
+<div class="h-new-request-wrapper">
+
+    <h1 class="h-request-header">{$source.name}</h1>
+
+    <div class="h-request-form">{$form_html}</div>
+
+</div>
+
+{/strip}

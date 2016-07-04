@@ -1,0 +1,251 @@
+.request-changed-params
+    display: none;
+
+.request-param-changed
+    color: red;
+
+.h-request-page
+    .h-confirmation-wrapper
+        margin: 0 0 1em
+        padding: 1em
+        background: #f0faf2;
+        border-radius: 2px;
+        box-shadow: 0 0 8px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.06);
+        overflow: hidden;
+
+        p
+            font: normal 0.875em/1.25 "Trebuchet MS", Arial
+
+    .h-request-header-wrapper
+        display: table
+        width: 100%
+        padding: 1em
+        box-sizing: border-box
+        background: #fafcfe
+        border-radius: 2px;
+        box-shadow: 0 0 8px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.06);
+        overflow: hidden;
+
+        & > .left-column,
+        & > .right-column
+            display: table-cell
+            vertical-align: middle;
+
+        & > .right-column
+            width: 25%
+            border-left: 1px solid rgba(0,0,0,0.1)
+            padding: 0 0 0 1em
+            box-sizing: border-box;
+
+        .h-request-header
+            margin: 0
+            padding: 0;
+
+        .h-detail-wrapper
+            margin: 0
+            width: 100%
+            border: 0;
+
+            td
+                padding: 0
+                border: 0
+                box-sizing: border-box
+                vertical-align: baseline;
+
+                &.h-name
+                    font: bold 0.7em/1.25 "Trebuchet MS", Arial, "sans-serif"
+                    text-transform: uppercase
+                    color: #999;
+
+                &.h-value
+                    width: 100%
+                    padding: 0 0 0 0.75em
+                    box-sizing: border-box
+                    font-size: 1em
+                    font-style: italic;
+
+                    .h-status
+                        margin: 0;
+
+    .h-request-wrapper
+        margin: 1em 0 0;
+
+        .h-request-block
+            padding: 0
+
+        .h-log-list
+            margin: 2em 0 0;
+
+            .h-request-ticket
+                margin: 2em 0 0
+                background: #fefcfa
+
+        .h-request-actions
+            margin: 2em 0 0;
+
+        .h-action-content
+            margin: 2em 0 0;
+
+            .wa-field
+                margin 1em 0 0
+                display table
+
+                &:first-child
+                    margin-left 0
+
+                .wa-name
+                .wa-value
+                    display table-cell
+                    vertical-align top
+                    width auto
+                    min-width: auto
+
+                .buttons
+                    input
+                        vertical-align middle
+
+        .h-request-ticket
+            padding: 0
+            background: #fafcfe
+            box-shadow: 0 0 0.5em rgba(33,66,99,0.1)
+            border-radius: 0.25em;
+
+            .h-ticket-header
+                display: table
+                width: 100%
+                table-layout: fixed
+                padding: 0.5em 0
+                border-bottom: 2px solid rgba(0,0,0,.025)
+
+                & > .left-column,
+                & > .right-column
+                    display: table-cell
+                    vertical-align: top;
+
+                & > .left-column
+                    width: 25px;
+                    padding 0 .5em
+
+                & > .right-column
+                    vertical-align: middle;
+
+                .h-image-wrapper
+                    font-size 0
+                    line-height 0
+
+                    img
+                        width: 100%
+                        border-radius: 50%;
+
+                .h-author-wrapper
+                    margin 0 4px 0 0
+                    color: #121212
+
+                .h-date-wrapper
+                    font-size 11px
+                    color: #aaa
+
+            .h-ticket-content
+                padding: .5em
+                min-height: 1.25em;
+
+                .h-params
+                    margin: 1em 0 0;
+
+                    &:first-child
+                        margin-top: 0;
+
+                .h-request-data
+                .h-log-data
+                    display: table
+                    margin: 1em 0 0
+
+                    &:first-child
+                        margin-top: 0;
+
+                    .wa-field
+                        display: table-row;
+
+                        &:first-child
+                            margin-top 0
+
+                            .wa-name
+                            .wa-value
+                                border-top: 0;
+
+                        .wa-name
+                        .wa-value
+                            display: table-cell
+                            vertical-align: top
+                            padding: .5em 0.5em 0.5em 0
+
+                        .wa-name
+                            font: bold 0.875em/1.25em "Trebuchet MS", Arial
+                            color: #999;
+
+                        .wa-value
+                            padding-left: 1em;
+
+                .h-text
+                    margin: 1em 0 0;
+
+                    &:first-child
+                        margin-top: 0;
+
+                    .show-quote
+                        color: #500050
+                        cursor: pointer
+                        font-size: 9px
+                        margin: 0.5em 0.15em;
+
+                    hr
+                        display: none;
+
+                    .same-tab
+                        display: inline-block
+                        margin: 0.5em 0 0
+                        border: 1px solid rgba(0,0,0,0.1)
+                        padding: 2px
+                        background: #fff
+                        width: 150px
+                        max-width: 100%
+                        border-radius: 2px
+                        line-height: 0
+                        box-sizing: border-box;
+
+                        img
+                            max-width: 100%
+                            border-radius: 2px
+
+                    .h-request-images
+                        margin 1em 0 0
+
+                        .h-request-image
+                            display inline-block
+                            vertical-align top
+                            margin 0 0 0 4px
+
+                            &:first-child
+                                margin-left 0
+
+                            p
+                                margin 0
+
+                            .same-tab
+                                margin 0
+
+                .h-attachments
+                    display: inline-block
+                    vertical-align: top
+                    margin: 1em 0 0
+
+                    .h-attachment
+                        margin: 0.5em 0 0;
+
+                        .h-size
+                            margin 0 0 0 4px
+                            font-size 12px
+                            color: #aaa
+
+                        &:first-child
+                            margin-top: 0;

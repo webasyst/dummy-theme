@@ -1,0 +1,30 @@
+{strip}
+
+<div class="h-search-page">
+
+    <h1 class="h-search-header">{$query|escape}</h1>
+
+    {if !empty($faq_list)}
+        <ul class="h-faq-list">
+            {foreach $faq_list as $q}
+                <li class="h-faq-wrapper">
+                    <h3 class="h-faq-name">
+                        <a href="{$wa->getUrl('helpdesk/frontend/faq')}{$q.category_url}/{$q.url}/">{$q.question|escape}</a>
+                    </h3>
+                    <div class="h-faq-answer">
+                        {if !empty($q.fragments)}
+                            {$q.fragments|implode:" "}
+                        {else}
+                            {$q.answer|strip_tags|truncate:200:"..."}
+                        {/if}
+                    </div>
+                </li>
+            {/foreach}
+        </ul>
+    {else}
+        &lt;[`no records`]&gt;
+    {/if}
+
+</div>
+
+{/strip}
