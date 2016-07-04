@@ -1,0 +1,69 @@
+{strip}
+
+<section class="p-photos-wrapper" id="p-photo-section">
+
+    {* @event frontend_collection.%plugin_id%.plain_list *}
+    {if !empty($frontend_collection)}{foreach $frontend_collection as $item}{if !empty($item.plain_list)}{$item.plain_list}{/if}{/foreach}{/if}
+
+    <div class="p-photo-list p-wide-list" id="photo-list">
+        {foreach $photos as $photo}
+            <figure class="p-photo-item {if !empty($photo.stack_nav)}with-stack{/if}" itemscope itemtype ="http://schema.org/Photograph">
+                <a name="photo{$photo.id}"></a>
+
+                <a class="p-photo-link" href="{$photo.frontend_link}">
+                    {$wa->photos->getImgHtml($photo, '970x0', ['itemprop' => 'image', 'class' => 'p-photo-image'])}
+                </a>
+
+                {if !empty($photo.stack_nav)}
+                    <div class="p-photo-stack">
+                        {$photo.stack_nav}
+                    </div>
+                {/if}
+
+                <div class="p-top-left-hook">
+                    {* @event prepare_photos_frontend.top_left.%plugin_id% *}
+                    {foreach $photo.hooks.top_left as $plugin => $output}{$output}{/foreach}
+                </div>
+
+                <div class="p-top-right-hook">
+                    {* @event prepare_photos_frontend.top_right.%plugin_id% *}
+                    {foreach $photo.hooks.top_right as $plugin => $output}{$output}{/foreach}
+                </div>
+
+                {if !empty($photo.description)}
+                    <div class="p-text-wrapper">
+                        {* <h5 itemprop="name">{$photo.name}</h5> *}
+
+                        {* <div class="p-photo-name">{$wa->photos->ratingHtml($photo.rate, 16)}</div> *}
+
+                        {if !empty($photo.description)}
+                            <div itemprop="description">{$photo.description}</div>
+                        {/if}
+                    </div>
+                {/if}
+
+                {* @event prepare_photos_frontend.plain.%plugin_id% *}
+                {foreach $photo.hooks.plain as $plugin => $output}{$output}{/foreach}
+            </figure>
+        {/foreach}
+    </div>
+
+    {if isset($pages_count) && $pages_count > 1}
+        <div class="p-paging-wrapper {if $theme_settings.pagination == "lazyloading"}is-lazy-loading{/if}" data-loading-text="[`Loading...`]">
+            {wa_pagination total=$pages_count attrs=["class" => "p-paging-list"]}
+        </div>
+    {/if}
+
+    <script>
+        ( function($) {
+            var $wrapper = $("#p-photo-section").removeAttr("id");
+            new PhotoList({
+                $wrapper: $wrapper,
+                useLazy: {if isset($pages_count) && $pages_count > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if}
+            });
+        })(jQuery);
+    </script>
+
+</section>
+
+{/strip}

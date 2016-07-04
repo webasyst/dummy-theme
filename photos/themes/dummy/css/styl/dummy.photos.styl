@@ -1,0 +1,45 @@
+@import "nib";
+
+@import "albums.styl";
+
+@import "photo.styl";
+
+@import "photos.styl";
+
+.p-home-wrapper
+    .p-photo-stream
+        margin 4em 0 0
+
+#gallery-nav
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 30px;
+
+    ul.menu-h
+        li
+            float: none;
+            display: inline-block;
+
+    .popup
+        max-width: 400px; max-height: 70%; overflow-y: scroll;
+
+        ul.menu-v
+            padding-left: 6px;
+
+            li
+                display: block; float: none; list-style: none; line-height: 1.3em; text-align: left;
+
+                a
+                    color: #03c;
+
+                    &:hover
+                        color: red;
+
+                ul
+                    padding-left: 15px; padding-top: 2px; font-size: 0.9em; margin-bottom: 10px;
+
+                    li
+                        float: none;
+
+                        a
+                            font-weight: normal;

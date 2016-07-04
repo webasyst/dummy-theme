@@ -1,0 +1,32 @@
+{strip}
+
+{if $nofollow}
+    <meta name="robots" content="nofollow" />
+{/if}
+
+{* CSS *}
+<link href="{$wa_active_theme_url}css/dummy.photos.css?v{$wa_theme_version}" rel="stylesheet">
+
+{* JS *}
+<script src="{$wa_static_url}wa-content/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="{$wa_active_theme_url}js/wookmark.min.js?v{$wa->version(true)}"></script>
+<script src="{$wa_active_theme_url}js/dummy.photos.js?v={$wa->version(true)}"></script>
+
+{* RETINA *}
+{if $wa->photos->config('enable_2x')}
+    <script>
+        ( function($) {
+            var retina_js = "{$wa_static_url}wa-content/js/jquery-plugins/jquery.retina.min.js?v{$wa->version(true)}";
+            $.getScript(retina_js, function() {
+                $(document).ready( function() {
+                    $(".retina-image").retina();
+                });
+            });
+        })(jQuery);
+    </script>
+{/if}
+
+{* @event frontend_assets.%plugin_id% *}
+{foreach $frontend_assets as $item}{if !empty($item)}{$item}{/if}{/foreach}
+
+{/strip}

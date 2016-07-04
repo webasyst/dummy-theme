@@ -1,0 +1,10 @@
+{strip}
+
+{* @event frontend_layout.%plugin_id%.header *}
+{foreach $frontend_layout as $item}
+    {if !empty($item.header)}{$item.header}{/if}
+{/foreach}
+
+{$content}
+
+{/strip}

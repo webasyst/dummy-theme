@@ -1,0 +1,30 @@
+{strip}
+
+{$albums = $wa->photos->childAlbums()}
+
+<div class="p-home-wrapper">
+    {if !empty($photos) || !empty($albums)}
+
+        {if !empty($albums)}
+            <h2>[`Albums`]</h2>
+            {include file="albums.html" albums=$albums inline}
+        {/if}
+
+        {if !empty($photos)}
+            <section class="p-photo-stream">
+                <h2>[`Photostream`]</h2>
+                {include file='photos.thumbs.html'}
+            </section>
+        {/if}
+
+    {else}
+
+        <div class="welcome">
+            <h1>[`Welcome to your new photo gallery!`]</h1>
+            <p>{sprintf('[`Start by <a href="%s">uploading photos</a> in your gallery backend.`]', $wa_backend_url|cat:'photos/')}</p>
+        </div>
+
+    {/if}
+</div>
+
+{/strip}

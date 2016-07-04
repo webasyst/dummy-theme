@@ -1,0 +1,20 @@
+{strip}
+
+{* BREADCRUMBS *}
+{* UNCOMMENT IF YOU NEED IT
+{if $_show_breadcrums && !empty($breadcrumbs)}
+    <div class="s-breadcrumbs-wrapper">
+        <ul class="s-breadcrumbs-block" itemprop="breadcrumb">
+            {foreach $breadcrumbs as $breadcrumb}
+                {if !empty($breadcrumb)}
+                    <li class="s-breadcrumb-item">
+                        <a class="s-breadcrumb-link" href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+                    </li>
+                {/if}
+            {/foreach}
+        </ul>
+    </div>
+{/if}
+*}
+
+{/strip}

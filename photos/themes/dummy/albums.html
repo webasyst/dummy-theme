@@ -1,0 +1,38 @@
+{strip}
+
+<section class="p-albums">
+    {foreach $albums as $album}
+        {$_image_url = false}
+        {if $album.key_photo}
+            {$_image_url = photosPhoto::getPhotoUrl($album.key_photo, 480)}
+            {if $album.key_photo.edit_datetime}
+                {$_image_url = $album.key_photo.thumb.url|cat: "?"|cat: strtotime($album.key_photo.edit_datetime)}
+            {/if}
+        {/if}
+
+        <div class="p-album">
+            <div class="p-image-wrapper" style="{if !empty($_image_url)}background-image: url({$_image_url});{/if}"></div>
+            <div class="p-text-wrapper">
+                <div class="table">
+                    <div class="column" style="width: 32px; padding-right: 1em;">
+                        <i class="p-album-icon"></i>
+                    </div>
+                    <div class="column">
+                        <div class="p-album-text">
+                            <div class="p-album-name">
+                                {$album.name}
+                            </div>
+                            <div class="p-album-counter">{sprintf( _w('%d photo','%d photos',$album.count), $album.count)}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{$album.full_url}" class="p-album-link"></a>
+
+            {*TODO: ACCESS STATUS*}
+            {*<strong{if $a.status <= 0} class="gray" title="[`Private album`]"{/if}>{$a.name|default:'[`(no name)`]'}{if $a.status <= 0} <i class="icon10 lock-bw"></i>{/if}</strong>*}
+        </div>
+    {/foreach}
+</section>
+
+{/strip}

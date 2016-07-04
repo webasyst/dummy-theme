@@ -1,0 +1,46 @@
+{strip}
+
+<div class="p-album-page">
+
+    <h1 class="p-album-name">
+        <span itemprop="name">{$album.name}</span>
+        {* @event frontend_collection.%plugin_id%.name *}
+        {foreach $frontend_collection as $item}{if !empty($item.name)}{$item.name}{/if}{/foreach}
+    </h1>
+
+    {if $album.note}
+        <div class="p-album-note">
+            <em>{$album.note}</em>
+        </div>
+    {/if}
+
+    {if $album.description}
+        <p class="p-album-description">{$album.description}</p>
+    {/if}
+
+    {if !empty($childcrumbs)}
+        {include file="albums.html" albums=$childcrumbs inline}
+    {/if}
+
+    {* @event frontend_collection.%plugin_id%.content *}
+    {foreach $frontend_collection as $item}{if !empty($item.content)}{$item.content}{/if}{/foreach}
+
+    {if !empty($photos)}
+
+        {if !empty($childcrumbs)}
+            {include file='photos.thumbs.html'}
+        {else}
+            {include file='photos.wide.html'}
+        {/if}
+
+    {elseif empty($childcrumbs)}
+
+        <div class="view-plain">
+            <p>[`There are no photos in this album.`]</p>
+        </div>
+
+    {/if}
+
+</div>
+
+{/strip}

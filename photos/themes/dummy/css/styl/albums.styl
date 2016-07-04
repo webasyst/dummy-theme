@@ -1,0 +1,94 @@
+.p-album-page
+    .p-album-note
+        margin: 1em 0;
+        color: #aaa;
+        font-style: italic;
+
+    .p-album-description
+        margin: 1em 0;
+        line-height 1.5em
+
+.p-albums
+    .p-album
+        position relative
+        display inline-block
+        vertical-align top
+        width 50%
+        max-width (192*2)px
+
+        border solid transparent
+        border-width 0 4px 4px 0
+        box-sizing border-box
+
+        &:before
+            content: ""
+            position absolute
+            top 0
+            left 0
+            width 100%
+            height 100%
+            background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.2) 100%);
+
+        .p-image-wrapper
+            width 100%
+            height 0
+            padding-bottom (100*9/16)%
+            background #f0f0f0 50% no-repeat
+            background-size cover
+
+        .p-album-link
+            position absolute
+            top 0
+            left 0
+            width 100%
+            height 100%
+            background transparent
+            cursor pointer
+
+        .p-text-wrapper
+            position absolute
+            bottom 0
+            left 0
+            width 100%
+            padding 1em
+            color #fff
+            box-sizing border-box
+            text-shadow 0 0 1px rgba(0,0,0,.5)
+            white-space nowrap
+
+            .table
+                display table
+                width 100%
+                table-layout fixed
+
+                .column
+                    display table-cell
+                    vertical-align middle
+
+            .p-album-icon
+                display inline-block
+                width 24px
+                height 24px
+                padding 4px
+                border-radius 50%
+                overflow hidden
+                background #fbfbfb url("../img/icons/album-icon.png") 50% no-repeat
+                background-size 24px
+                box-shadow 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.1)
+
+            .p-album-text
+                position relative
+                top -1px
+
+                .p-album-name
+                    display inline-block
+                    font bold 18px/1em "Trebuchet MS", Arial, sans-serif;
+
+                    width 100%
+                    white-space nowrap
+                    text-overflow ellipsis
+                    overflow hidden
+
+                .p-album-counter
+                    font-size 12px
+                    color #f0f0f0

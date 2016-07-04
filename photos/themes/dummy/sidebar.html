@@ -1,0 +1,46 @@
+{strip}
+
+<nav class="s-nav-wrapper" role="navigation">
+
+    <ul>
+        <li class="{if $wa->currentUrl() == $wa_app_url}is-selected{/if}">
+            <a href="{$wa_app_url}">[`All photos`]</a>
+        </li>
+        <li  class="{if $wa->param('action') neq 'page' && $wa->param('action') neq 'album' && $wa->param('hash') == 'favorites'}is-selected{/if}">
+            <a href="{$wa_app_url}favorites/">[`Editors’ choice`]</a>
+        </li>
+
+        {* @event frontend_sidebar.%plugin_id%.menu *}
+        {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.menu)}
+            <li>{$item.menu}</li>
+        {/if}{/foreach}
+    </ul>
+
+    {function renderNavItem page=[]}
+        {$_is_selected = ( strlen($page.url) > 1 && $wa->currentUrl()|strstr:$page.url )}
+
+        <li class="{if !empty($_is_selected)}is-selected{/if} {if !empty($page.childs)}has-sub-menu{/if}">
+            <a href="{$page.url}">{$page.name}</a>
+            {if !empty($page.childs)}
+                <ul>
+                    {foreach $page.childs as $subpage}
+                        {renderNavItem page=$subpage}
+                    {/foreach}
+                </ul>
+            {/if}
+        </li>
+    {/function}
+
+    {* SIDEBAR NAV *}
+    {$_pages = $wa->photos->pages()}
+    {if !empty($_pages)}
+        <ul>
+            {foreach $_pages as $page}
+                {renderNavItem page=$page}
+            {/foreach}
+        </ul>
+    {/if}
+
+</nav>
+
+{/strip}
