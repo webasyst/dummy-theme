@@ -1,0 +1,208 @@
+.b-post-wrapper
+    margin 2em 0 0
+
+    &:first-child
+        margin-top 0
+
+    .b-post
+        padding 1em
+        box-shadow 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.1)
+        border-radius 2px
+        overflow hidden
+
+        .b-post-name
+            margin 0
+
+        .b-credentials
+            margin: 1em -1em;
+            background: #f8f8f8;
+            padding: 1em;
+
+            .table-layout
+                display table
+                width 100%
+
+                .column-item
+                    display table-cell
+                    vertical-align middle
+
+                .column-right
+                    text-align right
+
+            .b-userpic
+            .b-username
+            .b-date
+                display: inline-block
+
+            .b-userpic
+                width: 20px
+                border-radius: 50%
+                margin 0 4px 0 0
+                vertical-align middle
+
+            .b-username
+                color: #444
+                margin 0 4px 0 0
+
+            .b-date
+                color #888
+                font-size .85em
+
+            .b-comments-link
+                $_size = 16px
+                display inline-block
+                margin 0 0 0 .5em
+                min-height $_size
+                padding 0 0 0 ($_size + 6)
+                font-size .85em
+                line-height $_size
+
+                background transparent url("../img/icons/comment-icon.png") 0 50% no-repeat
+                background-size $_size
+
+        .b-content
+            margin 1em 0 0
+            line-height 1.5em
+
+            h1
+            h2
+            h3
+            h4
+            h5
+            h6
+                margin-top 2rem
+
+                &:first-child
+                    margin-top 0
+
+            ul
+            ol
+                margin 1em 0
+                padding 0 0 0 2em
+                list-style inherit
+
+                li
+                    list-style inherit
+
+            img
+                max-width: 100%
+                height: auto !important
+
+            iframe
+                max-width: 100%
+
+        .b-album-wrapper
+            margin 2em 0 0
+
+            .b-album-header
+                margin 0 0 .5em
+
+            .b-album
+                position relative
+                display inline-block
+                vertical-align top
+                width 50%
+                max-width (192*2)px
+
+                border solid transparent
+                border-width 0 4px 4px 0
+                box-sizing border-box
+
+                &:before
+                    content: ""
+                    position absolute
+                    top 0
+                    left 0
+                    width 100%
+                    height 100%
+                    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.2) 100%);
+
+                .b-image-wrapper
+                    width 100%
+                    height 0
+                    padding-bottom (100*9/16)%
+                    background #f0f0f0 50% no-repeat
+                    background-size cover
+
+                .b-album-link
+                    position absolute
+                    top 0
+                    left 0
+                    width 100%
+                    height 100%
+                    background transparent
+                    cursor pointer
+
+                .b-text-wrapper
+                    position absolute
+                    bottom 0
+                    left 0
+                    width 100%
+                    padding 1em
+                    color #fff
+                    box-sizing border-box
+                    text-shadow 0 0 1px rgba(0,0,0,.5)
+                    white-space nowrap
+
+                    .table
+                        display table
+                        width 100%
+                        table-layout fixed
+
+                        .column
+                            display table-cell
+                            vertical-align middle
+
+                    .b-album-icon
+                        display inline-block
+                        width 24px
+                        height 24px
+                        padding 4px
+                        border-radius 50%
+                        overflow hidden
+                        background #fbfbfb url("../img/icons/album-icon.png") 50% no-repeat
+                        background-size 24px
+                        box-shadow 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.1)
+
+                    .b-album-text
+                        position relative
+                        top -1px
+
+                        .b-album-name
+                            display inline-block
+                            font bold 18px/1em "Trebuchet MS", Arial, sans-serif;
+
+                            width 100%
+                            white-space nowrap
+                            text-overflow ellipsis
+                            overflow hidden
+
+                        .b-album-counter
+                            font-size 12px
+                            color #f0f0f0
+        .b-photo-list
+            margin 2em 0 0
+
+            &.is-preview
+                .b-photo-item
+                    display inline-block
+                    vertical-align top
+                    margin 2px;
+
+                    font-size 0
+                    line-height 0
+
+            .b-photo-item
+                display block
+                margin 2em 0 0
+
+                &:first-child
+                    margin-top 0
+
+                .b-photo-info
+                    margin .25em 0 0
+                    line-height 1.5em
+
+                img
+                    display block
+                    max-width 100%

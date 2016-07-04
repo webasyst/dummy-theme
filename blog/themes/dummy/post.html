@@ -1,0 +1,82 @@
+{strip}
+
+<article class="b-post-wrapper" id="b-post-{$post.id}" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="b-post">
+        <h1 class="b-post-name">
+            <span itemprop="name">{$post.title}</span>
+            {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+            {if !empty($post.plugins.post_title)}
+                {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+            {/if}
+        </h1>
+
+        <div class="b-credentials">
+            <meta itemprop="datePublished" content="{$post.datetime|date_format:'Y-m-d\TH:i'}">
+
+            {if $post.contact_id}
+                <a href="{$post.user.posts_link}">
+                    <img class="b-userpic" src="{$post.user.photo_url_20}" alt="">
+                </a>
+                <a class="b-username" href="{$post.user.posts_link}" itemprop="author">{$post.user.name}</a>
+            {else}
+                <img class="b-userpic" src="{$post.user.photo_url_20}" alt="">
+                <span class="b-username" itemprop="author">{$post.user.name}</span>
+            {/if}
+
+            <span class="b-date" title="{$post.datetime|wa_datetime}">{$post.datetime|wa_datetime:"humandate"}</span>
+        </div>
+
+        {* @event prepare_posts_frontend.%plugin_id%.before *}
+        {if !empty($post.plugins.before)}
+            <div class="text_before">
+                {foreach $post.plugins.before as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+
+        <div class="b-content" itemprop="articleBody">
+            {$post.text}
+        </div>
+
+        {if $post.album_id && $post.album.id && $post.album.photos}
+            {$_show_album = !empty($theme_settings.photos_view_type) && $theme_settings.photos_view_type == "album"}
+            {if $_show_album}
+                {include "post.album.html" album=$post.album inline}
+            {else}
+                {include "post.photos.html" photos=$post.album.photos inline}
+            {/if}
+        {/if}
+
+        {* @event prepare_posts_frontend.%plugin_id%.after *}
+        {if !empty($post.plugins.after)}
+            <div class="text_after">
+                {foreach $post.plugins.after as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+    </div>
+
+    {* @event frontend_post.%plugin_id%.footer *}
+    {foreach $frontend_post as $plugin => $output}
+        {if !empty($output.footer)}{$output.footer}{/if}
+    {/foreach}
+
+    {if $show_comments && $post.comments_allowed}
+        {if $post.status eq blogPostModel::STATUS_PUBLISHED}
+            {include 'comments.html' inline}
+        {else}
+            <h4>[`Comments for non published posts are disabled`]</h4>
+        {/if}
+    {/if}
+
+    <script>
+        ( function($) {
+            new Post({
+                $wrapper: $("#b-post-{$post.id}"),
+                use_retina: {if blogPhotosBridge::is2xEnabled()}true{else}false{/if}
+            });
+        })(jQuery);
+    </script>
+
+</article>
+
+{/strip}

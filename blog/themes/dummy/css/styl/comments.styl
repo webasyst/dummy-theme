@@ -1,0 +1,219 @@
+.b-comments-wrapper
+    margin 2em 0 0
+
+    .b-comments-count
+        margin: 0
+        padding: 0
+
+        &.is-hidden
+            display none;
+
+    .b-comments
+        margin 1em 0 0
+
+        .b-comment-wrapper
+            margin 1.5em 0 0
+
+            &:first-child
+                margin-top 0
+
+            .b-comment
+                position relative
+                padding: 0 0.5em .5em;
+                transition background 200ms linear
+                border-radius: 2px;
+
+                &.is-new
+                    background rgba(0,255,0,.05)
+
+                &.in-reply-to
+                    background rgba(255,255,0,.05)
+
+                .b-credentials
+                    display table
+                    width: 100%
+                    table-layout fixed
+                    padding 6px 0.25em 6px 6px
+                    border-bottom: 1px solid #f0f0f0;
+                    box-sizing: border-box;
+
+                    & > .left-column
+                    & > .right-column
+                        display table-cell
+                        vertical-align middle
+
+                    & > .left-column
+                        width: 20px;
+                        padding: 0 8px 0 0
+                        font-size 0
+                        line-height 0
+
+                    .b-author-image
+                        width: 20px;
+                        text-align center
+
+                        img
+                            width 100%
+                            border-radius 50%;
+                            box-shadow 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.1)
+
+                    .b-author
+                        .b-username
+                        .b-staff
+                        .b-date
+                            margin 0 .25em
+                            display inline-block
+                            vertical-align baseline
+
+                        .b-staff
+                            padding .25em
+                            border-radius 2px
+                            background #d2ffd2
+                            color #666
+                            box-shadow 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.05)
+
+                        .b-date
+                            font-size: 0.8em
+                            color: #aaa
+
+                .b-text
+                    font-weight bold
+                    padding: 9px 0 0 37px;
+
+                .b-actions
+                    margin .5em 0 0
+                    padding: 0 0 0 37px;
+
+                    .comment-reply
+                        color: #638392
+
+                .b-comment-form
+                    margin: 1em 0 0 37px;
+
+                    .b-form-buttons
+                        .b-cancel-button
+                            display inline-block
+                            margin 0 4px 0 0
+
+            & > .b-comment-wrapper
+                padding-left: 50px
+
+                .b-comment
+                    .b-text
+                        font-weight normal
+
+.b-comment-form
+    margin 2em 0 0
+    background: #f8f8f8;
+    border-radius: 2px;
+    padding: 1em;
+    box-shadow: 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.1);
+
+    .b-form-header
+        position relative
+        top -1px
+        line-height 1em
+
+    .b-form-auth
+
+        .b-auth-providers
+            padding 0
+
+            li
+                margin 0 .5em 0 0
+                display: inline-block
+
+                &:first-child
+                    margin-left 0
+
+                &.is-selected
+                    a
+                        background #2e6da4
+                        color #fff
+
+                &:hover
+                    a
+                        box-shadow 0 0 2px rgba(0,0,0,.1), 0 2px 2px rgba(0,0,0,.1)
+
+                a
+                    display inline-block
+                    padding: 0.5em
+                    border-radius 2px
+                    line-height 1.25em
+
+                    img
+                        vertical-align: top;
+                        margin 0 4px 0 0
+
+        .userpic
+            width 20px
+            height 20px
+            vertical-align middle
+            margin 0 4px
+
+            &:first-child
+                margin-left 0
+
+        .b-logout-link
+            margin 0 0 0 4px
+
+            &:before
+                content "("
+                margin 0 2px 0 0
+
+            &:after
+                content ")"
+                margin 0 0 0 2px
+
+        .b-guest-auth
+            margin 1em 0 0
+
+            &.is-hidden
+                display none
+
+            input
+                display inline-block
+                vertical-align baseline
+                margin 0 0 0 4px
+                width 25%
+                box-sizing border-box
+
+                &:first-child
+                    margin-left 0
+
+        .wa-captcha
+            margin: 1em 0 0;
+
+            p
+                margin: 0;
+                line-height 0
+
+                & + p
+                    display none
+
+            img
+                max-width 100%;
+
+                -webkit-border-radius 5px
+                border-radius 5px
+
+                & + strong
+                    display none
+
+            input
+                margin: 1em 0 0;
+
+    .b-comment-body
+        margin 1em 0 0
+
+    .b-form-buttons
+        margin: 1em 0 0;
+
+        &:first-child
+            margin-top: 0;
+
+        .b-add-wrapper
+            text-align right
+
+        .b-cancel-button
+            display none

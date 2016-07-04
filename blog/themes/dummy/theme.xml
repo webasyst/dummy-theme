@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="dummy" app="blog" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="1.0.0">
+    <name locale="en_US">Dummy</name>
+    <name locale="ru_RU">Dummy</name>
+    <files>
+        <!-- parent resources -->
+        <file path="css/dummy.css" parent="1">
+        </file>
+        <file path="js/dummy.js" parent="1">
+        </file>
+        <!-- blog resources -->
+        <file path="css/dummy.blog.css">
+        </file>
+        <file path="js/dummy.blog.js">
+        </file>
+        <!-- parent templates -->
+        <file path="index.html" parent="1">
+        </file>
+        <file path="error.html" parent="1">
+        </file>
+        <file path="signup.html" parent="1">
+        </file>
+        <file path="login.html" parent="1">
+        </file>
+        <file path="forgotpassword.html" parent="1">
+        </file>
+        <file path="page.html" parent="1">
+            <description locale="en_US">Static info page</description>
+            <description locale="ru_RU">Информационная страница</description>
+        </file>
+        <file path="my.profile.html" parent="1">
+        </file>
+        <!-- blog resources -->
+        <file path="breadcrumbs.html">
+        </file>
+        <file path="comment.form.html">
+        </file>
+        <file path="comment.html">
+            <description locale="en_US">One comment template</description>
+            <description locale="ru_RU">Вывод одного комментария из списка</description>
+        </file>
+        <file path="comments.html">
+            <description locale="en_US">Post comment list</description>
+            <description locale="ru_RU">Комментарии к записи блога</description>
+        </file>
+        <file path="footer.html">
+            <description locale="en_US">App specific footer content</description>
+            <description locale="ru_RU">Содержимое футера приложения</description>
+        </file>
+        <file path="head.html">
+            <description locale="en_US">Blog app's &lt;head&gt; instructions</description>
+            <description locale="ru_RU">Блок &lt;head&gt; приложения «Блог»</description>
+        </file>
+        <file path="header.html">
+            <description locale="en_US">App specific header content</description>
+            <description locale="ru_RU">Содержимое «шапки» приложения</description>
+        </file>
+        <file path="main.html">
+            <description locale="en_US">Main layout and navigation for the Blog app content</description>
+            <description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Блог»</description>
+        </file>
+        <file path="post.album.html">
+            <description locale="en_US">Photo album attached to the blog post</description>
+            <description locale="ru_RU">Фотоальбом, прикрепленный к записи в блоге</description>
+        </file>
+        <file path="post.html">
+            <description locale="en_US">Dedicated post page</description>
+            <description locale="ru_RU">Страница одной записи блога</description>
+        </file>
+        <file path="post.photos.html">
+        </file>
+        <file path="post.preview.html">
+        </file>
+        <file path="sidebar.html">
+        </file>
+        <file path="stream.html">
+            <description locale="en_US">Post stream wrapper</description>
+            <description locale="ru_RU">Обертка для страницы вывода списка записей</description>
+        </file>
+    </files>
+    <settings>
+        <setting var="photos_view_type" control_type="radio">
+            <value>list</value>
+            <name locale="ru_RU">Варианты отображения прикреплённых фотографий</name>
+            <name locale="en_US">View type of attached photos</name>
+            <options>
+                <option value="album">
+                    <name locale="ru_RU">Ссылка на альбом</name>
+                    <name locale="en_US">Album link</name>
+                    <description locale="ru_RU">Статья будет содержать ссылку на альбом.</description>
+                    <description locale="en_US">The article will contain a link to the album.</description>
+                </option>
+                <option value="list">
+                    <name locale="ru_RU">Список фотографий</name>
+                    <name locale="en_US">Photo list</name>
+                    <description locale="ru_RU">Статья будет содержать список фотографий из альбома.</description>
+                    <description locale="en_US">The article will contain a list of the photos from an album.</description>
+                </option>
+            </options>
+        </setting>
+    </settings>
+    <locales>
+        <locale>
+            <msgid>Attached photo album</msgid>
+            <msgstr locale="ru_RU">Прикреплённый фотоальбом</msgstr>
+        </locale>
+    </locales>
+</theme>

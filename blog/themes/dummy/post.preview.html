@@ -1,0 +1,92 @@
+{strip}
+
+<article class="b-post-wrapper" id="b-post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts"{/if} itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="b-post">
+        <h3 class="b-post-name">
+            <a href="{$post.link}" itemprop="url">{$post.title}</a>
+            {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+            {if !empty($post.plugins.post_title)}
+                {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+            {/if}
+        </h3>
+
+        <div class="b-credentials">
+            <div class="table-layout">
+                <div class="column-item">
+                    <meta itemprop="datePublished" content="{$post.datetime|date_format:'Y-m-d\TH:i'}">
+
+                    {if $post.contact_id}
+                        {if !empty($post.user.photo_url_20)}
+                            <a href="{$post.user.posts_link}">
+                                <img class="b-userpic" src="{$post.user.photo_url_20}" alt="">
+                            </a>
+                        {/if}
+                        <a class="b-username" href="{$post.user.posts_link}" itemprop="author">{$post.user.name}</a>
+                    {else}
+                        {if !empty($post.user.photo_url_20)}
+                            <img class="b-userpic" src="{$post.user.photo_url_20}" alt="">
+                        {/if}
+                        <span class="b-username" itemprop="author">{$post.user.name}</span>
+                    {/if}
+
+                    <span class="b-date" title="{$post.datetime|wa_datetime}">{$post.datetime|wa_datetime:"humandate"}</span>
+                </div>
+                {if $show_comments && $post.comments_allowed && !empty($post.comment_count)}
+                    <div class="column-item column-right">
+                        <a class="b-comments-link" href="{$post.link}#comments">
+                            {_w('%d comment','%d comments',$post.comment_count)}
+                        </a>
+                    </div>
+                {/if}
+            </div>
+        </div>
+
+        {* @event prepare_posts_frontend.%plugin_id%.before *}
+        {if !empty($post.plugins.before)}
+            <div class="text_before">
+                {foreach $post.plugins.before as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+
+        <div class="b-content" itemprop="articleBody">
+            {if !empty($is_search_post)}
+                {$post.text|strip_tags|truncate:400}
+            {else}
+                {$post.text}
+                {if $post.cutted}
+                    <a href="{$post.link}">{$post.cut_link_label|default:'[`Continue reading →`]'}</a>
+                {/if}
+            {/if}
+        </div>
+
+        {if empty($is_search_post) && $post.album_id && $post.album.id && $post.album.photos}
+            {$_show_album = !empty($theme_settings.photos_view_type) && $theme_settings.photos_view_type == "album"}
+            {if $_show_album}
+                {include "post.album.html" album=$post.album inline}
+            {else}
+                {include "post.photos.html" photos=$post.album.photos preview=true inline}
+            {/if}
+        {/if}
+
+        {* @event prepare_posts_frontend.%plugin_id%.after *}
+        {if !empty($post.plugins.after)}
+            <div class="text_after">
+                {foreach $post.plugins.after as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+    </div>
+
+    <script>
+        ( function($) {
+            new Post({
+                $wrapper: $("#b-post-{$post.id}"),
+                search_query: {if !empty($is_search_post)}"{$blog_query|escape}"{else}false{/if},
+                use_retina: {if blogPhotosBridge::is2xEnabled()}true{else}false{/if},
+                is_review: true
+            });
+        })(jQuery);
+    </script>
+
+</article>
+
+{/strip}

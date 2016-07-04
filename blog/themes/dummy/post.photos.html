@@ -1,0 +1,27 @@
+{strip}
+
+{if !empty($preview)}
+    <div class="b-photo-list is-preview">
+        {foreach $photos as $photo}
+            <figure class="b-photo-item" itemscope itemtype ="http://schema.org/Photograph">
+                <a href="{$post.link}#photo{$photo.id}">
+                    <img src="{$photo.thumb_crop.url}" class="retinify" alt="{$photo.name|escape}">
+                </a>
+            </figure>
+        {/foreach}
+    </div>
+{else}
+    <div class="b-photo-list">
+        {foreach $photos as $photo}
+            <figure class="b-photo-item" itemscope itemtype ="http://schema.org/Photograph">
+                <a name="photo{$photo.id}"></a>
+                <img src="{$photo.thumb_big.url}" class="retinify" alt="{$photo.name|escape}">
+                {if $photo.description}
+                    <div class="b-photo-info" itemprop="description">{$photo.description}</div>
+                {/if}
+            </figure>
+        {/foreach}
+    </div>
+{/if}
+
+{/strip}

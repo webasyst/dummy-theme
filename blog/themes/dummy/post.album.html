@@ -1,0 +1,36 @@
+{strip}
+
+{$_album = $post.album}
+{$_photo_id = $_album.key_photo_id}
+{if empty($_photo_id)}
+    {$_photo = reset($_album.photos)}
+{else}
+    {$_photo = $_album.photos.$_photo_id}
+{/if}
+{$_image_url = $_photo.thumb.url}
+{$_count = count($_album.photos)}
+
+<div class="b-album-wrapper">
+    <h4 class="b-album-header">[`Attached photo album`]:</h4>
+    <div class="b-album">
+        <div class="b-image-wrapper" style="{if !empty($_image_url)}background-image: url({$_image_url});{/if}"></div>
+        <div class="b-text-wrapper">
+            <div class="table">
+                <div class="column" style="width: 32px; padding-right: 1em;">
+                    <i class="b-album-icon"></i>
+                </div>
+                <div class="column">
+                    <div class="b-album-text">
+                        <div class="b-album-name">
+                            {$album.name}
+                        </div>
+                        <div class="b-album-counter">{sprintf( _w('%d photo','%d photos',$_count), $_count)}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{$_album.frontend_link}" class="b-album-link"></a>
+    </div>
+</div>
+
+{/strip}

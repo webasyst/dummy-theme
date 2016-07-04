@@ -1,0 +1,63 @@
+{strip}
+
+<div class="b-comment" id="comment-{$comment.id}" data-comment-id="{$comment.id}">
+    <a name="comment-{$comment.id}"></a>
+    <meta itemprop="commentTime" content="{$comment.datetime|date_format:'Y-m-d\TH:i'}">
+
+    <div class="b-credentials">
+        <div class="left-column">
+            <a class="b-author-image" href="{if $comment.site}{$comment.site}{else}javascript:void(0);{/if}" name="comment{$comment.id}">
+                <img src="{$comment.user.photo_url_20|default:$comment.user.photo_url}" alt="">
+            </a>
+        </div>
+        <div class="right-column">
+            <div class="b-author">
+                {$_author_name = "[`Deleted`]"}
+
+                {if !empty($_author_name)}
+                    {$_author_name = $comment.name}
+                {/if}
+                {if !empty($comment.user.firstname)}
+                    {$_author_name = $comment.user.firstname}
+                {/if}
+
+                {if mb_strlen($_author_name) > 0}
+                    {if empty($comment.site)}
+                        <span class="b-username" itemprop="creator">{$_author_name}</span>
+                    {else}
+                        <a href="{$comment.site}" class="b-username" itemprop="creator">{$_author_name}</a>
+                    {/if}
+                {/if}
+
+                {if $comment.user.id}
+                    <span class="b-staff">{$wa->accountName()}</span>
+                {/if}
+
+                <span class="b-date" title="{$comment.datetime|wa_datetime}" datetime="{$comment.datetime|date_format:'Y-m-d\TH:i'}">{$comment.datetime|wa_datetime:"humandatetime"}</span>
+            </div>
+        </div>
+
+        {* @event prepare_comments_frontend.%plugin_id%.authorname_suffix *}
+        {if !empty($comment.plugins.authorname_suffix)}
+            {foreach $comment.plugins.authorname_suffix as $plugin => $output}{$output}{/foreach}
+        {/if}
+    </div>
+
+    {* @event prepare_comments_frontend.%plugin_id%.before *}
+    {if !empty($comment.plugins.before)}
+        {foreach $comment.plugins.before as $plugin => $output}{$output}{/foreach}
+    {/if}
+
+    <div class="b-text" itemprop="commentText">{$comment.text|nl2br}</div>
+
+    {* @event prepare_comments_frontend.%plugin_id%.after *}
+    {if !empty($comment.plugins.after)}
+        {foreach $comment.plugins.after as $plugin => $output}{$output}{/foreach}
+    {/if}
+
+    <div class="b-actions">
+        <a class="comment-reply" href="javascript:void(0);">[`reply`]</a>
+    </div>
+</div>
+
+{/strip}

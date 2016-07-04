@@ -1,0 +1,60 @@
+@import "nib";
+
+@import "comments.styl";
+
+@import "sidebar.styl";
+
+@import "article.styl";
+
+.b-stream-wrapper
+    .b-stream-header
+        margin-top -.2em
+
+    .b-paging-wrapper
+        margin 2em 0 0
+        text-align center
+
+        &.is-lazy-loading
+            .s-paging-list
+                display none
+
+        .b-paging-list
+            margin 0
+
+            li
+                display inline-block
+                margin 0 0 0 .5em
+
+                &:first-child
+                    margin-left 0
+
+                &.selected a
+                a:hover
+                    background rgba(0,0,0,.1)
+
+                a
+                    display inline-block
+                    min-width 1.25em
+                    line-height 1.25em
+                    text-align center
+                    padding .5em
+                    border-radius 50%
+
+// Plugins
+ul.menu-v
+    &.categories
+        margin-bottom: 20px
+
+        li
+            border: none
+
+            a
+                padding: 5px 16px
+
+            &.selected a
+                color: #000
+                text-decoration: none
+                font-weight: bold
+
+.tags.cloud
+    text-align: center

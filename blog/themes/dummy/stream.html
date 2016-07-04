@@ -1,0 +1,43 @@
+{strip}
+
+<section class="b-stream-wrapper" id="b-stream-wrapper" {if $wa->param('blog_url')}itemscope itemtype="http://schema.org/Blog"{/if}>
+    <a name="page_{$page}"></a>
+
+    {if !$is_lazyloading and !empty($stream_title)}
+        <h1 class="b-stream-header">{$stream_title|escape}</h1>
+    {/if}
+
+    <section class="b-posts">
+        {foreach $posts as $post}
+            {if !$is_search}
+                {include file="./post.preview.html" post=$post inline}
+            {else}
+                {include file="./post.preview.html" post=$post is_search_post=true inline}
+            {/if}
+        {/foreach}
+    </section>
+
+    {if isset($pages) && $pages > 1}
+        <div class="b-paging-wrapper {if $theme_settings.pagination == "lazyloading"}is-lazy-loading{/if}" data-loading-text="[`Loading...`]">
+            {wa_pagination page=$page total=$pages attrs=["class" => "s-paging-list"]}
+        </div>
+    {/if}
+
+    <script>
+        ( function($) {
+            var initLazyLoading = {if isset($pages) && $pages > 1 && $theme_settings.pagination == "lazyloading"}true{else}false{/if};
+            if (initLazyLoading) {
+                new LazyLoading({
+                    $wrapper: $("#b-stream-wrapper"),
+                    names: {
+                        list: ".b-posts",
+                        items: ".b-post-wrapper",
+                        paging: ".b-paging-wrapper"
+                    }
+                });
+            }
+        })(jQuery);
+    </script>
+</section>
+
+{/strip}

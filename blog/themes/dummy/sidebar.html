@@ -1,0 +1,118 @@
+{strip}
+
+{$rss = $wa->blog->rssUrl()}
+{$timeline = $wa->blog->timeline()}
+
+<nav class="s-nav-wrapper" role="navigation">
+
+    {* BLOG LIST *}
+    <ul class="b-blog-list">
+        {foreach $wa->blog->blogs() as $blog}
+            <li class="{if $wa->globals('blog_id') eq $blog.id && empty($is_search)}is-selected{/if}">
+                <a href="{$blog.link}">{$blog.name}</a>
+            </li>
+            {foreachelse}
+            <li>
+                <a href="{$wa->blog->url()}">[`All posts`]</a>
+            </li>
+        {/foreach}
+    </ul>
+
+    {* SUBSCRIBE *}
+    <ul class="b-subscribe">
+        {if $rss}
+            <li><a href="{$rss}" title="[s`RSS`]"><i class="icon16 rss"></i>[s`RSS`]</a></li>
+        {/if}
+        <li><a href="javascript:void(0);" title="[s`Facebook`]"><i class="icon16 facebook"></i><span>[s`Facebook`]</span></a></li>
+        <li><a href="javascript:void(0);" title="[s`Twitter`]"><i class="icon16 twitter"></i><span>[`Twitter`]</span></a></li>
+        <li><a href="javascript:void(0);" title="[s`VK`]"><i class="icon16 vk"></i><span>[s`VK`]</span></a></li>
+    </ul>
+
+    {* FOLLOW *}
+    <div class="b-follow-list">
+        {if !empty($theme_settings.facebook_likebox_code)}
+            <div class="b-follow-item">
+                {$theme_settings.facebook_likebox_code}
+            </div>
+        {/if}
+        {if !empty($theme_settings.twitter_timeline_code)}
+            <div class="b-follow-item">
+                {$theme_settings.twitter_timeline_code}
+            </div>
+        {/if}
+        {if !empty($theme_settings.vk_widget_code)}
+            <div class="b-follow-item">
+                {$theme_settings.vk_widget_code}
+            </div>
+        {/if}
+    </div>
+
+    {* TIMELINE NAVIGATION *}
+    {if !empty($timeline)}
+
+        <ul class="b-timeline-list">
+            {$year=null}
+            {foreach $timeline as $year_month => $item}
+                {if $year neq $item.year}
+                    {if !$item@first}
+                        </ul>
+                        </li>
+                    {/if}
+
+                    {*{if $item.year_selected}is-selected{/if}*}
+                    <li class="is-selected">
+                        {$year=$item.year}
+                        <a href="{$item.year_link}">{$item.year|default:'NULL'}</a>
+                        <ul class="b-sub-list">
+                {/if}
+
+                <li class="{if $item.selected}is-selected{/if}">
+                    <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month,1)))}</a>
+                </li>
+
+                {if $item@last}
+                    </ul>
+                    </li>
+                {/if}
+
+            {/foreach}
+        </ul>
+    {/if}
+
+    {* PLUGINS *}
+    {* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+    {foreach $frontend_action as $plugin => $output}
+        {if !empty($output.sidebar)}
+            <div class="{$plugin}">{$output.sidebar}</div>
+        {/if}
+    {/foreach}
+
+    {function renderNavItem page=[]}
+        {$_is_selected = ( strlen($page.url) > 1 && $wa->currentUrl()|strstr:$page.url )}
+
+        <li class="{if !empty($_is_selected)}is-selected{/if} {if !empty($page.childs)}has-sub-menu{/if}">
+            <a href="{$page.url}">{$page.name}</a>
+            {if !empty($page.childs)}
+                <ul>
+                    {foreach $page.childs as $subpage}
+                        {renderNavItem page=$subpage}
+                    {/foreach}
+                </ul>
+            {/if}
+        </li>
+    {/function}
+
+    {* SIDEBAR NAV *}
+    {$_pages = $wa->blog->pages()}
+    {if !empty($_pages)}
+        <ul>
+            {foreach $_pages as $page}
+                {renderNavItem page=$page}
+            {/foreach}
+        </ul>
+    {/if}
+
+</nav>
+
+{/strip}
+

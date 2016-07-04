@@ -1,0 +1,51 @@
+{strip}
+
+{include file="comment.form.html" inline}
+
+{$_is_hidden = !(!empty($post.comment_count) && $post.comment_count > 0 )}
+{$depth=-1}
+
+<section class="b-comments-wrapper {if $_is_hidden}is-hidden{/if}" id="b-comments-wrapper" itemscope itemtype="http://schema.org/UserComments">
+    <a name="comments"></a>
+    <h3 class="b-comments-count" id="b-comments-count">{_w('%d comment','%d comments',$post.comment_count)}</h3>
+    <div class="b-comments">
+        {if $post.comment_count}
+            {foreach $post.comments as $comment}
+                {if $comment.depth < $depth}
+                    {$loop=$depth-$comment.depth}
+                    {section name="end-comment" loop=$loop}
+                        </div>
+                    {/section}
+                    {$depth=$comment.depth}
+                {/if}
+                {if $comment.depth == $depth}
+                    </div>
+                    <div class="b-comment-wrapper">
+                {/if}
+                {if $comment.depth > $depth}
+                    <div class="b-comment-wrapper">
+                    {$depth=$comment.depth}
+                {/if}
+                {include file="comment.html" inline}
+            {/foreach}
+
+            {section name="end-comment" loop=$depth }
+                </div>
+            {/section}
+        {/if}
+    </div>
+</section>
+
+<script>
+    ( function($) {
+        new CommentForm({
+            $formWrapper: $("#b-comment-form"),
+            $commentsWrapper: $("#b-comments-wrapper"),
+            require_auth: {if $require_authorization}true{else}false{/if},
+            auth_source: "{$current_auth_source}",
+            authorized: {if !empty($current_user_id)}true{else}false{/if}
+        });
+    })(jQuery);
+</script>
+
+{/strip}
