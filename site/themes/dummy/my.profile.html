@@ -1,0 +1,95 @@
+{strip}
+
+<div class="s-profile-wrapper">
+
+    {* HEADER *}
+    <header class="page-header-wrapper">
+        <h1 class="page-header">[s`My profile`]</h1>
+    </header>
+
+    {* HINT *}
+    {if !empty($saved) || ( isset($smarty.get.emailconfirmed) && $smarty.get.emailconfirmed == 1 ) }
+        <div class="hint-wrapper is-success">[s`Contact information successfully updated!`]</div>
+    {/if}
+
+    {* FORM *}
+    <section class="page-section">
+        <div class="profile-form-wrapper" id="wa-my-info-wrapper">
+
+            <div class="wa-form {if !empty($form->errors)}is-hidden{/if}" id="wa-my-info-read-wrapper">
+
+                {foreach $user_info as $id => $info}
+                    <div class="wa-field">
+                        <div class="wa-name">{$info.name}</div>
+                        <div class="wa-value">{$info.value}</div>
+                    </div>
+                {/foreach}
+
+                <div class="wa-field button-block">
+                    <div class="wa-value">
+                        <input class="" id="wa-my-info-edit" type="button" value="[s`Edit`]">
+                    </div>
+                </div>
+
+            </div>
+
+            <form class="wa-form {if empty($form->errors)}is-hidden{/if}" id="wa-my-info-edit-wrapper" action="" method="post" enctype="multipart/form-data">
+                {$form->html()}
+
+                <div class="wa-field button-block">
+                    <div class="wa-value">
+                        <input class="" type="submit" value="[s`Save`]">
+                        <input class="transparent" id="wa-my-info-cancel" type="button" value="[s`Cancel`]">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    {* SOCIAL ACCOUNTS *}
+    {$auth_adapters = $wa->authAdapters(true)}
+    {if $auth_adapters}
+        <section class="page-section">
+            <h3 class="section-header">[s`Connected accounts`]</h3>
+
+            {$linked_adapters = []}
+            {$other_adapters = []}
+            {foreach $auth_adapters as $a}
+                {if $wa->user("{$a->getId()}_id")}
+                    {$linked_adapters[] = $a}
+                {else}
+                    {$other_adapters[] = $a}
+                {/if}
+            {/foreach}
+
+            {if $linked_adapters}
+                <ul class="auth-type-wrapper">
+                {foreach $linked_adapters as $a}
+                    <li class="auth-item"><span><img alt="{$a->getName()}" src="{$a->getIcon()}"/>{$a->getName()}</span></li>
+                {/foreach}
+                </ul>
+            {/if}
+
+            {if $other_adapters}
+                <p>[s`Connect this account to your social network accounts so next time you can log in without entering your password:`]</p>
+
+                <ul class="auth-type-wrapper">
+                {foreach $other_adapters as $a}
+                    <li class="auth-item">
+                        <a href="{$a->getUrl()}"><img alt="{$a->getName()}" src="{$a->getIcon()}"/>{$a->getName()}</a>
+                    </li>
+                {/foreach}
+                </ul>
+            {/if}
+        </section>
+    {/if}
+</div>
+
+<script>
+    renderProfilePage({
+        "changePasswordText": "[s`Change password`]",
+        "deletePhotoText": "[s`Delete photo`]"
+    });
+</script>
+
+{/strip}

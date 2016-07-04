@@ -1,0 +1,174 @@
+a
+    color #036
+    text-decoration none
+
+img
+iframe
+    max-width 100%
+
+h1
+h2
+h3
+h4
+h5
+h6
+    margin: 14px 0
+    font: bold 1em/1.25 $header-family
+    text-transform: none;
+    color: #121212;
+
+    &:first-child
+        margin-top: 0;
+
+h1
+    font-size: (36/14)em;
+
+h2
+    font-size: (30/14)em;
+
+h3
+    font-size: (24/14)em;
+
+h4
+    font-size: (18/14)em;
+
+h5
+    font-size: (14/14)em;
+
+h6
+    font-size: (12/14)em;
+
+ul
+    margin: 1em 0
+    list-style: none;
+
+    li
+        list-style: none;
+        margin: 0.5em 0 0
+
+        &:first-child
+            margin-top: 0
+
+        ul
+            margin: 0.5em 0 0.5em 2em
+
+p
+    margin: 1em 0 0;
+
+    &:first-child
+        margin-top: 0
+
+select
+    width 200px
+    padding: 8px 0;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 2px;
+
+input[type="text"]
+input[type="search"]
+input[type="password"]
+textarea
+    display inline-block
+    margin: 0;
+    width 200px
+    padding: .625em
+    box-sizing border-box
+    border: 1px solid rgba(0,0,0,.1)
+    border-radius 2px
+
+    font: normal 1em/1.25em $header-family
+    text-decoration none
+    color: #121212;
+
+    &.is-wide
+        width 100%
+
+textarea
+    width 100%
+
+.s-button
+button
+input[type="button"]
+input[type="submit"]
+    display inline-block
+    vertical-align top
+    height (1.25 + 1.25)em
+    margin: 0 0 0 .5em;
+    padding: .625em
+    border 0
+    width auto
+    box-sizing border-box
+    border-radius 2px
+
+    font: normal 1em/1.25em $header-family
+    text-decoration none
+    color: #fff;
+
+    white-space: nowrap;
+    text-align: center;
+
+    appearance none
+    user-select none
+
+    background: #2e6da4;
+
+    $shadow()
+
+    &:first-child
+        margin-left 0
+
+    &.transparent
+        color: inherit;
+        background transparent
+        border-color transparent
+        box-shadow none
+
+    &.white
+        color inherit
+        background #fff
+
+    &.green
+        color #fff
+        background #2fa42e
+
+    &.orange
+        color #fff
+        background #a4652e
+
+    &.red
+        background: #d9534f;
+        color: #fff;
+
+// Tables
+
+table
+    border-collapse: collapse
+    border-spacing: 0
+
+    th
+        color #aaa
+
+    th
+    td
+        border solid rgba(0,0,0,.05)
+        border-width 1px 0
+        vertical-align middle
+        padding .5em
+
+.s-user-content
+    line-height 1.5em
+
+    ul
+    ol
+        margin 1em 0 1em 2em
+
+    ul
+        li
+            list-style disc
+
+    ol
+        li
+            list-style decimal
+
+.is-hidden
+    display none

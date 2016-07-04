@@ -1,0 +1,35 @@
+{strip}
+
+{function renderNavItem page=[]}
+    {$_is_selected = ( strlen($page.url) > 1 && $wa->currentUrl()|strstr:$page.url )}
+
+    <li class="{if !empty($_is_selected)}is-selected{/if} {if !empty($page.childs)}has-sub-menu{/if}">
+        <a href="{$page.url}">{$page.name}</a>
+        {if !empty($page.childs)}
+            <ul>
+                {foreach $page.childs as $subpage}
+                    {renderNavItem page=$subpage}
+                {/foreach}
+            </ul>
+        {/if}
+    </li>
+{/function}
+
+{* SIDEBAR NAV *}
+{$_pages = $wa->site->pages()}
+{if !empty($_pages)}
+    <nav class="s-nav-wrapper" role="navigation">
+        <ul>
+            {if $wa->currentUrl() != $wa_app_url}
+                <li>
+                    <a href="{$wa_app_url}">[`All posts`]</a>
+                </li>
+            {/if}
+            {foreach $_pages as $page}
+                {renderNavItem page=$page}
+            {/foreach}
+        </ul>
+    </nav>
+{/if}
+
+{/strip}

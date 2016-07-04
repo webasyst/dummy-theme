@@ -1,0 +1,44 @@
+{strip}
+
+<header class="s-header-wrapper">
+    {* TOP *}
+    <div class="s-static-header">
+        <div class="s-site-info">
+            {if !empty($theme_settings.logo)}
+                <a class="s-site-logo" href="{$wa_app_url}">
+                    <img src="{$wa_theme_url}{$theme_settings.logo}?v{$wa_theme_version}" alt="{$wa->accountName()}" />
+                </a>
+            {else}
+                <span class="s-site-name">{$wa->accountName()}</span>
+            {/if}
+        </div>
+        <nav class="s-header-nav">
+            {if $wa->apps()}
+                <ul class="">
+                    {foreach $wa->apps() as $a}
+                        <li class="s-nav-item {if $a.url==$wa_app_url && !$wa->globals('isMyAccount')}is-active{/if}">
+                            <a href="{$a.url}">{$a.name}</a>
+                        </li>
+                    {/foreach}
+                </ul>
+            {/if}
+        </nav>
+        {if $wa->shop}
+            {$_phone = $wa->shop->settings('phone')}
+            {if !empty($_phone)}
+                <div class="s-time-wrapper">
+                    {if $wh = $wa->shop->settings('workhours')}
+                        <div class="s-label-wrapper">{$wh.days_from_to}{if $wh.hours_from && $wh.hours_to} {$wh.hours_from}—{$wh.hours_to}{/if}</div>
+                    {/if}
+                    <div class="s-phone-wrapper">{$_phone}</div>
+                </div>
+            {/if}
+        {/if}
+    </div>
+
+    {include file="`$wa_active_theme_path`/header.plugins.html" inline}
+
+    {include file="`$wa_active_theme_path`/header.html" inline}
+</header>
+
+{/strip}

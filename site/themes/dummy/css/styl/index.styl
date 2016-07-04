@@ -1,0 +1,49 @@
+@import "nib";
+
+// FONT
+$text-family = "Arial", "Neue Helvetica", "sans-serif";
+$header-family = "Trebuchet MS", "sans-serif";
+
+$site_width = 980px
+$blue = #638392
+
+$shadow()
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1)
+
+//
+@import "reset.styl";
+//
+@import "default.styl";
+//
+@import "general.styl";
+
+.cl
+    clearfix()
+
+body
+    font: normal 14px/1 $text-family
+    color: #121212
+    background: #fff;
+
+.s-site-wrapper
+
+    @import "header.styl";
+
+    @import "breadcrumbs.styl";
+
+    .s-main-container
+        margin 1em auto 0
+        display table
+        width $site_width
+        table-layout fixed
+
+        .s-sidebar-wrapper
+        .s-content-wrapper
+            display table-cell
+            vertical-align top
+
+        @import "sidebar.styl";
+
+        @import "content.styl";
+
+    @import "footer.styl";

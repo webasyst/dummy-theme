@@ -1,0 +1,80 @@
+{strip}
+
+<!DOCTYPE html>
+<html lang="{if $wa->locale()}{$wa->locale()}{else}en{/if}">
+<head>
+    <title>{$wa->title()}</title>
+
+    {* META *}
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="keywords" content="{$wa->meta('keywords')|escape}" />
+    <meta name="description" content="{$wa->meta('description')|escape}" />
+    {* // Use it with css3 @media-queries
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    *}
+    <meta name="viewport" content="width=1024" />
+
+    {* ICO *}
+    <link rel="shortcut icon" href="{$wa_static_url}favicon.ico" />
+
+    {* CSS *}
+    <link href="{$wa_url}wa-content/font/ruble/arial/fontface.css" rel="stylesheet" />
+    <link href="{$wa_theme_url}css/dummy.css?v{$wa_theme_version}" rel="stylesheet" />
+
+    {$wa->css()}
+
+    {* JS *}
+    <script src="{$wa_static_url}wa-content/js/jquery/jquery-1.11.1.min.js"></script>
+    <script src="{$wa_theme_url}js/dummy.js?v{$wa_theme_version}"></script>
+
+    {$wa->js()}
+
+    {include file="`$wa_active_theme_path`/head.html" inline}
+
+    {$wa->head()}
+
+</head>
+<body>
+
+{* MAIN SITE WRAPPER *}
+<div class="s-site-wrapper">
+
+    {*HEADER*}
+    {include file="./header.layout.html" inline}
+
+    <div class="s-up-content-wrapper">
+        {* BREADCRUMBS *}
+        {include file="./breadcrumbs.html" inline}
+    </div>
+
+    {* CONTENT AREA *}
+    <div class="s-main-container">
+
+        {* LEFT SIDEBAR *}
+        {$show_sidebar = $wa->globals("hideSidebar")}
+        {if empty($show_sidebar)}
+            <aside class="s-sidebar-wrapper" role="complementary">
+                <div class="s-sidebar-block">
+                    {include file="`$wa_active_theme_path`/sidebar.html" inline}
+                </div>
+            </aside>
+        {/if}
+
+        {* CONTENT *}
+        <main class="s-content-wrapper" itemscope itemtype="http://schema.org/WebPage" role="main">
+            <div class="s-content-block" id="s-content-block">
+                {include file="`$wa_active_theme_path`/main.html" inline}
+            </div>
+        </main>
+    </div>
+
+    {*FOOTER*}
+    {include file="`$wa_active_theme_path`/footer.html" inline}
+
+</div>
+
+</body>
+</html>
+
+{/strip}

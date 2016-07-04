@@ -1,0 +1,24 @@
+{strip}
+
+{* POST PAGE *}
+<article class="s-post-wrapper">
+
+    <header>
+        <h1 class="s-page-header">{$page.title}</h1>
+    </header>
+
+    {* POST CONTENT *}
+    <div class="s-text-wrapper s-user-content">
+        {$page.content}
+    </div>
+
+    {* CREDENTIALS *}
+    <footer class="s-post-credentials">
+        <div class="date-wrapper">
+            [`Posted`]: {$page.create_datetime|wa_date:humandate}
+        </div>
+    </footer>
+
+</article>
+
+{/strip}

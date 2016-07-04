@@ -1,0 +1,64 @@
+{strip}
+
+<div class="s-profile-wrapper">
+
+    {* HEADER *}
+    <header class="page-header-wrapper">
+        {if !empty($confirmed_email)}
+
+            <h1 class="page-header">[s`Thank you!`]</h1>
+            <p>[s`You have successfully confirmed your email.`]</p>
+
+        {elseif !empty($contact)}
+
+            <h1 class="page-header">[s`Thank you!`]</h1>
+            <p>[s`You have successfully signed up.`]</p>
+
+            {if !empty($email_confirmation_hash)}
+                <p><em>[s`A confirmation link has been sent to you by email. Please click this link to confirm your signup and to sign in.`]</em></p>
+            {/if}
+
+        {else}
+            <h1 class="page-header">[s`Sign up`]</h1>
+        {/if}
+    </header>
+
+    {if empty($confirmed_email) && empty($contact)}
+
+        {* SOCIAL ACCOUNTS *}
+        {$auth_adapters = $wa->authAdapters(true)}
+        {if $auth_adapters}
+            <section class="page-section social-auth-wrapper">
+
+                {$linked_adapters = []}
+                {$other_adapters = []}
+                {foreach $auth_adapters as $a}
+                    {if $wa->user("{$a->getId()}_id")}
+                        {$linked_adapters[] = $a}
+                    {else}
+                        {$other_adapters[] = $a}
+                    {/if}
+                {/foreach}
+
+                {if $other_adapters}
+                    <ul class="auth-type-wrapper">
+                        {foreach $other_adapters as $a}
+                            <li class="auth-item">
+                                <a href="{$a->getUrl()}"><img alt="{$a->getName()}" src="{$a->getIcon()}"/>{$a->getName()}</a>
+                            </li>
+                        {/foreach}
+                    </ul>
+                {/if}
+            </section>
+        {/if}
+
+        <section class="page-section signup-form-wrapper">
+            {$wa->signupForm($errors)}
+
+        </section>
+
+    {/if}
+
+</div>
+
+{/strip}

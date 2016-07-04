@@ -1,0 +1,11 @@
+{strip}
+
+{$_is_main_page = ( $wa->currentUrl() == $wa_app_url && ( empty($page.id) && empty($page.content) ) )}
+
+{if $_is_main_page}
+    {include file="./page.welcome.html" inline}
+{else}
+    {$content}
+{/if}
+
+{/strip}

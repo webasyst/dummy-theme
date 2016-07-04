@@ -1,0 +1,58 @@
+{strip}
+
+<div class="s-fixed-container" id="s-fixed-header">
+    <div class="s-fixed-header">
+
+        <div class="s-column center">
+            <div class="s-search-wrapper" role="search">
+                <form method="get" action="{$wa->getUrl("site/frontend/search")}">
+                    {$_query = $smarty.get.query|default:''|escape}
+                    <input class="s-text-input" type="search" name="query" value="{if !empty($_query)}{$_query}{/if}" placeholder="[`Search`]">
+                    <input class="s-submit-input" type="submit" value="">
+                </form>
+            </div>
+        </div>
+        <div class="s-column right">
+
+            {if $wa->isAuthEnabled()}
+                <div class="s-info-wrapper s-user-account">
+                    <div class="s-info-block">
+                        <div class="s-image-wrapper">
+                            <span class="s-image" {if $wa->user()->isAuth()}style="background-image: url('{$wa->user()->getPhoto2x(20)}');"{/if}></span>
+                        </div>
+                        <div class="s-text-wrapper">
+                            <div class="s-header">{if $wa->user()->isAuth()}[s`My profile`]{else}[`Login`]{/if}</div>
+                            <div class="s-text">[`Personal area`]</div>
+                        </div>
+                    </div>
+                    <a class="s-link" href="{$wa->getUrl('/frontend/myProfile')}"></a>
+                </div>
+            {/if}
+
+            {if $wa->shop}
+                {$_cart_total = $wa->shop->cart->total()}
+                {$_cart_count = $wa->shop->cart->count()}
+                {$_price_text = "[`Empty`]"}
+                {if !empty($_cart_total)}
+                    {$_price_text = wa_currency_html($_cart_total, $wa->shop->currency())}
+                {/if}
+
+                <div class="s-info-wrapper s-cart-wrapper {if empty($_cart_count)}is-empty{/if}" id="s-cart-wrapper">
+                    <div class="s-info-block">
+                        <div class="s-image-wrapper">
+                            <span class="s-image"></span>
+                            <span class="s-cart-count">{if !empty($_cart_count)}{$_cart_count}{/if}</span>
+                        </div>
+                        <div class="s-text-wrapper">
+                            <div class="s-header">[`Cart`]</div>
+                            <div class="s-text">{$_price_text}</div>
+                        </div>
+                    </div>
+                    <a class="s-link" href="{$wa->getUrl('shop/frontend/cart')}"></a>
+                </div>
+            {/if}
+        </div>
+    </div>
+</div>
+
+{/strip}

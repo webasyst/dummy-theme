@@ -1,0 +1,23 @@
+{strip}
+
+<header class="content-header-wrapper">
+    {if $error_code}
+        <h1 class="content-header">
+            [`Error`]: {$error_code}
+        </h1>
+    {/if}
+</header>
+
+<article class="post-item-wrapper">
+    <header>
+        <h3>
+            {if $error_message}
+                {$error_message}
+            {else}
+                [`Error`]
+            {/if}
+        </h3>
+    </header>
+</article>
+
+{/strip}

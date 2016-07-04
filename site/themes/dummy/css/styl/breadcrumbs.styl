@@ -1,0 +1,29 @@
+.s-up-content-wrapper
+    width $site_width
+    margin 1.5em auto
+    font-size (12/14)em
+    min-height 1em
+
+    .s-breadcrumbs-wrapper
+        color #888
+
+        .s-breadcrumb-item
+            margin 0
+            display inline-block
+            vertical-align top
+
+            &:first-child
+                &:before
+                    display none
+
+                .s-breadcrumb-link
+                    padding-left 0
+
+            &:before
+                content: "—"
+                padding 0 0 0 4px
+
+            .s-breadcrumb-link
+                text-decoration none
+                padding 0 0 0 4px
+                color inherit

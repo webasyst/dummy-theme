@@ -1,0 +1,80 @@
+.s-profile-wrapper
+
+    .s-profile-header
+        margin 0 0 0
+
+    .hint-wrapper
+        margin 1em 0
+        padding: 1em;
+        border-radius 2px
+        font: normal 1em $header-family
+
+        &.is-success
+            color: #fff;
+            background: #6dca6d
+
+    .wa-error-msg
+        display inline-block
+        padding .5em
+        margin .5em 0 0
+        background rgba(255,127,127,.1)
+        border-radius 2px
+
+    .wa-form
+        padding 0
+
+        .wa-field
+            padding: 1em 0
+            border-top 1px solid rgba(0,0,0,.05)
+            display table
+            width: 100%
+            table-layout fixed
+
+            &:first-child
+                margin-top: 0
+
+            &.button-block
+                padding-top 1em
+
+                input + input
+                    margin-left 1em
+
+            .wa-name
+            .wa-value
+                display table-cell
+                vertical-align middle
+
+            .wa-name
+                width: 20%
+                font: (12/14)em $header-family
+                text-transform uppercase
+                color: #222
+
+            .wa-submit
+                a
+                    line-height 2em
+
+            .wa-value
+                padding: 0
+
+                a + p
+                    margin-top: 0
+
+                .field
+                    margin 1em 0 0
+                    display block
+
+                    &:first-child
+                        margin-top 0
+
+                    & > span
+                        font: 0.7em/2 $header-family
+                        text-transform uppercase
+                        color: #444
+
+                    input
+                        vertical-align middle
+                        margin 0 0 0 8px
+
+                    select
+                        margin 0 0 0 8px

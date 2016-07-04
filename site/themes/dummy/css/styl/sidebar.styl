@@ -1,0 +1,81 @@
+.s-sidebar-wrapper
+    width 25%
+    min-width 250px
+
+    & + .s-content-wrapper
+        padding-left 2em
+
+    .s-sidebar-block
+        position relative
+
+        .s-nav-wrapper
+            ul
+            li
+                display block
+                margin 0
+                padding 0
+
+            & > ul
+                margin 2em 0 0
+                border-radius 2px
+                box-shadow: 0 0 8px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.06);
+                overflow hidden
+
+                &:first-child
+                    margin-top 0
+
+                li
+                    border-top 1px solid rgba(0,0,0,.1)
+
+                    &:first-child
+                        border-top 0
+
+                    &.has-sub-menu
+                        & > a
+                            &:before
+                                content: ""
+                                display block
+                                position absolute
+                                top 0
+                                right 0
+                                width 2em
+                                height 100%
+                                text-align center
+                                line-height 100%
+                                background transparent url("../img/icons/arror-icon.png") 50% no-repeat
+                                background-size auto 14px
+
+                        &.is-selected
+                            & > a
+                                &:before
+                                    transform rotate(90deg)
+
+                    &:hover
+                        & > a
+                            border-color #c09853
+
+                    &.is-selected
+                        & > a
+                            font-weight bold
+                            border-color $blue
+
+
+                        & > ul
+                            display block
+
+                    & > a
+                        position relative
+                        display block
+                        padding 1em
+                        text-decoration none
+                        transition all 333ms linear
+                        background #fefefe
+                        border-right 2px solid transparent
+
+                    & > ul
+                        display none
+                        border-top 1px solid rgba(0,0,0,.1)
+
+                        & > li
+                            & > a
+                                padding-left 2em
