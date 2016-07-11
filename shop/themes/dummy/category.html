@@ -1,4 +1,4 @@
-<div class="s-category-wrapper">
+<div class="s-category-wrapper" id="s-category-wrapper">
 
     <h1 class="s-category-header">{$category.name|escape}</h1>
 
@@ -9,10 +9,12 @@
     {if !empty($products)}
         {include file="./products.html" sorting=!empty($category.params.enable_sorting)}
     {else}
-        {if !empty($filters)}
-            [`No products were found.`]
-        {else}
-            [`This category does not contain any products.`]
-        {/if}
+        <div class="s-category-empty">
+            {if !empty($filters)}
+                [`No products were found.`]
+            {else}
+                [`This category does not contain any products.`]
+            {/if}
+        </div>
     {/if}
 </div>

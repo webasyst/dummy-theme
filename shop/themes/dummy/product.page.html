@@ -1,0 +1,21 @@
+{strip}
+
+<article class="s-product-subpage">
+
+    <h1>{$page.title|escape}</h1>
+
+    <div class="s-button-list">
+        <a href="{$wa->shop->productUrl($product)}">[`Overview`]</a>
+        <a href="{$wa->shop->productUrl($product, 'reviews')}">[`Reviews`] <span class="" itemprop="reviewCount">({$reviews_total_count})</span></a>
+        {foreach $product.pages as $p}
+            <a class="{if $page.id == $p.id}is-selected{/if}" href="{$wa->shop->productUrl($product, 'page', ['page_url' => $p.url])}">{$p.name|escape}</a>
+        {/foreach}
+    </div>
+
+    <div class="s-product-text">
+        {$page.content}
+    </div>
+
+</article>
+
+{/strip}

@@ -1,24 +1,24 @@
 {strip}
 
-<section class="s-category-filters">
+<section class="s-category-filters" id="s-category-filters">
     <form method="get" action="{$wa->currentUrl(0,1)}">
         {foreach $filters as $fid => $filter}
             <div class="s-filter-group">
                 {if $fid == 'price'}
                     {$c = $wa->shop->currency(true)}
                     <h5 class="s-filter-header">[`Price`]</h5>
-                    <ul class="s-filter-list">
-                        <div class="s-filter-item filter-price-item">
+                    <div class="s-filter-wrapper">
+                        <div class="s-filter-item s-range-item" data-min="{floor($filter.min)}" data-max="{ceil($filter.max)}">
                             [`from`]
                             <input type="text" class="min" name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if} placeholder="{floor($filter.min)}">
                             [`to`]
                             <input type="text" class="max" name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} placeholder="{ceil($filter.max)}">
                             {$c.sign}
                         </div>
-                    </ul>
+                    </div>
                 {else}
                     <h5 class="s-filter-header">{$filter.name|escape}</h5>
-                    <div class="s-filter-list">
+                    <div class="s-filter-wrapper">
                         {if $filter.type == 'boolean'}
                             <div class="s-filter-item">
                                 <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label>
@@ -31,7 +31,7 @@
                             </div>
                         {elseif isset($filter.min)}
                             {$_v = $wa->get($filter.code)}
-                            <div class="s-filter-item filter-price-item">
+                            <div class="s-filter-item s-range-item" data-min="{$filter.min}" data-max="{$filter.max}">
                                 [`from`]
                                 <input type="text" class="min" name="{$filter.code}[min]" placeholder="{$filter.min}" {if !empty($_v.min)}value="{$_v.min}"{/if}>
                                 [`to`]
@@ -54,14 +54,26 @@
                 {/if}
             </div>
         {/foreach}
-        
+
         <div class="s-buttons-wrapper">
             <input type="submit" value="[`Filter products`]">
             {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
             {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
         </div>
-        
+
     </form>
+
+    <script>
+        ( function($) {
+
+            new ProductsFilter({
+                $wrapper: $("#s-category-filters")
+            })
+
+        })(jQuery);
+    </script>
+
+
 
 </section>
 

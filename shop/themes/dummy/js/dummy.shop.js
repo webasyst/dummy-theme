@@ -624,16 +624,25 @@ var LazyLoading = ( function($) {
 
     LazyLoading.prototype.onScroll = function() {
         var that = this,
-            $window = that.$window,
-            scroll_top = $window.scrollTop(),
-            display_height = $window.height(),
-            paging_top = that.$paging.offset().top;
+            is_paging_exist = ( $.contains(document, that.$paging[0]) );
 
-        // If we see paging, stop watcher and run load
-        if (scroll_top + display_height >= paging_top) {
+        if (is_paging_exist) {
+
+            var $window = that.$window,
+                scroll_top = $window.scrollTop(),
+                display_height = $window.height(),
+                paging_top = that.$paging.offset().top;
+
+            // If we see paging, stop watcher and run load
+            if (scroll_top + display_height >= paging_top) {
+                that.stopWatcher();
+                that.loadNextPage();
+            }
+
+        } else {
             that.stopWatcher();
-            that.loadNextPage();
         }
+
     };
 
     LazyLoading.prototype.loadNextPage = function() {
@@ -787,5 +796,359 @@ var CountDown = ( function($) {
     };
 
     return CountDown;
+
+})(jQuery);
+
+// Shop :: AJAX Products Filtering
+var ProductsFilter = ( function($) {
+
+    ProductsFilter = function(options) {
+        var that = this;
+
+        // DOM
+        that.$wrapper = options["$wrapper"];
+        that.$form = that.$wrapper.find("form");
+
+        // VARS
+
+        // DYNAMIC VARS
+        that.is_locked = false;
+
+        // INIT
+        that.initClass();
+    };
+
+    ProductsFilter.prototype.initClass = function() {
+        var that = this;
+        //
+        that.initRangeSlider();
+        //
+        that.bindEvents();
+    };
+
+    ProductsFilter.prototype.initRangeSlider = function() {
+        var that = this,
+            $ranges = that.$wrapper.find(".s-range-item");
+
+        $ranges.each( function() {
+            var $range = $(this),
+                $inputMin = $range.find(".min"),
+                $inputMax = $range.find(".max"),
+                min = +$range.data("min"),
+                max = +$range.data("max"),
+                left = +$inputMin.val(),
+                right = +$inputMax.val();
+
+            if ($inputMin.length && $inputMax.length && min >= 0 && max > 0) {
+                new RangeSlider({
+                    min: min,
+                    max: max,
+                    left_value: left,
+                    right_value: right,
+                    $wrapper: $range,
+                    $inputMin: $inputMin,
+                    $inputMax: $inputMax
+                });
+            }
+        });
+    };
+
+    ProductsFilter.prototype.bindEvents = function() {
+        var that = this;
+
+        // On submit form
+        that.$form.on("submit", function(event) {
+            event.preventDefault();
+            if (!that.is_locked) {
+                that.onSubmit( $(this) );
+            }
+            return false;
+        });
+
+        that.is_locked = false;
+    };
+
+    ProductsFilter.prototype.onSubmit = function( $form ) {
+        var that = this,
+            href = $form.attr("action"),
+            data = $form.serialize(),
+            $category = $("#s-category-wrapper");
+
+        // Lock
+        that.is_locked = true;
+
+        // Animation
+        $category.addClass("is-loading");
+
+        $.get(href, data, function(html) {
+            // Insert new html
+            if ($category.length) {
+                $category.replaceWith(html);
+            }
+            // Scroll to Top
+            $("html, body").animate({
+                scrollTop: 0
+            }, 200);
+            // Unclock
+            that.is_locked = false;
+        });
+    };
+
+    return ProductsFilter;
+
+})(jQuery);
+
+// Shop :: Range Filter
+var RangeSlider = ( function($) {
+
+    var template =
+    '<div class="s-range-slider">' +
+        '<div class="r-bar-wrapper">' +
+            '<span class="r-bar"></span>' +
+            '<span class="r-point left"></span>' +
+            '<span class="r-point right"></span>' +
+        '</div>' +
+    '</div>';
+
+    RangeSlider = function(options) {
+        var that = this;
+
+        // DOM
+        that.$wrapper = options["$wrapper"];
+        that.$inputMin = options["$inputMin"];
+        that.$inputMax = options["$inputMax"];
+
+        // VARS
+        that.min = options["min"];
+        that.max = options["max"];
+        that.left_value = options["left_value"];
+        that.right_value = options["right_value"];
+        that.move_class = "is-move";
+        that.active_class = "is-active";
+
+        // DYNAMIC DOM
+        that.$rangeWrapper = false;
+        that.$leftPoint = false;
+        that.$rightPoint = false;
+        that.$bar = false;
+        that.$activePoint = false;
+
+        // DYNAMIC VARS
+        that.left = 0;
+        that.right = 100;
+        that.range_left = false;
+        that.range_width = false;
+
+        // INIT
+        that.initClass();
+    };
+
+    RangeSlider.prototype.initClass = function() {
+        var that = this;
+
+        that.$rangeWrapper = $(template);
+        that.$leftPoint = that.$rangeWrapper.find(".r-point.left");
+        that.$rightPoint = that.$rangeWrapper.find(".r-point.right");
+        that.$barWrapper = that.$rangeWrapper.find(".r-bar-wrapper");
+        that.$bar = that.$rangeWrapper.find(".r-bar");
+        that.$wrapper.after( that.$rangeWrapper );
+
+        that.changeRange();
+
+        that.bindEvents();
+    };
+
+    RangeSlider.prototype.bindEvents = function() {
+        var that = this,
+            move_class = that.move_class,
+            $document = $(document),
+            $body = $("body"),
+            no_select = "no-user-select";
+
+        that.$rangeWrapper.on("mousedown", ".r-point", function() {
+            that.$activePoint = $(this);
+            that.range_left = that.$barWrapper.offset().left;
+            that.range_width = that.$barWrapper.outerWidth();
+
+            // No selection then moving
+            $body.addClass(no_select);
+
+            // Add sub events
+            $document.on("mousemove", onMouseMove);
+            $document.on("mouseup", onMouseUp);
+        });
+
+        that.$inputMin.on("keyup", function() {
+            var $input = $(this),
+                val = parseInt( $input.val() );
+
+            if ( !(val >= 0) ) {
+                val = 0;
+            }
+
+            if (val < that.min) {
+                val = that.min;
+            }
+
+            if (val >= that.max) {
+                val = that.max * .99;
+            }
+
+            that.left_value = val;
+            that.changeRange( true );
+        });
+
+        that.$inputMax.on("keyup", function() {
+            var $input = $(this),
+                val = parseInt( $input.val() );
+
+            if ( !(val >= 0) ) {
+                val = that.max;
+            }
+
+            if (val > that.max) {
+                val = that.max;
+            }
+
+            if (val <= that.left_value) {
+                val = that.left_value * 1.01;
+            }
+
+            that.right_value = val;
+            that.changeRange( true );
+        });
+
+        that.$inputMin.on("change", function() {
+            $(this).val(that.left_value);
+        });
+
+        that.$inputMax.on("change", function() {
+            $(this).val(that.right_value);
+        });
+
+        function onMouseMove(event) {
+            var $point = that.$activePoint;
+            if (that.$activePoint) {
+                // Add move Class
+                var is_move = $point.hasClass(that.move_class);
+                if (!is_move) {
+                    $point.addClass(that.move_class);
+                }
+                // Do moving
+                that.prepareSetRange(event, $point);
+            }
+        }
+
+        function onMouseUp() {
+            $document.off("mousemove", onMouseMove);
+            $document.off("mouseup", onMouseUp);
+            $body.removeClass(no_select);
+            if (that.$activePoint) {
+                that.$activePoint.removeClass(move_class);
+                that.$activePoint = false;
+            }
+        }
+    };
+
+    RangeSlider.prototype.prepareSetRange = function(event, $point) {
+        var that = this,
+            is_left = ( $point[0] == that.$leftPoint[0] ),
+            delta, percent, min, max;
+        //
+        delta = ( event.pageX || event.clientX ) - that.range_left;
+        if (delta < 0) {
+            delta = 0;
+        } else if (delta > that.range_width) {
+            delta = that.range_width;
+        }
+        //
+        percent = (delta/that.range_width) * 100;
+
+        // Min Max
+        var min_points_place = 7; // 7%
+        if (is_left) {
+            min = 0;
+            max = that.right - min_points_place;
+        } else {
+            min = that.left + min_points_place;
+            max = 100;
+        }
+        if (percent < min) {
+            percent = min;
+        } else if (percent > max) {
+            percent = max;
+        }
+
+        // Set Range
+        if (is_left) {
+            that.setRange(percent, that.right);
+        } else {
+            that.setRange(that.left, percent);
+        }
+    };
+
+    RangeSlider.prototype.setRange = function( left, right, not_change_input ) {
+        var that = this,
+            result_left = 0,
+            result_right = 100;
+
+        if ( left && left >= 0 && left < result_right ) {
+            result_left = left;
+        }
+
+        if ( right && right > 0 && right <= result_right && right > result_left ) {
+            result_right = right;
+        }
+
+        // Set data
+        that.left = result_left;
+        that.right = result_right;
+
+        // Render
+        that.$leftPoint.css("left", result_left + "%");
+        that.$rightPoint.css("left", result_right + "%");
+
+        if (!not_change_input) {
+            var delta_value = that.max - that.min,
+                min_val = that.min + that.left * ( delta_value / 100 ),
+                max_val = that.min + that.right * ( delta_value / 100 );
+
+            that.$inputMin.val( parseInt(min_val * 10)/10 );
+            that.$inputMax.val( parseInt(max_val * 10)/10 );
+        }
+
+        // Bar
+        that.setBar();
+
+    };
+
+    RangeSlider.prototype.setBar = function() {
+        var that = this;
+        that.$bar.css({
+            width: Math.floor(that.right - that.left) + "%",
+            left: that.left + "%"
+        });
+    };
+
+    RangeSlider.prototype.changeRange = function( not_change_input ) {
+        var that = this;
+
+        // Set Range at Start
+        var left_value = that.left,
+            right_value = that.right,
+            delta_value = that.max - that.min;
+
+        if (that.left_value && that.left_value >= that.min && that.left_value < that.max) {
+            left_value = ( (that.left_value - that.min)/delta_value) * 100;
+        }
+
+        if (that.right_value && that.right_value > left_value && that.right_value <= that.max) {
+            right_value = ( (that.right_value - that.min)/delta_value) * 100;
+        }
+
+        that.setRange(left_value,right_value, not_change_input);
+    };
+
+    return RangeSlider;
 
 })(jQuery);
