@@ -1,6 +1,6 @@
 {strip}
 
-{$_my_directory = $wa->globals('isMyAccount')}
+{$_is_presonal_area = $wa->globals('isMyAccount')}
 {$_current_url = $wa->currentUrl()}
 
 {function renderNavItem page=[]}
@@ -21,28 +21,17 @@
 <nav class="h-sidebar-wrapper" role="navigation">
     <div class="s-nav-wrapper">
 
-        {if $_my_directory}
+        {if $_is_presonal_area}
+            {if $wa->user()->isAuth()}
 
-            {if empty($my_nav_selected)}
-                {$my_nav_selected = ""}
-            {/if}
-
-            <ul>
-                {if !empty($my_app) && $my_app == $wa->app()}
-                    <li class="{if $my_nav_selected == 'profile'}is-selected{/if}">
-                        <a href="{$wa->getUrl('/frontend/myProfile')}">[`My profile`]</a>
+                <ul class="s-mynav-list">
+                    {foreach $wa->myNav(false) as $nav}{$nav}{/foreach}
+                    <li>
+                        <a href="?logout">[`Logout`]</a>
                     </li>
-                {/if}
+                </ul>
 
-                <li class="{if $my_nav_selected == 'requests'}is-selected{/if}">
-                    <a href="{$wa->getUrl('/frontend/myRequests')}">[`My requests`]</a>
-                </li>
-
-                <li>
-                    <a href="?logout">[`Logout`]</a>
-                </li>
-            </ul>
-
+            {/if}
         {else}
 
             <div class="h-add-request">

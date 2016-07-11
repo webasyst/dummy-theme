@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dummy" app="blog" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="1.0.0">
+<theme id="dummy" app="blog" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="1.0.1">
     <name locale="en_US">Dummy</name>
     <name locale="ru_RU">Dummy</name>
     <files>
@@ -59,6 +59,8 @@
         <file path="main.html">
             <description locale="en_US">Main layout and navigation for the Blog app content</description>
             <description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Блог»</description>
+        </file>
+        <file path="my.nav.html">
         </file>
         <file path="post.album.html">
             <description locale="en_US">Photo album attached to the blog post</description>

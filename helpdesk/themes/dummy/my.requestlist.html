@@ -9,7 +9,7 @@
     {if $forms}
         <div class="h-requests-actions">
             {foreach $forms as $form}
-                <a class="s-button" href="{$wa->getUrl('helpdesk/frontend/myNew', ['id' => $form->getId()])}">{$form->name}</a>
+                <a href="{$wa->getUrl('helpdesk/frontend/myNew', ['id' => $form->getId()])}">{$form->name}</a>
             {/foreach}
         </div>
     {/if}

@@ -53,15 +53,23 @@ var LazyLoading = ( function($) {
 
     LazyLoading.prototype.onScroll = function() {
         var that = this,
-            $window = that.$window,
-            scroll_top = $window.scrollTop(),
-            display_height = $window.height(),
-            paging_top = that.$paging.offset().top;
+            is_paging_exist = ( $.contains(document, that.$paging[0]) );
 
-        // If we see paging, stop watcher and run load
-        if (scroll_top + display_height >= paging_top) {
+        if (is_paging_exist) {
+
+            var $window = that.$window,
+                scroll_top = $window.scrollTop(),
+                display_height = $window.height(),
+                paging_top = that.$paging.offset().top;
+
+            // If we see paging, stop watcher and run load
+            if (scroll_top + display_height >= paging_top) {
+                that.stopWatcher();
+                that.loadNextPage();
+            }
+
+        } else {
             that.stopWatcher();
-            that.loadNextPage();
         }
     };
 

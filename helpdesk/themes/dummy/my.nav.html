@@ -1,0 +1,11 @@
+{strip}
+
+{if empty($my_nav_selected)}
+    {$my_nav_selected = ""}
+{/if}
+
+<li class="{if $my_nav_selected == 'requests'}is-selected{/if}">
+    <a href="{$wa->getUrl('/frontend/myRequests')}">[`My requests`]</a>
+</li>
+
+{/strip}

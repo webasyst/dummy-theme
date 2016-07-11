@@ -323,6 +323,13 @@
 .h-new-request-wrapper .h-request-form {
   margin: 2em 0 0;
 }
+.h-requests-wrapper .h-requests-actions a {
+  margin: 0 0 0 1em;
+  text-decoration: underline;
+}
+.h-requests-wrapper .h-requests-actions a:first-child {
+  margin-left: 0;
+}
 .h-requests-table {
   margin: 2em 0 0;
   text-align: left;
