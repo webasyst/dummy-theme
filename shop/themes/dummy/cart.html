@@ -126,14 +126,14 @@
 
                 {* AFFILIATE BONUS *}
                 {if shopAffiliate::isEnabled() && $affiliate_bonus > 0}
-                    <div class="affiliate-bonus-wrapper">
-                        <div class="text-block">
-                            {sprintf('[`Your current affiliate bonus of %s points allows you to get an additonal discount of up to %s`]', $affiliate_bonus, shop_currency_html(shopAffiliate::convertBonus($affiliate_bonus)))}
+                    <div class="s-affiliate-bonus-wrapper">
+                        <div class="s-text-block">
+                            {sprintf('[`Your current affiliate bonus of %s points allows you to get an additonal discount of up to %s`]', $affiliate_bonus, shop_currency_html($affiliate_discount) )}
                         </div>
-                        <div class="affiliate-discount">
+                        <div class="s-affiliate-discount">
                             &minus; {if $use_affiliate}{shop_currency_html(shopAffiliate::convertBonus($used_affiliate_bonus))}{else}0{/if}
                         </div>
-                        <div class="button-block">
+                        <div class="s-button-block">
                             {if $use_affiliate}
                                 <input id="cancel-affiliate" type="button" value="[`Don’t use bonus discount`]">
                             {else}
@@ -144,7 +144,7 @@
                 {/if}
 
                 {if shopAffiliate::isEnabled() && !empty($add_affiliate_bonus)}
-                    <div class="affiliate-hint-wrapper" id="affiliate-hint-wrapper">
+                    <div class="s-affiliate-hint-wrapper" id="s-affiliate-hint-wrapper">
                         {sprintf("[`This order will add <strong>+%s bonuses</strong> to  your account, which you will be able to spend on getting additional discounts later.`]", $add_affiliate_bonus)}
                     </div>
                 {/if}

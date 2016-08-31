@@ -354,7 +354,7 @@ var updateHeaderCart = ( function($) {
 // Shop :: Product Page :: Product Photos Class
 var ProductPhotos = ( function($) {
 
-    function getImageArray($links) {
+    function getImageArray( $links ) {
         var imageArray = [];
 
         $links.each( function() {
@@ -376,7 +376,7 @@ var ProductPhotos = ( function($) {
 
         // VARS
         that.active_class = "is-selected";
-        that.imageArray = getImageArray( that.$thumbsLinks );
+        that.imageArray = getImageArray( that.$thumbsLinks.length ? that.$thumbsLinks : that.$mainLink );
 
         // DYNAMIC VARS
         that.active_index = 0;
@@ -995,7 +995,7 @@ var RangeSlider = ( function($) {
             }
 
             that.left_value = val;
-            that.changeRange( true );
+            that.changeRange();
         });
 
         that.$inputMax.on("keyup", function() {
@@ -1015,15 +1015,7 @@ var RangeSlider = ( function($) {
             }
 
             that.right_value = val;
-            that.changeRange( true );
-        });
-
-        that.$inputMin.on("change", function() {
-            $(this).val(that.left_value);
-        });
-
-        that.$inputMax.on("change", function() {
-            $(this).val(that.right_value);
+            that.changeRange();
         });
 
         function onMouseMove(event) {
@@ -1130,7 +1122,7 @@ var RangeSlider = ( function($) {
         });
     };
 
-    RangeSlider.prototype.changeRange = function( not_change_input ) {
+    RangeSlider.prototype.changeRange = function() {
         var that = this;
 
         // Set Range at Start
@@ -1146,7 +1138,7 @@ var RangeSlider = ( function($) {
             right_value = ( (that.right_value - that.min)/delta_value) * 100;
         }
 
-        that.setRange(left_value,right_value, not_change_input);
+        that.setRange(left_value,right_value, true);
     };
 
     return RangeSlider;

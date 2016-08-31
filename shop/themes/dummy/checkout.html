@@ -41,34 +41,37 @@
     {/if}
 
     <div class="s-steps-wrapper">
-        <form method="post" action="">
+        {if isset($checkout_steps)}
+            {$_steps_count = count($checkout_steps)}
+            {$_current_step_index = array_search($checkout_current_step, array_keys($checkout_steps))}
+            {$_is_first = ( $_current_step_index == 0 )}
+            {$_is_last = ( $_current_step_index == ($_steps_count - 1) )}
 
-            {if isset($checkout_steps)}
-                {$_steps_count = count($checkout_steps)}
-                {$_current_step_index = array_search($checkout_current_step, array_keys($checkout_steps))}
-                {$_is_first = ( $_current_step_index == 0 )}
-                {$_is_last = ( $_current_step_index == ($_steps_count - 1) )}
+            <form method="post" action="">
+        {/if}
+
+        <div class="s-step-wrapper" id="step-{$checkout_current_step}" data-step-id="{$checkout_current_step}">
+
+            {if !empty($_is_first) && $wa->isAuthEnabled()}
+                {include file="checkout.auth.html" inline}
             {/if}
 
-            <div class="s-step-wrapper" id="step-{$checkout_current_step}" data-step-id="{$checkout_current_step}">
-
-                {if !empty($_is_first) && $wa->isAuthEnabled()}
-                    {include file="checkout.auth.html" inline}
-                {/if}
-
-                <div class="s-step-content {if $wa->post('wa_auth_login')}is-hidden{/if}">
-                    {include file="checkout.`$checkout_current_step`.html"}
-                </div>
-
-                {if !$_is_success}
-                    <div class="s-step-buttons">
-                        <input class="s-step-submit" type="submit" value="{if !empty($_is_last)}[`Place order`]{else}[`Next &rarr;`]{/if}">
-                        <input type="hidden" name="step" value="{$checkout_current_step}">
-                    </div>
-                {/if}
+            <div class="s-step-content {if $wa->post('wa_auth_login')}is-hidden{/if}">
+                {include file="checkout.`$checkout_current_step`.html"}
             </div>
 
-        </form>
+            {if !$_is_success}
+                <div class="s-step-buttons">
+                    <input class="s-step-submit" type="submit" value="{if !empty($_is_last)}[`Place order`]{else}[`Next &rarr;`]{/if}">
+                    <input type="hidden" name="step" value="{$checkout_current_step}">
+                </div>
+            {/if}
+
+        </div>
+
+        {if isset($checkout_steps)}
+            </form>
+        {/if}
     </div>
 
 </div>

@@ -1545,6 +1545,22 @@
 .s-cart-page .s-cart-total {
   margin: 2em 0 0;
 }
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper {
+  margin: 1em 0 0;
+}
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper .s-text-block,
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper .s-affiliate-discount,
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper .s-button-block {
+  margin: 1em 0 0;
+}
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper .s-text-block:first-child,
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper .s-affiliate-discount:first-child,
+.s-cart-page .s-cart-total .s-affiliate-bonus-wrapper .s-button-block:first-child {
+  margin-top: 0;
+}
+.s-cart-page .s-cart-total .s-affiliate-hint-wrapper {
+  margin: 1em 0 0;
+}
 .s-cart-page .s-cart-total .s-coupon-wrapper .s-coupon-header {
   display: inline-block;
   vertical-align: middle;

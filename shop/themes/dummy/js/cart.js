@@ -7,7 +7,7 @@ var Cart = ( function($) {
         that.$wrapper = ( options["$wrapper"] || false );
         that.$products = that.$wrapper.find(".s-cart-product");
         that.$services = that.$products.find(".s-product-services");
-        that.$cartAffiliateHint = $("#affiliate-hint-wrapper");
+        that.$cartAffiliateHint = $("#s-affiliate-hint-wrapper");
         that.$cartDiscount = $("#s-cart-discount");
         that.$cartDiscountWrapper = $("#cart-discount-wrapper");
         that.$cartTotal = $("#cart-total");
@@ -239,7 +239,7 @@ var Cart = ( function($) {
         }
 
         // Render Discount
-        if (data.discount_numeric) {
+        if (data.discount) {
             $cartDiscountWrapper.show();
             $cartDiscount.html('&minus; ' + data.discount);
         } else {
