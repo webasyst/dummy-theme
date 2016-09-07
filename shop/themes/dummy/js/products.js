@@ -170,7 +170,8 @@ var Products = ( function($) {
 
     Products.prototype.changeQuantity = function( $quantity ) {
         var that = this,
-            max_val = $quantity.data("max-quantity"),
+            input_max_data = parseInt( $quantity.data("max-quantity")),
+            max_val = ( isNaN(input_max_data) || input_max_data === 0 ) ? Infinity : input_max_data,
             value = parseInt( $quantity.val() ),
             new_value = 1;
 

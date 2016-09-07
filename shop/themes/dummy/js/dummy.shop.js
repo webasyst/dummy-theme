@@ -367,20 +367,23 @@ var ProductPhotos = ( function($) {
         return imageArray;
     }
 
-    ProductPhotos = function() {
+    ProductPhotos = function(options) {
         var that = this;
 
-        that.$mainLink = $("#s-photo-main");
-        that.$thumbs = $("#s-photos-list");
+        that.$wrapper = options["$wrapper"];
+        that.$mainLink = that.$wrapper.find("#s-photo-main");
+        that.$video = that.$wrapper.find(".s-video-wrapper");
+        that.$thumbs = that.$wrapper.find(".s-photos-list");
         that.$thumbsLinks = that.$thumbs.find("a");
 
         // VARS
         that.active_class = "is-selected";
+        that.hidden_class = "is-hidden";
         that.imageArray = getImageArray( that.$thumbsLinks.length ? that.$thumbsLinks : that.$mainLink );
 
         // DYNAMIC VARS
         that.active_index = 0;
-        that.$activeLink = false;
+        that.$activeLink = ( that.$thumbs.find("a." + that.active_class) || false );
 
         // INIT
         that.bindEvents();
@@ -403,6 +406,7 @@ var ProductPhotos = ( function($) {
 
     ProductPhotos.prototype.setPhoto = function( $link ) {
         var that = this,
+            is_video = $link.hasClass("is-video"),
             big_photo_src = $link.attr("href"),
             index = $link.data("index"),
             active_class = that.active_class;
@@ -410,14 +414,23 @@ var ProductPhotos = ( function($) {
         // Marking
         if (that.$activeLink) {
             that.$activeLink.removeClass(active_class)
-        } else {
-            that.$thumbs.find("." + active_class).removeClass(active_class);
         }
         $link.addClass(active_class);
 
-        // Change main photo
-        that.$mainLink.attr("href", big_photo_src)
-            .find("img").attr("src", big_photo_src);
+        if (is_video) {
+
+            that.$mainLink.addClass(that.hidden_class);
+            that.$video.removeClass(that.hidden_class);
+
+        } else {
+
+            that.$mainLink.removeClass(that.hidden_class);
+            that.$video.addClass(that.hidden_class);
+
+            // Change main photo
+            that.$mainLink.attr("href", big_photo_src)
+                .find("img").attr("src", big_photo_src);
+        }
 
         // Save data
         that.active_index = index;
