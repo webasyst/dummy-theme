@@ -605,7 +605,7 @@ var LazyLoading = ( function($) {
         that.$window = $(window);
 
         // DYNAMIC VARS
-        that.$paging = that.$wrapper.find(that.pagind_name);
+        $_paging = $(options["names"]["paging"]);
 
         // INIT
         that.initLazyLoading();
@@ -637,20 +637,19 @@ var LazyLoading = ( function($) {
 
     LazyLoading.prototype.onScroll = function() {
         var that = this,
-            is_paging_exist = ( $.contains(document, that.$paging[0]) );
+            is_paging_exist = ( $.contains(document, $_paging[0]) );
 
         if (is_paging_exist) {
 
-            var $window = that.$window,
-                scroll_top = $window.scrollTop(),
-                display_height = $window.height(),
-                paging_top = that.$paging.offset().top;
+          var scroll_top = $(window).scrollTop(),
+              display_height =  $(window).height(),
+              paging_top = $_paging.offset().top;
 
-            // If we see paging, stop watcher and run load
-            if (scroll_top + display_height >= paging_top) {
-                that.stopWatcher();
-                that.loadNextPage();
-            }
+          // If we see paging, stop watcher and run load
+          if (scroll_top + display_height >= paging_top) {
+              that.stopWatcher();
+              that.loadNextPage();
+          }
 
         } else {
             that.stopWatcher();
@@ -660,11 +659,10 @@ var LazyLoading = ( function($) {
 
     LazyLoading.prototype.loadNextPage = function() {
         var that = this,
-            next_page_url = getNextUrl(),
-            $paging = that.$paging;
+            next_page_url = getNextUrl();
 
         function getNextUrl() {
-            var $nextPage = that.$paging.find(".selected").next(),
+            var $nextPage = $_paging.find(".selected").next(),
                 result = false;
 
             if ($nextPage.length) {
@@ -675,9 +673,9 @@ var LazyLoading = ( function($) {
         }
 
         function showLoad() {
-            var $loading = '<div class="s-loading-wrapper"><i class="icon16 loading"></i>&nbsp;' + $paging.data("loading-text") + '</div>';
+            var $loading = '<div class="s-loading-wrapper"><i class="icon16 loading"></i>&nbsp;' + $_paging.data("loading-text") + '</div>';
 
-            $paging
+            $_paging
                 .addClass(that.load_class)
                 .append($loading);
         }
@@ -693,11 +691,11 @@ var LazyLoading = ( function($) {
 
                 that.$list.append($newItems);
 
-                $paging.after($newPaging);
+                $_paging.after($newPaging);
 
-                $paging.remove();
+                $_paging.remove();
 
-                that.$paging = $newPaging;
+                $_paging = $newPaging;
 
                 that.addWatcher();
             });
@@ -884,8 +882,17 @@ var ProductsFilter = ( function($) {
     ProductsFilter.prototype.onSubmit = function( $form ) {
         var that = this,
             href = $form.attr("action"),
-            data = $form.serialize(),
-            $category = $("#s-category-wrapper");
+            data = $form.serializeArray(),
+            $category = $("#s-category-wrapper"),
+            params = [];
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].value !== '') {
+                    params.push(data[i].name + '=' + data[i].value);
+                }
+            }
+
+            var url = '?' + params.join('&');
 
         // Lock
         that.is_locked = true;
@@ -893,10 +900,15 @@ var ProductsFilter = ( function($) {
         // Animation
         $category.addClass("is-loading");
 
-        $.get(href, data, function(html) {
+        $.get(url+'&_=_', function(html) {
             // Insert new html
             if ($category.length) {
                 $category.replaceWith(html);
+                $category.removeClass("is-loading");
+            }
+            // Filter history
+            if (!!(history.pushState && history.state !== undefined)) {
+                window.history.pushState({}, '', url);
             }
             // Scroll to Top
             $("html, body").animate({
