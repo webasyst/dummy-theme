@@ -91,7 +91,7 @@
     };
 
     var unsetReplyID = function( $link ) {
-        var $review = $link.closest(".review-item"),
+        var $review = $link.closest(".s-review-item"),
             parent_id = $review.data("id"),
             $form = $(".s-form-wrapper"),
             $input =  $form.find("input[name=\"parent_id\"]"),
@@ -102,7 +102,7 @@
     };
 
     var setReplyID = function( $link ) {
-        var $review = $link.closest(".review-item"),
+        var $review = $link.closest(".s-review-item"),
             parent_id = $review.data("id"),
             $form = $(".s-form-wrapper"),
             $input =  $form.find("input[name=\"parent_id\"]");
