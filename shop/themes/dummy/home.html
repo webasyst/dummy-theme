@@ -1,7 +1,8 @@
 {strip}
 
 {$wa->globals("hideSidebar", true)}
-{$promocards = $wa->shop->promos()}
+{$wa->globals("isHomePage", true)}
+{$promocards = $wa->shop->promos('link', '900')}
 
 <div class="s-home-wrapper">
 

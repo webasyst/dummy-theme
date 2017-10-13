@@ -7,7 +7,7 @@
             <h3 class="s-shipping-header">
                 <label class="s-shipping-label">
                     {if !empty($m.logo)}
-                        <img class="s-shipping-image" src="{$m.logo}">
+                        <img class="s-shipping-image method-logo" src="{$m.logo}">
                     {/if}
                     <input class="s-shipping-input" type="radio" name="shipping_id" value="{$m.id}" {if $m.external || !empty($m.error)}disabled{/if} {if $m.id == $shipping.id}checked{/if}>
                     <span class="s-shipping-name">{$m.name|escape}</span>
@@ -15,70 +15,61 @@
             </h3>
             <div class="s-shipping-details">
 
-                {if empty($m.error) && !empty($m.rates)}
-                    {if count($m.rates) > 1}
-                        <div class="s-shipping-controls">
+                <div class="s-shipping-controls">
+                    {if empty($m.error) && !empty($m.rates)}
+                        {if count($m.rates) > 1}
                             <select class="s-shipping-select shipping-rates" name="rate_id[{$m.id}]">
                                 {foreach $m.rates as $rate_id => $r}
                                     <option data-rate="{shop_currency($r.rate, $r.currency)}" {if !empty($r.est_delivery)}data-delivery="{$r.est_delivery}"{/if} {if !empty($r.comment)}data-comment="{$r.comment}"{/if} value="{$rate_id}"{if $rate_id == $shipping.rate_id} selected{/if}>{$r.name} ({shop_currency($r.rate, $r.currency)})</option>
                                 {/foreach}
                             </select>
-                        </div>
-                    {else}
-                        <input type="hidden" name="rate_id[{$m.id}]" value="{key($m.rates)}">
+                        {else}
+                            <input type="hidden" name="rate_id[{$m.id}]" value="{key($m.rates)}">
+                        {/if}
                     {/if}
-                {/if}
+                </div>
 
                 {if $m.description}<p class="s-shipping-description">{$m.description}</p>{/if}
 
-                <div class="s-rate-wrapper">
-                    {if empty($m.error)}
+                <div class="s-rate-wrapper {if !empty($m.error)}has-error{/if}">
 
-                        <p class="s-comment error comment" style="{if empty($m.comment)}display: none;{/if}">
-                            {if !empty($m.comment)}{$m.comment}{/if}
-                        </p>
-
-                        <div class="s-price-wrapper">
-                            [`Price`]:
-                            <span class="s-price">
+                    {* PRICE *}
+                    <div class="s-price-wrapper js-price-wrapper">
+                        [`Price`]:
+                        <span class="s-price price nowrap js-price" {if !empty($m.error)}style="display: none;"{/if}">
+                            {if empty($m.error)}
                                 {if $m.rate !== null}
                                     {shop_currency_html($m.rate, $m.currency)}
                                 {elseif $m.external}
                                     {$external_methods[] = $m.id}
                                     [`Loading...`] <i class="icon16 loading"></i>
                                 {/if}
-                            </span>
-                        </div>
+                            {/if}
+                        </span>
+                    </div>
 
-                        <div class="s-delivery-wrapper" style="{if empty($m.est_delivery)}display: none;{/if}">
-                            [`Estimated delivery`]:
-                            <span class="s-delivery">{$m.est_delivery}</span>
-                        </div>
-                    {else}
-                        <div class="s-price-wrapper">
-                            [`Price`]:
-                            <span class="s-price"></span>
-                        </div>
+                    {* DELIVERY *}
+                    <div class="s-delivery-wrapper js-delivery-wrapper" style="{if empty($m.est_delivery) || !empty($m.error)}display: none;{/if}">
+                        [`Estimated delivery`]:
+                        <span class="s-delivery est_delivery js-delivery-wrapper">{if !empty($m.est_delivery)}{$m.est_delivery}{/if}</span>
+                    </div>
 
-                        <p class="s-comment" style="display: none;"></p>
+                    {* COMMENT *}
+                    <p class="s-comment hint error comment js-comment" style="{if empty($m.comment)}display: none;{/if}">
+                        {if !empty($m.comment)}{$m.comment}{/if}
+                    </p>
 
-                        <div class="s-delivery-wrapper" style="display: none;">
-                            [`Estimated delivery`]:
-                            <span class="s-delivery"></span>
-                        </div>
-
-                        <p class="s-shipping-error">{$m.error}</p>
-                    {/if}
-
+                    {* SHIPPING *}
+                    <p class="s-shipping-error shipping-error js-error" {if empty($m.error)}style="display: none;"{/if}>{if !empty($m.error)}{$m.error}{/if}</p>
                 </div>
 
                 {if !empty($m.form)}
                     <div class="wa-form wa-address" {if $m.id != $shipping.id}style="display:none"{/if}>
-                        {$m.form->html(null, true, true)}
+                        {$m.form->html()}
                         {if !empty($checkout_steps.shipping.service_agreement_hint)}
                             <div class="wa-field">
                                 <div class="wa-value">
-                                    <p class="hint">{$checkout_steps.shipping.service_agreement_hint}</span>
+                                    <p class="hint">{$checkout_steps.shipping.service_agreement_hint}</p>
                                 </div>
                             </div>
                         {/if}
@@ -197,65 +188,82 @@
         {/if}
 
         function responseCallback(shipping_id, data) {
-            var name = 'rate_id[' + shipping_id + ']';
-            if (typeof(data) != 'string') {
-                $(".shipping-" + shipping_id + ' input:radio').removeAttr('disabled');
-            }
-            if (typeof(data) == 'string') {
-                $(".shipping-" + shipping_id + ' input[name="' + name + '"]').remove();
-                $(".shipping-" + shipping_id + ' select[name="' + name + '"]').remove();
-                var el = $(".shipping-" + shipping_id).find('.rate');
-                if (el.hasClass('error')) {
-                    el.find('em').html(data);
-                } else {
-                    el.find('.s-price, .hint').hide();
-                    el.addClass('error').append($('<em class="shipping-error"></em>').html(data));
-                }
-            } else if (data.length > 1) {
-                $(".shipping-" + shipping_id + ' input[name="' + name + '"]').remove();
-                var select = $(".shipping-" + shipping_id + ' select[name="' + name + '"]');
-                var html = '<select class="shipping-rates" name="' + name + '">';
-                for (var i = 0; i < data.length; i++) {
-                    var r = data[i];
-                    html += '<option data-rate="' + r.rate + '" data-comment="' + (r.comment || '') + '" data-est_delivery="' + (r.est_delivery || '') + '" value="' + r.id + '">' + r.name + ' (' + r.rate + ')</option>';
-                }
-                html += '</select>';
-                if (select.length) {
-                    var selected = select.val();
-                    select.remove();
-                } else {
-                    var selected = false;
-                }
-                select = $(html);
-                $(".shipping-" + shipping_id + " h3").append(select);
-                if (selected) {
-                    select.val(selected);
-                }
-                select.trigger('change', 1);
-                $(".shipping-" + shipping_id).find('.rate').removeClass('error').find('.s-price').show();
-                $(".shipping-" + shipping_id).find('.rate em.shipping-error').remove();
+            var $wrapper = $(".shipping-" + shipping_id),
+                $block = $wrapper.find(".s-rate-wrapper"),
+                $priceW = $wrapper.find(".js-price-wrapper"),
+                $price = $wrapper.find(".js-price"),
+                $deliveryW = $wrapper.find(".js-delivery-wrapper"),
+                $delivery = $wrapper.find(".js-delivery"),
+                $comment = $wrapper.find(".js-comment"),
+                $error = $wrapper.find(".js-error"),
+                error_class = "is-error",
+                name = 'rate_id[' + shipping_id + ']';
+
+            if (typeof(data) === 'string') {
+                $wrapper.find('input[name="' + name + '"]').remove();
+                $wrapper.find('select[name="' + name + '"]').remove();
+
+                $block.addClass(error_class);
+                $priceW.hide();
+                $comment.hide();
+                $error.html(data).show();
+
             } else {
-                $(".shipping-" + shipping_id + ' select[name="' + name + '"]').remove();
-                var input = $(".shipping-" + shipping_id + ' input[name="' + name + '"]');
-                if (input.length) {
-                    input.val(data[0].id);
+                $wrapper.find("input:radio").removeAttr("disabled");
+                if ( data.length > 1 ) {
+                    var $select = $wrapper.find('select[name="' + name + '"]');
+                    $wrapper.find('input[name="' + name + '"]').remove();
+
+                    var html = '<select class="s-shipping-select shipping-rates" name="' + name + '">';
+                    for ( var i = 0; i < data.length; i++ ) {
+                        var r = data[i];
+                        html += '<option data-rate="' + r.rate + '" data-comment="' + (r.comment || '') + '" data-est_delivery="' + (r.est_delivery || '') + '" value="' + r.id + '">' + r.name + ' (' + r.rate + ')</option>';
+                    }
+                    html += '</select>';
+
+                    var selected = false;
+                    if ( $select.length ) {
+                        selected = $select.val();
+                        $select.remove();
+                    }
+
+                    $select = $(html);
+                    $wrapper.find(".s-shipping-details").prepend($select);
+
+                    if ( selected ) {
+                        $select.val(selected);
+                    }
+
+                    $select.trigger("change", 1);
+
                 } else {
-                    $(".shipping-" + shipping_id + " h3").append('<input type="hidden" name="' + name + '" value="' + data[0].id + '">');
+                    $wrapper.find('select[name="' + name + '"]').remove();
+                    var $input = $wrapper.find('input[name="' + name + '"]');
+                    if ( $input.length ) {
+                        $input.val(data[0].id);
+                    } else {
+                        $wrapper.append('<input type="hidden" name="' + name + '" value="' + data[0].id + '">');
+                    }
+
+                    $price.html(data[0].rate);
+
+                    if ( data[0].est_delivery ) {
+                        $delivery.html(data[0].est_delivery);
+                        $deliveryW.show();
+                    } else {
+                        $deliveryW.hide();
+                    }
+
+                    if ( data[0].comment ) {
+                        $comment.html(data[0].comment).show();
+                    } else {
+                        $comment.hide();
+                    }
                 }
-                $(".shipping-" + shipping_id + " .s-price").html(data[0].rate);
-                $(".shipping-" + shipping_id + " .est_delivery").html(data[0].est_delivery);
-                $(".shipping-" + shipping_id).find('.rate').removeClass('error').find('.s-price').show();
-                if (data[0].est_delivery) {
-                    $(".shipping-" + shipping_id + " .est_delivery").parent().show();
-                } else {
-                    $(".shipping-" + shipping_id + " .est_delivery").parent().hide();
-                }
-                if (data[0].comment) {
-                    $(".shipping-" + shipping_id + " .comment").html('<br>' + data[0].comment).show();
-                } else {
-                    $(".shipping-" + shipping_id + " .comment").hide();
-                }
-                $(".shipping-" + shipping_id).find('.rate em.shipping-error').remove();
+
+                $block.removeClass(error_class);
+                $priceW.show();
+                $error.hide();
             }
         }
 
@@ -266,7 +274,9 @@
 {foreach $frontend_checkout as $_}{$_}{/foreach}
 
 {if !empty($error)}
-    <div class="s-checkout-result error">{$error}</div>
+    <div class="s-checkout-result">
+        <span class="wa-error-msg c-error">{$error}</span>
+    </div>
 {/if}
 
 {/strip}

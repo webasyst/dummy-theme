@@ -9,9 +9,7 @@
     'stock' => '[`In stock`]'
 ]}
 
-{if !isset($active_sort)}
-    {$active_sort = $wa->get('sort', 'create_datetime')}
-{/if}
+{$active_sort = $wa->get('sort', 'create_datetime')}
 
 <div class="s-sorting-wrapper">
 

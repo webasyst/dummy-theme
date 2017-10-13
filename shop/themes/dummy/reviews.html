@@ -124,6 +124,18 @@
                         </div>
                     {/if}
 
+                    {if empty($current_user_id) && !empty($review_service_agreement) && !empty($review_service_agreement_hint)}
+                        <div class="s-review-field service-agreement-wrapper">
+                            <label>
+                                {if $review_service_agreement == 'checkbox'}
+                                    <input type="hidden" name="service_agreement" value="">
+                                    <input type="checkbox" name="service_agreement" value="1"{if $wa->post('service_agreement') || $wa->storage('shop_review_agreement')} checked{/if}>
+                                {/if}
+                                {$review_service_agreement_hint}
+                            </label>
+                        </div>
+                    {/if}
+
                     <div class="s-review-field reply-notification">
                         <span class="reply-number"></span>
                         <a href="javascript:void(0);" class="unset-reply-parent">[`cancel`]</a>

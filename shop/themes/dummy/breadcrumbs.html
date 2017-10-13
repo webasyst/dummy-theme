@@ -1,8 +1,8 @@
 {strip}
 
 {$_breadcrumbs = []}
-{$_is_main_page = ( $wa->currentUrl() == $wa_app_url )}
-{$_is_personal_area = ( $wa->currentUrl() == $wa->getUrl('/frontend/my') )}
+{$_is_main_page = $wa->globals('isHomePage')}
+{$_is_personal_area = $wa->globals('isMyPage')}
 
 {if !($_is_main_page || $_is_personal_area || empty($breadcrumbs))}
     {$_breadcrumbs[] = [

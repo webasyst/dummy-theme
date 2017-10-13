@@ -10,8 +10,14 @@
 
         $("#show-sidebar-link").on("click", function() {
             toggleSidebar();
-        })
+        });
 
+        window.onpopstate = function() {
+            var state = window.history.state;
+            if (state && state.reload) {
+                location.reload();
+            }
+        };
     };
 
     var onProviderClick = function( $link ) {
@@ -596,7 +602,7 @@ var LazyLoading = ( function($) {
         // VARS
         that.list_name = options["names"]["list"];
         that.items_name = options["names"]["items"];
-        that.pagind_name = options["names"]["paging"];
+        that.paging_name = options["names"]["paging"];
         that.load_class = "is-loading";
 
         // DOM
@@ -605,7 +611,7 @@ var LazyLoading = ( function($) {
         that.$window = $(window);
 
         // DYNAMIC VARS
-        that.$paging = that.$wrapper.find(that.pagind_name);
+        that.$paging = that.$wrapper.find(that.paging_name);
 
         // INIT
         that.initLazyLoading();
@@ -689,7 +695,7 @@ var LazyLoading = ( function($) {
             $.get(next_page_url, function(response) {
                 var $category = $(response),
                     $newItems = $category.find(that.list_name + " " + that.items_name),
-                    $newPaging = $category.find(that.pagind_name);
+                    $newPaging = $category.find(that.paging_name);
 
                 that.$list.append($newItems);
 
@@ -823,6 +829,7 @@ var ProductsFilter = ( function($) {
         that.$form = that.$wrapper.find("form");
 
         // VARS
+        that.history_api = !!(history.pushState && history.state !== undefined);
 
         // DYNAMIC VARS
         that.is_locked = false;
@@ -884,7 +891,7 @@ var ProductsFilter = ( function($) {
     ProductsFilter.prototype.onSubmit = function( $form ) {
         var that = this,
             href = $form.attr("action"),
-            data = $form.serialize(),
+            data = getData(),
             $category = $("#s-category-wrapper");
 
         // Lock
@@ -902,9 +909,30 @@ var ProductsFilter = ( function($) {
             $("html, body").animate({
                 scrollTop: 0
             }, 200);
-            // Unclock
+
+            // Filter history
+            if (that.history_api) {
+                window.history.pushState({
+                    reload: true
+                }, '', href + "?" + data);
+            }
+
+        }).always( function () {
             that.is_locked = false;
         });
+
+        function getData() {
+            var result = [],
+                data = $form.serializeArray();
+
+            $.each(data, function(index, item) {
+                if (item.value) {
+                    result.push(item.name + "=" + item.value);
+                }
+            });
+
+            return result.join("&")
+        }
     };
 
     return ProductsFilter;
