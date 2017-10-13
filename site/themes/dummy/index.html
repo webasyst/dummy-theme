@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="{if $wa->locale()}{$wa->locale()}{else}en{/if}">
 <head>
-    <title>{$wa->title()}</title>
+    <title>{$wa->title()|escape}</title>
 
     {* META *}
     <meta charset="UTF-8">

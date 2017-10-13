@@ -297,7 +297,6 @@ input:-ms-input-placeholder {
   filter: blur(5px);
 }
 .userpic {
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   -webkit-background-size: auto;
   -moz-background-size: auto;
@@ -320,7 +319,6 @@ input:-ms-input-placeholder {
   color: #345;
   font-size: 0.9em;
   border: 1px solid rgba(0,0,0,0.1);
-  -webkit-border-radius: 3px;
   border-radius: 3px;
   white-space: nowrap;
 }
@@ -450,7 +448,6 @@ ul.tree ul a {
   height: 36px;
   display: inline-block;
   vertical-align: middle;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
 }
 .wa-captcha strong {
@@ -576,14 +573,12 @@ i.icon16.instagram {
 }
 i.icon16.userpic20 {
   background-position: -2px -2px;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   -webkit-background-size: 20px 20px;
   -moz-background-size: 20px 20px;
   background-size: 20px 20px;
 }
 i.icon16.color {
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   border: 1px solid rgba(0,0,0,0.2);
   width: 12px;
@@ -704,7 +699,6 @@ select {
   width: 200px;
   padding: 8px 0;
   border: 1px solid rgba(0,0,0,0.1);
-  -webkit-border-radius: 2px;
   border-radius: 2px;
 }
 input[type="text"],
@@ -720,7 +714,6 @@ textarea {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   border: 1px solid rgba(0,0,0,0.1);
-  -webkit-border-radius: 2px;
   border-radius: 2px;
   font: normal 1em/1.25em "Trebuchet MS", "sans-serif";
   text-decoration: none;
@@ -750,7 +743,6 @@ input[type="submit"] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
   font: normal 1em/1.25em "Trebuchet MS", "sans-serif";
   text-decoration: none;
@@ -811,6 +803,16 @@ input[type="button"].red,
 input[type="submit"].red {
   background: #d9534f;
   color: #fff;
+}
+.s-button[disabled],
+button[disabled],
+input[type="button"][disabled],
+input[type="submit"][disabled] {
+  background: #e2e2e2;
+  color: #505050;
+  cursor: default;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 table {
   border-collapse: collapse;
@@ -968,7 +970,6 @@ body {
   height: 40px;
   background: #fff;
   border: 1px solid rgba(127,127,127,0.1);
-  -webkit-border-radius: 3px;
   border-radius: 3px;
   -webkit-transition: all 333ms ease-in-out;
   -moz-transition: all 333ms ease-in-out;
@@ -1019,7 +1020,6 @@ body {
   background: transparent 50% no-repeat;
   -webkit-box-shadow: 0 0 2px rgba(0,0,0,0.1);
   box-shadow: 0 0 2px rgba(0,0,0,0.1);
-  -webkit-border-radius: 50%;
   border-radius: 50%;
 }
 .s-main-wrapper .s-header-wrapper .s-fixed-container .s-fixed-header .s-info-wrapper .s-info-block .s-text-wrapper {
@@ -1078,7 +1078,6 @@ body {
   right: -4px;
   padding: 2px 4px;
   background: #f00;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   text-align: center;
   font-size: 0.714285714285714em;
@@ -1103,7 +1102,6 @@ body {
   right: -4px;
   padding: 2px 4px;
   background: #f00;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   text-align: center;
   font-size: 0.714285714285714em;
@@ -1170,7 +1168,6 @@ body {
 }
 .s-main-wrapper .s-main-block .s-sidebar-wrapper .s-sidebar-block .s-nav-wrapper > ul {
   margin: 2em 0 0;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
   -webkit-box-shadow: 0 0 8px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.06);
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.06);
@@ -1285,7 +1282,6 @@ body {
 }
 .s-main-wrapper .s-main-block .s-content-wrapper .s-content-block .s-post-wrapper .album-wrapper .album-image img {
   width: 100%;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
 }
 .s-main-wrapper .s-main-block .s-content-wrapper .s-content-block .s-post-wrapper .s-post-credentials {
@@ -1311,7 +1307,6 @@ body {
 }
 .s-main-wrapper .s-main-block .s-content-wrapper .s-content-block .s-post-wrapper .s-post-credentials .userpic-wrapper .userpic-image {
   width: 100%;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
 }
 .s-main-wrapper .s-main-block .s-content-wrapper .s-content-block .s-post-wrapper .s-post-credentials .username {
@@ -1330,7 +1325,6 @@ body {
 .s-main-wrapper .s-main-block .s-content-wrapper .s-content-block .s-profile-wrapper .hint-wrapper {
   margin: 1em 0;
   padding: 1em;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
   font: normal 1em "Trebuchet MS", "sans-serif";
 }
@@ -1343,7 +1337,6 @@ body {
   padding: 0.5em;
   margin: 0.5em 0 0;
   background: rgba(255,127,127,0.1);
-  -webkit-border-radius: 2px;
   border-radius: 2px;
 }
 .s-main-wrapper .s-main-block .s-content-wrapper .s-content-block .s-profile-wrapper .wa-form {

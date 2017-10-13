@@ -109,6 +109,8 @@
         window.addEventListener("orientationchange", setSpace);
 
         function setSpace() {
+            $main.removeAttr("style");
+
             var display_height = $window.height(),
                 main_height = $main.closest(".s-content-wrapper").height(),
                 footer_top = $footer.offset().top,
@@ -116,12 +118,10 @@
 
             var delta = ( display_height - (footer_top + footer_height) );
 
-            if ( delta > 0 ) {
+            if (delta > 0) {
                 $main.css({
                     "min-height": main_height + delta + "px"
                 });
-            } else {
-                $main.removeAttr("style");
             }
         }
     }
