@@ -61,7 +61,7 @@
 
             if (new_review_id) {
                 // Marking
-                $(".review-item").each( function() {
+                $(".s-review-item").each( function() {
                     var $review = $(this);
                     if ( $review.data("id") == new_review_id ) {
                         $review.addClass(activeClass);

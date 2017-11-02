@@ -128,7 +128,7 @@
                 {if shopAffiliate::isEnabled() && $affiliate_bonus > 0}
                     <div class="s-affiliate-bonus-wrapper">
                         <div class="s-text-block">
-                            {sprintf('[`Your current affiliate bonus of %s points allows you to get an additonal discount of up to %s`]', $affiliate_bonus, shop_currency_html($affiliate_discount) )}
+                            {sprintf('[`Your current affiliate bonus of %s points allows you to get an additonal discount of up to %s`]', $affiliate_bonus, shop_currency_html($potential_affiliate_discount, $wa->shop->currency()) )}
                         </div>
                         <div class="s-affiliate-discount">
                             &minus; {if $use_affiliate}{shop_currency_html(shopAffiliate::convertBonus($used_affiliate_bonus))}{else}0{/if}

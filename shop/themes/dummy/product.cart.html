@@ -24,7 +24,7 @@
                         <div class="inline-select {if $f.type == 'color'}color{/if}">
                             {foreach $f.values as $v_id => $v}
                                 {if !isset($default_sku_features[$f.id])}{$default_sku_features[$f.id]=$v_id}{/if}
-                                <a data-sku-id="{$f.id}:{$v_id};" data-value="{$v_id}" href="javascript:void(0);" style="{if $f.type == 'color'}{$v->style}{/if}">
+                                <a class="{if $default_sku_features[$f.id] == $v_id}selected{/if}" data-sku-id="{$f.id}:{$v_id};" data-value="{$v_id}" href="javascript:void(0);" style="{if $f.type == 'color'}{$v->style}{/if}">
                                     {if $f.type == 'color'}
                                         <span class="color_name">{strip_tags($v)}</span>
                                     {else}
@@ -52,8 +52,8 @@
                 <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                     {$sku_available =  $product.status && $sku.available && ($wa->shop->settings('ignore_stock_count') || $sku.count === null || $sku.count > 0)}
                     {if $sku.name}<meta itemprop="name" content="{$sku.name|escape}">{/if}
-                    <meta itemprop="price" content="{$sku.price}">
-                    <meta itemprop="priceCurrency" content="{$product.currency}">
+                    <meta itemprop="price" content="{shop_currency($sku.price, $product.currency)}">
+                    <meta itemprop="priceCurrency" content="{$wa->shop->currency()}">
                     {if (!($sku.count === null) && $sku.count <= 0)}
                         <link itemprop="availability" href="http://schema.org/OutOfStock" />
                     {else}
@@ -81,8 +81,8 @@
                                     {if $sku.image_id} data-image-id="{$sku.image_id}"{/if}>
                                 <span itemprop="name">{$sku.name|escape}</span>
                                 {if $sku.sku}<span class="hint">{$sku.sku|escape}</span>{/if}
-                                <meta itemprop="price" content="{$sku.price}">
-                                <meta itemprop="priceCurrency" content="{$product.currency}">
+                                <meta itemprop="price" content="{shop_currency($sku.price, $product.currency)}">
+                                <meta itemprop="priceCurrency" content="{$wa->shop->currency()}">
                                 <span class="price tiny nowrap">{shop_currency_html($sku.price, $product.currency)}</span>
                                 {if (!($sku.count === null) && $sku.count <= 0)}
                                     <link itemprop="availability" href="http://schema.org/OutOfStock" />
@@ -102,8 +102,8 @@
                     {$sku = $product.skus[$product.sku_id]}
                     {if $sku.sku}<span class="hint">{$sku.sku|escape}</span>{/if}
                     {if $sku.name}<meta itemprop="name" content="{$sku.name|escape}">{/if}
-                    <meta itemprop="price" content="{$sku.price}">
-                    <meta itemprop="priceCurrency" content="{$product.currency}">
+                    <meta itemprop="price" content="{shop_currency($sku.price, $product.currency)}">
+                    <meta itemprop="priceCurrency" content="{$wa->shop->currency()}">
                     {if !$sku.available}
                         <link itemprop="availability" href="http://schema.org/Discontinued" />
                         <p><em class="bold error">[`This product is not available for purchase`]</em></p>
@@ -239,7 +239,8 @@
             is_dialog: {if $_is_dialog}true{else}false{/if},
             currency: {json_encode($currency_info)},
             services: {if count($product.skus) > 1 or $product.sku_type}{json_encode($sku_services)}{else}false{/if},
-            features: {if $product.sku_type}{json_encode($sku_features_selectable)}{else}false{/if}
+            features: {if $product.sku_type}{json_encode($sku_features_selectable)}{else}false{/if},
+            default_sku_features: {$default_sku_features|default:""|json_encode}
         });
     }
 })(jQuery);

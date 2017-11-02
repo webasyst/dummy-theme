@@ -48,7 +48,7 @@
                     <a class="s-image" href="{$product.frontend_url}" title="{$_name}" style="background-image: url('{$_product_image_src}');">
                         {* <img src="{$_product_image_src}" itemprop="image" alt="{$_name}"> *}
                     </a>
-                    <div class="s-slide-block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                    <div class="s-slide-block">
                         <h2 class="s-header" itemprop="name">
                             <a class="name" href="{$product.frontend_url}" title="{$_name}">{$product.name}</a>
                         </h2>
@@ -56,12 +56,14 @@
                             {if $product.summary}{strip_tags($product.summary)|truncate:255}{/if}
                         </p>
 
-                        <div class="s-price">{shop_currency_html($product.price)}</div>
-                        <meta itemprop="price" content="{$product.price}">
-                        <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
-                        {if !empty($product.summary)}
-                            <meta itemprop="description" content="{strip_tags($product.summary)}">
-                        {/if}
+                        <div  itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                            <div class="s-price">{shop_currency_html($product.price)}</div>
+                            <meta itemprop="price" content="{shop_currency($product.price, null, null, 0)}">
+                            <meta itemprop="priceCurrency" content="{$wa->shop->currency()}">
+                            {if !empty($product.summary)}
+                                <meta itemprop="description" content="{strip_tags($product.summary)}">
+                            {/if}
+                        </div>
                     </div>
 
                     {$badge_html = $wa->shop->badgeHtml($product.badge)}

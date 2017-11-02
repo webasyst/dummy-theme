@@ -18,6 +18,7 @@ var Product = ( function($) {
         that.currency = options["currency"];
         that.services = options["services"];
         that.features = options["features"];
+        that.default_sku_features = options["default_sku_features"];
 
         // DYNAMIC VARS
         that.price = parseFloat( that.$price.data("price") );
@@ -34,7 +35,12 @@ var Product = ( function($) {
         //
         that.bindEvents();
 
-        initFirstSku();
+        var $selected = that.$form.find(".inline-select .selected");
+        if ($selected.length) {
+            $selected.trigger("click");
+        } else {
+            initFirstSku();
+        }
 
         function initFirstSku() {
             var $skuFeature = that.$form.find(".sku-feature:first"),
@@ -75,6 +81,7 @@ var Product = ( function($) {
 
                 if (is_select) {
                     $skuFeature.change();
+
                 } else {
                     var $groups = $wrapper.find(".inline-select"),
                         groups = getGroupsData( $groups ),
@@ -152,6 +159,7 @@ var Product = ( function($) {
                         function getSkuData( sku_array ) {
                             var id = [],
                                 $links = [];
+
                             $.each(sku_array, function(index, item) {
                                 id.push(item.id);
                                 $links.push(item.$link);

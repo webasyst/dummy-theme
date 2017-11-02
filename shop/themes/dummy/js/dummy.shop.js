@@ -594,8 +594,6 @@ var Dialog = ( function($) { "use strict";
 // Shop :: Lazy Loading
 var LazyLoading = ( function($) {
 
-    var onScroll;
-
     LazyLoading = function(options) {
         var that = this;
 
@@ -612,6 +610,7 @@ var LazyLoading = ( function($) {
 
         // DYNAMIC VARS
         that.$paging = that.$wrapper.find(that.paging_name);
+        that.is_enabled = true;
 
         // INIT
         that.initLazyLoading();
@@ -620,48 +619,32 @@ var LazyLoading = ( function($) {
     LazyLoading.prototype.initLazyLoading = function() {
         var that = this;
 
-        that.addWatcher();
-    };
+        that.$window.on("scroll", watcher);
 
-    LazyLoading.prototype.addWatcher = function() {
-        var that = this;
-
-        onScroll = function() {
-            that.onScroll();
-        };
-
-        that.$window.on("scroll", onScroll);
-    };
-
-    LazyLoading.prototype.stopWatcher = function() {
-        var that = this;
-
-        if (typeof onScroll == "function") {
-            that.$window.off("scroll", onScroll);
+        function watcher() {
+            var is_exist = $.contains(document, that.$paging[0]);
+            if (is_exist) {
+                if (that.is_enabled) {
+                    that.onScroll();
+                }
+            } else {
+                that.$window.off("scroll", watcher);
+            }
         }
     };
 
     LazyLoading.prototype.onScroll = function() {
         var that = this,
-            is_paging_exist = ( $.contains(document, that.$paging[0]) );
+            $window = that.$window,
+            scroll_top = $window.scrollTop(),
+            display_height = $window.height(),
+            paging_top = that.$paging.offset().top;
 
-        if (is_paging_exist) {
-
-            var $window = that.$window,
-                scroll_top = $window.scrollTop(),
-                display_height = $window.height(),
-                paging_top = that.$paging.offset().top;
-
-            // If we see paging, stop watcher and run load
-            if (scroll_top + display_height >= paging_top) {
-                that.stopWatcher();
-                that.loadNextPage();
-            }
-
-        } else {
-            that.stopWatcher();
+        // If we see paging, stop watcher and run load
+        if (scroll_top + display_height >= paging_top) {
+            that.is_enabled = false;
+            that.loadNextPage();
         }
-
     };
 
     LazyLoading.prototype.loadNextPage = function() {
@@ -705,7 +688,7 @@ var LazyLoading = ( function($) {
 
                 that.$paging = $newPaging;
 
-                that.addWatcher();
+                that.is_enabled = true;
             });
         }
     };

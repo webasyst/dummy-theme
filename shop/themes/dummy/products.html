@@ -16,7 +16,7 @@
     {if !empty($type)}
         {$_type = $_types[$type]}
     {else}
-        {$_settings_type = $theme_settings.related_view_type}
+        {$_settings_type = ifset($theme_settings.related_view_type)}
         {if !empty($_settings_type) && $_settings_type == "table"}
             {$_type = $_types["table"]}
         {/if}
@@ -71,8 +71,8 @@
 
                                 <input type="hidden" name="product_id" value="{$product.id}">
                                 <link itemprop="availability" href="http://schema.org/InStock" />
-                                <meta itemprop="price" content="{$product.price}">
-                                <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
+                                <meta itemprop="price" content="{shop_currency($product.price, null, null, 0)}">
+                                <meta itemprop="priceCurrency" content="{$wa->shop->currency()}">
                             {else}
                                 <div class="s-pricing-wrapper">
                                     <span class="s-price">{shop_currency_html($product.price)}</span>
@@ -82,8 +82,8 @@
                                     <strong>{if $wa->shop->settings('ignore_stock_count')}[`Pre-order only`]{else}[`Out of stock`]{/if}</strong>
                                 </div>
 
-                                <meta itemprop="price" content="{$product.price}">
-                                <meta itemprop="priceCurrency" content="{$wa->shop->primaryCurrency()}">
+                                <meta itemprop="price" content="{shop_currency($product.price, null, null, 0)}">
+                                <meta itemprop="priceCurrency" content="{$wa->shop->currency()}">
                                 <link itemprop="availability" href="http://schema.org/OutOfStock" />
                             {/if}
 
