@@ -19,8 +19,8 @@
 
 <nav class="h-sidebar-wrapper" role="navigation">
 
-    {$_is_presonal_area = $wa->globals('isMyAccount')}
-    {if $_is_presonal_area}
+    {$_is_personal_area = $wa->globals('isMyAccount')}
+    {if $_is_personal_area}
         {if $wa->user()->isAuth()}
 
             <div class="s-nav-wrapper">

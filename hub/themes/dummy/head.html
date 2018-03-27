@@ -5,12 +5,11 @@
 <script src="{$wa_app_static_url}js/vendors/jquery-ui-1.10.3.custom.min.js"></script>
 
 {* REDACTOR *}
-<link href="{$wa_static_url}wa-content/js/redactor/redactor.css?v{$wa->version(true)}" rel="stylesheet">
-<script src="{$wa_static_url}wa-content/js/redactor/redactor.min.js?v{$wa->version(true)}"></script>
+<link href="{$wa_static_url}wa-content/js/redactor/2/redactor.css?v{$wa->version(true)}" rel="stylesheet">
+<script src="{$wa_static_url}wa-content/js/redactor/2/redactor.min.js?v{$wa->version(true)}"></script>
 {if substr($wa->locale(), 0, 2)!='en'}
-    <script src="{$wa_static_url}wa-content/js/redactor/{substr($wa->locale(), 0, 2)}.js?v{$wa->version(true)}"></script>
+    <script src="{$wa_static_url}wa-content/js/redactor/2/{substr($wa->locale(), 0, 2)}.js?v{$wa->version(true)}"></script>
 {/if}
-<script src="{$wa_app_static_url}js/redactor/redactor.codeblock.js?v{$wa->version()}"></script>
 
 {* THEME *}
 <link href="{$wa_static_url}wa-apps/hub/css/glyphs.css?v{$wa->version()}" rel="stylesheet">

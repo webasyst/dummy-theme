@@ -505,8 +505,10 @@ var Comment = ( function($) {
         //
 
         function showEditForm() {
-            var text = $text.html();
-            $textarea.val(text);
+            var text = $text.html(),
+                csrf = $editButton.parent('.h-actions').find('input[name="_csrf"]').val();
+
+            $textarea.data('csrf', csrf).val(text);
 
             if (!is_textarea_inited) {
                 $.hub.initEditor($textarea, { minHeight: 70 });
@@ -894,7 +896,7 @@ var CommentForm = ( function($) {
     CommentForm.prototype.onSubmit = function() {
         var that = this,
             $form = that.$form,
-            href = location.href.replace(/\/#\/[^#]*|\/#|\/$/g, '') + '/comments/add/',
+            href = location.origin + location.pathname + '/comments/add/',
             data = $form.serialize();
 
         that.is_locked = true;
@@ -935,6 +937,10 @@ var CommentForm = ( function($) {
                 setTimeout( function () {
                     $commentBody.removeClass(that.new_class);
                 }, 10000);
+
+
+                that.$textarea.redactor('code.set', '');
+                that.$textarea.redactor('toolbar.setUnfixed');
 
                 // // Reset comment form
                 that.refreshForm(true);
@@ -994,16 +1000,18 @@ $.hub.initTopicVotes = function(options) {
 
 $.hub.initEditor = function (el, options) {
     options = $.extend({
-        minHeight: 300,
+        minHeight: 150,
         buttonSource: false,
         paragraphy: false,
         convertDivs: false,
-        imageUpload: el.data('upload-url'),
-        buttons: ['bold', 'italic', 'underline', 'deleted', 'unorderedlist', 'orderedlist',
-            'image', 'video', 'link', '|', 'codeblock', 'blockquote'],
+        pasteLinkTarget: '_blank',
+        toolbarFixedTopOffset: 20,
+        buttons: ['bold', 'italic', 'underline', 'deleted', 'lists', 'image', 'video', 'link', 'codeblock', 'blockquote'],
         plugins: ['video', 'codeblock', 'blockquote'],
-        uploadImageFields: {
-            _csrf: el.closest('form').find('input[name="_csrf"]').val()
+        imageUpload: el.data('upload-url'),
+        imageUploadFields: {
+            _csrf: (el.data('csrf') || el.closest('form').find('input[name="_csrf"]').val()),
+            _version: 2
         },
         imageUploadErrorCallback: function(json) {
             alert(json.error);
