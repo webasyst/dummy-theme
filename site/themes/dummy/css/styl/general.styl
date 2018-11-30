@@ -52,6 +52,15 @@ ul
         ul
             margin: 0.5em 0 0.5em 2em
 
+pre
+    display block
+    padding: 1em;
+    font-size: 14px;
+    line-height: 20px;
+    background: #f0f0f0;
+    color: #888;
+    word-wrap: normal;
+
 p
     margin: 1em 0;
     line-height 1.4em
@@ -62,11 +71,15 @@ p
     &:last-child
         margin-bottom: 0
 
+figure
+    margin: 1em 0;
+
 select
     width 200px
-    padding: 8px 0;
+    padding: 0;
     border: 1px solid rgba(0,0,0,.1);
     border-radius: 2px;
+    height 24px
 
 input[type="text"]
 input[type="search"]
@@ -99,7 +112,7 @@ input[type="submit"]
     display inline-block
     vertical-align top
     height (1.25 + 1.25)em
-    margin: 0 0 0 .5em;
+    margin: 0 .5em 0 0;
     padding: .625em
     border 0
     width auto
@@ -120,8 +133,8 @@ input[type="submit"]
 
     $shadow()
 
-    &:first-child
-        margin-left 0
+    &:last-child
+        margin-right 0
 
     &.transparent
         color: inherit;

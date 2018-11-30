@@ -1,0 +1,198 @@
+$rem($size = 14)
+    $_rem = 14
+    return ($size/$_rem)rem
+
+.wa-order-dialog
+    z-index 20000
+
+.wa-flex-box
+    display: flex;
+
+    &.middle
+        align-items: center;
+
+    &.wrap
+        flex-wrap wrap
+
+    &.full-line
+        justify-content: space-between;
+
+    &.fixed
+        justify-content: space-between;
+        &.fixed > *
+            flex-basis: 100%;
+            flex-grow: 0;
+
+    & > *
+        &.middle
+            align-self: center;
+
+    for $i in ("025" "05" "075" 1 2 3 4 5)
+        if $i == "025"
+            $value = 0.25
+        else if $i == "05"
+            $value = 0.5
+        else if $i == "075"
+            $value = 0.75
+        else
+            $value = $i
+        &.space-{$i}
+            & > *:not(:last-child)
+                margin-right ($value)rem
+
+.s-main-wrapper
+    .s-header-wrapper .s-static-header
+    .s-footer-wrapper .s-footer-block
+    .s-breadcrumbs-wrapper
+    .s-main-block
+        box-sizing border-box
+
+        @media screen and (max-width 1100px)
+            padding-right 20px
+            padding-left 20px
+
+        @media screen and (min-width 1101px)
+            padding-right 40px
+            padding-left 40px
+
+        @media screen and (max-width 1300px)
+            width 100%
+
+        @media screen and (min-width 1301px)
+            width 1300px
+
+.s-checkout-order-page
+    padding: 0 0 80px;
+
+    img
+        font-size inherit
+
+    .wa-field-wrapper
+        .wa-label
+        .wa-checkbox-wrapper
+            padding-left 5px
+
+        .wa-select
+            height 28px
+
+        .wa-input
+            width 100%
+
+    .wa-dropdown > .wa-dropdown-toggle
+        padding-top 6px
+        padding-bottom 5px
+
+    .s-order-section
+        & > .s-section-header
+            border: solid #ccc;
+            border-width 1px 1px 0
+            padding: 18px 20px 17px 20px;
+            background: #f3f3f3;
+
+            & > .s-header
+                margin: 0;
+                font-size: 25px;
+                line-height: 30px;
+                font-weight normal
+
+            .s-delete-button
+                display: inline-block;
+                color: #888;
+                line-height: 17px;
+
+                &:hover
+                    color: red;
+                    .s-delete-icon
+                        fill: red;
+
+                .s-delete-icon
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    margin: 0 6px 0 0;
+                    fill: #b8b8b8;
+
+    .wa-order-cart-wrapper
+    .wa-order-form-wrapper
+        p
+            &:first-child
+                margin-top 0
+            &:last-child
+                margin-bottom 0
+
+        & > .wa-cart-body
+        & > .wa-form-body
+            background: #fff;
+            padding: 20px 20px 40px;
+            border: solid #ccc;
+            border-width 0 1px 1px
+
+        & > .wa-cart-footer
+        & > .wa-form-footer
+            padding: 15px 20px;
+            color #aaa
+
+            a
+                color #999
+
+    .wa-order-cart-wrapper
+        .wa-products
+            .wa-product
+                .wa-details-section
+                    .wa-services
+                        .wa-service
+                            .wa-label
+                                padding-left 0
+
+                                .wa-field
+                                    position: static
+
+    .wa-order-form-wrapper
+        .wa-field-wrapper
+            &:not(.is-agreement-field)
+                .s-checkbox
+                    font-size $rem(16)
+                    transform translate(0,.15em)
+
+            &.is-agreement-field
+                .s-checkbox
+                    input:checked + span
+                        background #949494
+
+@media screen and (min-width: 841px)
+    .s-checkout-order-page
+        display table
+        width 100%
+        table-layout fixed
+
+        & > .s-order-column
+            display table-cell
+            vertical-align top
+            padding 0 20px
+
+            &:first-of-type
+                padding-left 0
+            &:last-of-type
+                padding-right 0
+
+    .wa-order-form-wrapper
+        .wa-form-footer
+            font-size 14px
+            line-height (17/14)em
+            text-align right
+
+@media screen and (max-width: 840px)
+    .s-checkout-order-page
+        & > .s-order-column
+            margin-top: 40px;
+            &:first-child
+                margin-top 0
+
+@media screen and (max-width: 768px)
+    .s-checkout-order-page
+        .s-order-section
+            & > .s-section-header
+                .s-delete-button
+                    width: 43%;
+                    line-height: 14px;
+                    text-align: right;

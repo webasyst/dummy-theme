@@ -27,6 +27,11 @@
                     {$_price_text = wa_currency_html($_cart_total, $wa->shop->currency())}
                 {/if}
 
+                {$_cart_url = $wa->getUrl('shop/frontend/cart')}
+                {if method_exists($wa->shop, 'checkout')}
+                    {$_cart_url = $wa->shop->checkout()->cartUrl()}
+                {/if}
+
                 <div class="s-info-wrapper s-cart-wrapper {if empty($_cart_count)}is-empty{/if}" id="s-cart-wrapper">
                     <div class="s-info-block">
                         <div class="s-image-wrapper">
@@ -38,7 +43,7 @@
                             <div class="s-text">{$_price_text}</div>
                         </div>
                     </div>
-                    <a class="s-link" href="{$wa->getUrl('shop/frontend/cart')}"></a>
+                    <a class="s-link" href="{$_cart_url}"></a>
                 </div>
             {/if}
         </div>

@@ -144,7 +144,7 @@
                                 {else}
                                     {$stock_count = null}
                                 {/if}
-                                {$stock.name}: {in_stock n=$stock_count low=$stock.low_count critical=$stock.critical_count}<br>
+                                {$stock.name|escape}: {in_stock n=$stock_count low=$stock.low_count critical=$stock.critical_count}<br>
                             {/foreach}
                         {else}
                             {in_stock n=$sku.count}

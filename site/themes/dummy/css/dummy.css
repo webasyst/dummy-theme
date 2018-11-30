@@ -685,6 +685,15 @@ ul li:first-child {
 ul li ul {
   margin: 0.5em 0 0.5em 2em;
 }
+pre {
+  display: block;
+  padding: 1em;
+  font-size: 14px;
+  line-height: 20px;
+  background: #f0f0f0;
+  color: #888;
+  word-wrap: normal;
+}
 p {
   margin: 1em 0;
   line-height: 1.4em;
@@ -695,11 +704,15 @@ p:first-child {
 p:last-child {
   margin-bottom: 0;
 }
+figure {
+  margin: 1em 0;
+}
 select {
   width: 200px;
-  padding: 8px 0;
+  padding: 0;
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 2px;
+  height: 24px;
 }
 input[type="text"],
 input[type="search"],
@@ -736,7 +749,7 @@ input[type="submit"] {
   display: inline-block;
   vertical-align: top;
   height: 2.5em;
-  margin: 0 0 0 0.5em;
+  margin: 0 0.5em 0 0;
   padding: 0.625em;
   border: 0;
   width: auto;
@@ -760,11 +773,11 @@ input[type="submit"] {
   -webkit-box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1);
   box-shadow: 0 0 4px 0 rgba(0,0,0,0.1), 0 2px 2px 0 rgba(0,0,0,0.1);
 }
-.s-button:first-child,
-button:first-child,
-input[type="button"]:first-child,
-input[type="submit"]:first-child {
-  margin-left: 0;
+.s-button:last-child,
+button:last-child,
+input[type="button"]:last-child,
+input[type="submit"]:last-child {
+  margin-right: 0;
 }
 .s-button.transparent,
 button.transparent,
@@ -911,6 +924,57 @@ body {
 .s-main-wrapper .s-header-wrapper .s-static-header .s-header-nav .s-nav-item.is-active a,
 .s-main-wrapper .s-header-wrapper .s-static-header .s-header-nav .s-nav-item:hover a {
   border-color: #638392;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper {
+  position: relative;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper.is-open .s-hidden {
+  display: block;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-hidden {
+  display: none;
+  position: absolute;
+  top: 100;
+  right: 0;
+  width: 250px;
+  padding: 10px;
+  z-index: 1;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 3px;
+  background: #fff;
+  text-align: left;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-label-wrapper {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper {
+  margin: 5px 0 0;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper .s-day-wrapper {
+  margin-top: 5px;
+  font-size: 14px;
+  line-height: 1.214285714285714em;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper .s-day-wrapper:first-child {
+  margin-top: 0;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper .s-day-wrapper .s-date {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 5px;
+  color: #888;
+  width: 100px;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper .s-day-wrapper .s-value {
+  display: inline-block;
+  vertical-align: top;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper .s-day-wrapper .s-value .s-time {
+  color: #333;
+}
+.s-main-wrapper .s-header-wrapper .s-static-header .s-schedule-wrapper .s-days-wrapper .s-day-wrapper .s-value .s-text {
+  color: #888;
 }
 .s-main-wrapper .s-header-wrapper .s-static-header .s-time-wrapper {
   text-align: right;

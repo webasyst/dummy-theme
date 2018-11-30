@@ -51,6 +51,58 @@
                     a
                         border-color $blue
 
+        .s-schedule-wrapper
+            position relative
+
+            &.is-open
+                .s-hidden
+                    display block
+
+            .s-hidden
+                display none
+                position: absolute;
+                top 100
+                right 0
+                width 250px
+                padding 10px
+                z-index 1
+
+                border 1px solid rgba(0,0,0,.1)
+                border-radius 3px
+
+                background #fff
+                text-align left
+
+            .s-label-wrapper
+                text-decoration underline
+                cursor pointer
+
+            .s-days-wrapper
+                margin 5px 0 0
+
+                .s-day-wrapper
+                    margin-top: 5px
+                    font-size 14px
+                    line-height (17/14)em
+                    &:first-child
+                        margin-top 0
+
+                    .s-date
+                        display inline-block
+                        vertical-align top
+                        margin-right 5px
+                        color #888
+                        width 100px
+
+                    .s-value
+                        display inline-block
+                        vertical-align top
+                        .s-time
+                            color #333
+                        .s-text
+                            color #888
+
+
         .s-time-wrapper
             text-align right
             white-space nowrap

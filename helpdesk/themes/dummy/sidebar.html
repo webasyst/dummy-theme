@@ -1,6 +1,6 @@
 {strip}
 
-{$_is_presonal_area = $wa->globals('isMyAccount')}
+{$_is_personal_area = $wa->globals('isMyAccount')}
 {$_current_url = $wa->currentUrl()}
 
 {function renderNavItem page=[]}
@@ -21,7 +21,7 @@
 <nav class="h-sidebar-wrapper" role="navigation">
     <div class="s-nav-wrapper">
 
-        {if $_is_presonal_area}
+        {if $_is_personal_area}
             {if $wa->user()->isAuth()}
 
                 <ul class="s-mynav-list">

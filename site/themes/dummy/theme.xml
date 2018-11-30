@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dummy" app="site" vendor="webasyst" author="webasyst" version="1.0.3">
+<theme id="dummy" app="site" vendor="webasyst" author="webasyst" version="1.1.0">
     <name locale="en_US">Dummy</name>
     <name locale="ru_RU">Dummy</name>
     <files>

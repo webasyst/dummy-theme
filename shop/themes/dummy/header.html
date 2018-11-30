@@ -1,5 +1,7 @@
 {strip}
 
+{$_hide_cart = $wa->globals("hideCart")}
+
 {* @event frontend_header.%plugin_id% *}
 {foreach $frontend_header as $_}{$_}{/foreach}
 
@@ -55,12 +57,17 @@
                 </div>
             {/if}
 
-            {if $wa->shop}
+            {if empty($_hide_cart)}
                 {$_cart_total = $wa->shop->cart->total()}
                 {$_cart_count = $wa->shop->cart->count()}
                 {$_price_text = ""}
                 {if !empty($_cart_total)}
                     {$_price_text = wa_currency_html($_cart_total, $wa->shop->currency())}
+                {/if}
+
+                {$_cart_url = $wa->getUrl('shop/frontend/cart')}
+                {if method_exists($wa->shop, 'checkout')}
+                    {$_cart_url = $wa->shop->checkout()->cartUrl()}
                 {/if}
 
                 <div class="s-info-wrapper s-compare-wrapper is-empty" id="s-compare-counter">
@@ -87,7 +94,7 @@
                             <div class="s-text">{$_price_text}</div>
                         </div>
                     </div>
-                    <a class="s-link" href="{$wa->getUrl('shop/frontend/cart')}"></a>
+                    <a class="s-link" href="{$_cart_url}"></a>
                 </div>
             {/if}
         </div>

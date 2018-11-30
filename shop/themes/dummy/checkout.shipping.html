@@ -83,7 +83,7 @@
         </li>
         {foreachelse}
         <li>
-            <em class="error">[`Oops! We are sorry, but <strong>we can not ship this order to your selected destination</strong>. Checkout can not be completed.`]</em>
+            <em class="error">[`Oops! We are sorry, but <strong>we cannot ship this order to your selected destination</strong>. Checkout cannot be completed.`]</em>
         </li>
     {/foreach}
 </ul>
@@ -98,7 +98,7 @@
             var $select = $(this),
                 $selected = $select.find("option:selected"),
                 rate = $selected.data("rate"),
-                delivery = $selected.data("delivery"),
+                delivery = $selected.data("est_delivery"),
                 comment = $selected.data("comment"),
                 $item = $select.closest(".s-shipping-item");
 

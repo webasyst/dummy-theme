@@ -3,8 +3,8 @@
 <nav class="s-nav-wrapper" role="navigation">
 
     {* Display user area links *}
-    {$_is_presonal_area = ( $wa->globals("isMyAccount") || !empty($my_nav_selected) || !empty($frontend_my_nav) )}
-    {if $_is_presonal_area}
+    {$_is_personal_area = ( $wa->globals("isMyAccount") || !empty($my_nav_selected) || !empty($frontend_my_nav) )}
+    {if $_is_personal_area}
 
         {if $wa->user()->isAuth()}
             <ul class="s-mynav-list">
