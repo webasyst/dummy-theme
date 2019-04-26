@@ -2,9 +2,6 @@ $rem($size = 14)
     $_rem = 14
     return ($size/$_rem)rem
 
-.wa-order-dialog
-    z-index 20000
-
 .wa-flex-box
     display: flex;
 
@@ -82,7 +79,13 @@ $rem($size = 14)
         padding-top 6px
         padding-bottom 5px
 
+    .s-back-link
+        text-align right
+
     .s-order-section
+        & > .s-section-footer
+            padding: 18px 20px 17px 20px;
+
         & > .s-section-header
             border: solid #ccc;
             border-width 1px 1px 0

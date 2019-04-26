@@ -2091,9 +2091,6 @@ body.no-user-select {
 .s-range-slider .r-bar-wrapper .r-point.right {
   left: 100%;
 }
-.wa-order-dialog {
-  z-index: 20000;
-}
 .wa-flex-box {
   display: -webkit-box;
   display: -moz-box;
@@ -2235,6 +2232,12 @@ body.no-user-select {
 .s-checkout-order-page .wa-dropdown > .wa-dropdown-toggle {
   padding-top: 6px;
   padding-bottom: 5px;
+}
+.s-checkout-order-page .s-back-link {
+  text-align: right;
+}
+.s-checkout-order-page .s-order-section > .s-section-footer {
+  padding: 18px 20px 17px 20px;
 }
 .s-checkout-order-page .s-order-section > .s-section-header {
   border: solid #ccc;
