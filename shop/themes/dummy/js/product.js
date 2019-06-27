@@ -573,7 +573,7 @@ var Product = ( function($) {
                         .find('input')
                             .removeAttr('disabled');
 
-                if (typeof (v) == 'string') {
+                if (typeof (v) === 'string' || typeof (v) === 'number') {
                     $form.find(".service-" + service_id + ' .service-price').html( that.currencyFormat(v) );
                     $form.find(".service-" + service_id + ' input').data('price', v);
 
