@@ -83,6 +83,9 @@ $rem($size = 14)
         text-align right
 
     .s-order-section
+        &:not(:first-child)
+            margin-top 20px
+
         & > .s-section-footer
             padding: 18px 20px 17px 20px;
 
@@ -137,6 +140,11 @@ $rem($size = 14)
 
             a
                 color #999
+
+    .wa-order-cross_selling-wrapper
+        & > .wa-cross_selling-body
+            border: solid #ccc;
+            border-width 0 1px 1px
 
     .wa-order-cart-wrapper
         .wa-products

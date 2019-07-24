@@ -61,10 +61,8 @@
 
             <script>
                 ( function($) {
-                    $.getScript("{$wa_active_theme_url}plugins/swipebox/js/jquery.swipebox.min.js?v{$wa_theme_version}", function() {
-                        new ProductPhotos({
-                            $wrapper: $("#s-product-photos")
-                        });
+                    new ProductPhotos({
+                        $wrapper: $("#s-product-photos")
                     });
                 })(jQuery);
             </script>

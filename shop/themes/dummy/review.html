@@ -45,7 +45,65 @@
     {if $review.text}
         <div class="description-wrapper" itemprop="description">{$review.text}</div>
     {/if}
-    
+
+    {strip}
+    {if !empty($review.images)}
+        <div class="s-images-list">
+            {foreach $review.images as $_image}
+                <a class="s-image-wrapper js-show-image" href="{$_image.url_0|escape}" title="{$_image.description|escape}" target="_blank">
+                    <img class="s-image" src="{$_image.url_2|escape}" alt="{$_image.description|escape}">
+                </a>
+            {/foreach}
+
+            <script>
+                ( function($) {
+                    var $document = $(document),
+                        $review = $(".s-review-item[data-id=\"" + {$review.id|escape} + "\"]");
+
+                    $review.on("click", ".js-show-image", function(event) {
+                        event.preventDefault();
+
+                        var $image = $(this),
+                            images = [];
+
+                        $review.find(".js-show-image").each(function () {
+                            var $_image = $(this);
+                            images.push({
+                                href: $_image.attr("href"),
+                                title: escape($_image.attr("title"))
+                            });
+                        });
+
+                        var k = $image.prevAll('.js-show-image').length;
+                        if (k) {
+                            images = images.slice(k).concat(images.slice(0, k));
+                        }
+
+                        $.swipebox(images, {
+                            useSVG : false,
+                            hideBarsDelay: false,
+                            afterOpen: function() {
+                                $document.on("scroll", closeSwipe);
+                                function closeSwipe() {
+                                    var $closeButton = $("#swipebox-close");
+                                    if ($closeButton.length) {
+                                        $closeButton.trigger("click");
+                                    }
+                                    $document.off("scroll", closeSwipe);
+                                }
+                            }
+                        });
+
+                        function escape(string) {
+                            return $("<div />").text(string).html();
+                        }
+                    });
+                })(jQuery);
+            </script>
+        </div>
+    {/if}
+    {/strip}
+
     {if $reply_allowed}
         <div class="actions-wrapper">
             {$_link_href = "javascript:void(0);"}
