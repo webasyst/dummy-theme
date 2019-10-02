@@ -1126,8 +1126,8 @@ var RangeSlider = ( function($) {
 
         if (!not_change_input) {
             var delta_value = that.max - that.min,
-                min_val = that.min + that.left * ( delta_value / 100 ),
-                max_val = that.min + that.right * ( delta_value / 100 );
+                min_val = that.min + that.left * delta_value / 100,
+                max_val = that.min + that.right * delta_value / 100;
 
             that.$inputMin.val( parseInt(min_val * 10)/10 );
             that.$inputMax.val( parseInt(max_val * 10)/10 );

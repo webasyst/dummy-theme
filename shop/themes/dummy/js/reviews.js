@@ -360,9 +360,36 @@ var ReviewImagesSection = ( function($) {
                 return false;
             });
 
-            $form.submit( function(event) {
+            var $submit_button = $form.find(".js-submit-button"),
+                is_locked = false;
+
+            $form.on("submit", function(event) {
                 event.preventDefault();
-                addReview();
+
+                if (!is_locked) {
+                    is_locked = true;
+
+                    var $loading = $('<i class="icon16 loading" />');
+                    $loading.insertAfter($submit_button);
+
+                    $submit_button
+                        .attr("disabled", true)
+                        .val( $submit_button.data("active") );
+
+                    addReview()
+                        .always( function() {
+                            is_locked = false;
+                        })
+                        .done( function(response) {
+                            if (response.status === "fail") {
+                                $loading.remove();
+
+                                $submit_button
+                                    .removeAttr("disabled")
+                                    .val( $submit_button.data("inactive") );
+                            }
+                        });
+                }
             });
 
         };
