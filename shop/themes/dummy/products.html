@@ -90,7 +90,7 @@
                             <div class="s-rating-wrapper">
                                 {if $product.rating > 0}
                                     <span class="s-rating-block nowrap">{$wa->shop->ratingHtml($product.rating, 16)}</span>
-                                    <span class="s-rating-hint">{$product.rating_count} [`Review's`]</span>
+                                    <span class="s-rating-hint">{_w('%d review', '%d reviews', $product.rating_count)}</span>
                                 {else}
                                     <span class="s-rating-block nowrap">
                                         <i class="icon16 star-empty"></i>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dummy" app="shop" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="1.1.5">
+<theme id="dummy" app="shop" vendor="webasyst" author="webasyst" parent_theme_id="site:dummy" version="1.2.0">
     <name locale="en_US">Dummy</name>
     <name locale="ru_RU">Dummy</name>
     <files>
@@ -257,42 +257,4 @@
         <thumb>750</thumb>
         <thumb>970</thumb>
     </thumbs>
-    <locales>
-        <locale>
-            <msgid>No review's</msgid>
-            <msgstr locale="ru_RU">Отзывов нет</msgstr>
-        </locale>
-        <locale>
-            <msgid>Home</msgid>
-            <msgstr locale="ru_RU">Главная</msgstr>
-        </locale>
-        <locale>
-            <msgid>Catalog</msgid>
-            <msgstr locale="ru_RU">Каталог</msgstr>
-        </locale>
-        <locale>
-            <msgid>Logout</msgid>
-            <msgstr locale="ru_RU">Выход</msgstr>
-        </locale>
-        <locale>
-            <msgid>Review's</msgid>
-            <msgstr locale="ru_RU">Отзывы</msgstr>
-        </locale>
-        <locale>
-            <msgid>Sorting</msgid>
-            <msgstr locale="ru_RU">Сортировка</msgstr>
-        </locale>
-        <locale>
-            <msgid>Table</msgid>
-            <msgstr locale="ru_RU">Таблица</msgstr>
-        </locale>
-        <locale>
-            <msgid>Thumbs</msgid>
-            <msgstr locale="ru_RU">Плитки</msgstr>
-        </locale>
-        <locale>
-            <msgid>Delete all products</msgid>
-            <msgstr locale="ru_RU">Удалить все товары</msgstr>
-        </locale>
-    </locales>
 </theme>

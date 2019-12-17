@@ -1,0 +1,41 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: shop/themes/dummy\n"
+"POT-Creation-Date: 2019-10-23 17:23+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: shop/themes/dummy\n"
+"Language-Team: shop/themes/dummy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: utf-8\n"
+"Language: en_US\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: /wa-apps/shop/themes/dummy/products.sorting.html:17
+msgid "Sorting"
+msgstr ""
+
+#: /wa-apps/shop/themes/dummy/products.html:102
+msgid "No review's"
+msgstr ""
+
+#: /wa-apps/shop/themes/dummy/products.html:122
+msgid "added"
+msgstr ""
+
+#: /wa-apps/shop/themes/dummy/order.html:79
+#: /wa-apps/shop/themes/dummy/cart.html:187
+msgid "Recommended"
+msgstr ""
+
+#: /wa-apps/shop/themes/dummy/breadcrumbs.html:10
+msgid "Home"
+msgstr ""
+
+#: /wa-apps/shop/themes/dummy/header.html:15
+msgid "Catalog"
+msgstr ""

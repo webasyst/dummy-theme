@@ -20,7 +20,7 @@
             <ul>
                 {if !empty($category) && !$category.sort_products}
                     <li class="{if !$active_sort}is-active{/if}">
-                        <a href="{$wa->currentUrl(0, 1)}">[`New & Popular`]</a>
+                        {$wa->shop->sortUrl("new", "[`New & Popular`]", $active_sort)}
                     </li>
                 {/if}
                 {foreach $sort_fields as $sort => $name}

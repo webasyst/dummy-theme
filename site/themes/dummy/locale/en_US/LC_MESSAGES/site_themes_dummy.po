@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: site/themes/dummy\n"
+"POT-Creation-Date: 2019-10-23 17:21+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: site/themes/dummy\n"
+"Language-Team: site/themes/dummy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: utf-8\n"
+"Language: en_US\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: /wa-apps/site/themes/dummy/page.html:18
+msgid "Posted"
+msgstr ""
+
+#: /wa-apps/site/themes/dummy/page.welcome.html:5
+msgid "Open “<a href=\"%s\">Pages</a>” section and add a new page with an empty address. You will see its contents here."
+msgstr ""
+
+#: /wa-apps/site/themes/dummy/header.html:15
+msgid "Personal area"
+msgstr ""
+
+#: /wa-apps/site/themes/dummy/header.html:25
+msgid "Empty"
+msgstr ""
+
+#: /wa-apps/site/themes/dummy/header.html:42
+msgid "Cart"
+msgstr ""

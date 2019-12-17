@@ -44,6 +44,28 @@
                         </div>
                     </div>
                     <a class="s-link" href="{$_cart_url}"></a>
+
+                    {strip}
+                    {capture assign="_loading_template"}
+                        <div class="s-loading-section">
+                            <div class="s-loading-content">
+                                <i class="icon16 loading"></i>
+                            </div>
+                        </div>
+                    {/capture}
+                    {/strip}
+
+                    <script>
+                        ( function($) {
+                            var is_loading = false;
+                            $("#s-cart-wrapper").on("click", function() {
+                                if (!is_loading) {
+                                    is_loading = true;
+                                    $("body").append({$_loading_template|json_encode});
+                                }
+                            });
+                        })(jQuery);
+                    </script>
                 </div>
             {/if}
         </div>
