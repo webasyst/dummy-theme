@@ -51,10 +51,14 @@
                     {foreach $tags as $tag}{if !$tag@first}, {/if}<a href="{$tag.url}">{$tag.name|escape}</a>{/foreach}
                 </div>
 
-                {if !empty($topic.editable)}
+                {if !empty($topic.editable) || !empty($topic.deletable)}
                     <div class="h-actions">
-                        <a class="s-button" href="{$topic.edit_url}">[`Edit topic`]</a>
-                        <button class="h-delete-topic white" data-delete-url="{$topic.delete_url}" data-confirm="[`You are about to delete this record. Are you sure?`]">[`Delete`]</button>
+                        {if !empty($topic.editable)}
+                            <a class="s-button" href="{$topic.edit_url}">[`Edit topic`]</a>
+                        {/if}
+                        {if !empty($topic.deletable)}
+                            <button class="h-delete-topic white" data-delete-url="{$topic.delete_url}" data-confirm="[`You are about to delete this record. Are you sure?`]">[`Delete`]</button>
+                        {/if}
                     </div>
                 {/if}
             </div>
