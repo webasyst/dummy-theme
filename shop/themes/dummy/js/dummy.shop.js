@@ -435,8 +435,11 @@ var ProductPhotos = ( function($) {
 
             // Change main photo
             that.$mainLink.attr("href", big_photo_src)
-                .find("img").attr("src", big_photo_src);
-        }
+                .find("img")
+                    .attr("src", big_photo_src)
+                    .attr("title", $link.find("img").attr("title"))
+                    .attr("alt", $link.find("img").attr("alt"));
+            }
 
         // Save data
         that.active_index = index;

@@ -18,6 +18,7 @@ var Product = ( function($) {
         that.currency = options["currency"];
         that.services = options["services"];
         that.features = options["features"];
+        that.skus = options["skus"];
         that.default_sku_features = options["default_sku_features"];
 
         // DYNAMIC VARS
@@ -296,10 +297,14 @@ var Product = ( function($) {
         var key = getKey(),
             sku = that.features[key];
 
+        var sku_id = null;
+
         if (sku) {
 
             //
             that.updateSkuServices(sku.id);
+
+            sku_id = sku.id;
 
             //
             if (sku.image_id) {
@@ -337,6 +342,8 @@ var Product = ( function($) {
         //
         that.cartButtonVisibility(true);
 
+        that.$form.trigger("product_sku_changed", [sku_id, sku]);
+
         function getKey() {
             var result = "";
 
@@ -358,6 +365,9 @@ var Product = ( function($) {
             compare_price = $link.data("compare-price"),
             image_id = $link.data('image-id');
 
+        var sku = (that.skus[sku_id] ? that.skus[sku_id] : null);
+        if (!sku) { alert("SKU ERROR"); return false; }
+
         // DOM
         var $button = that.$button;
 
@@ -377,6 +387,8 @@ var Product = ( function($) {
         that.cartButtonVisibility(true);
         //
         that.updatePrice(price, compare_price);
+        //
+        that.$form.trigger("product_sku_changed", [sku_id, sku]);
     };
 
     //

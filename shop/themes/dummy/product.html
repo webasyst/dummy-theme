@@ -1,9 +1,53 @@
 {strip}
 
 {$wa->globals("hideSidebar", true)}
+{if empty($sku_features)}{$sku_features = []}{/if}
+
+<script src="{$wa_theme_url}js/page.product.js?v={$wa_theme_version}"></script>
+
+{function name="_render_sku_features" _features=[]}
+    <table class="s-features-wrapper" id="s-product-features">
+        {foreach $_features as $_feature_id => $_feature_value}
+            {$_true_params = ["weight", "brand", "model", "width", "height", "depth", "color", "manufacturer"]}
+            {$_is_good_param = ($_feature_id|in_array:$_true_params)}
+            {$_itemprop = ""}
+            {if $_is_good_param}{$_itemprop = $_feature_id}{/if}
+            {$_feature = ifset($sku_features, $_feature_id, null)}
+
+            {if $_feature && $_feature.type == 'divider'}
+                <tr class="divider">
+                    <td colspan="2">{ifset($_feature, 'name', $_feature_id)|escape}</td>
+                </tr>
+            {elseif $_feature}
+                <tr>
+                    <td class="name">{ifset($_feature, 'name', $_feature_id)|escape}</td>
+                    <td class="value" itemprop="{$_itemprop|escape}">
+                        {if is_array($_feature_value)}
+                            {if $_feature.type == 'color'}
+                                {implode('<br>', $_feature_value)}
+                            {else}
+                                {implode(', ', $_feature_value)}
+                            {/if}
+                        {else}
+                            {$_feature_value}
+                        {/if}
+                    </td>
+                </tr>
+            {/if}
+        {/foreach}
+    </table>
+{/function}
+
+{$_skus_features_html = []}
+{foreach $product.skus as $_sku}
+    {if !empty($_sku.features)}
+        {capture assign="_sku_features_html"}{_render_sku_features _features=$_sku.features}{/capture}
+        {$_skus_features_html[$_sku.id] = $_sku_features_html}
+    {/if}
+{/foreach}
 
 {* PRODUCT PAGE *}
-<article class="s-product-page" itemscope itemtype="http://schema.org/Product">
+<article class="s-product-page" id="js-product-page" itemscope itemtype="http://schema.org/Product">
 
     <h1 class="s-product-header" itemprop="name">{$product.name|escape}</h1>
 
@@ -52,7 +96,7 @@
                         <li class="s-photo-thumb">
                             {* @hint link id needed for change product image on sku change event *}
                             <a class="is-selected is-video" href="{$video.url}">
-                                <img src="{$video.images[0]}">
+                                <img src="{$video.images[0]}" alt="">
                             </a>
                         </li>
                     {/if}
@@ -143,34 +187,9 @@
             {* PRODUCT FEATURES *}
             {if $product.features}
                 <div class="s-tab-content" id="tab-content-2">
-                    <table class="s-features-wrapper" id="s-product-features">
-                        {foreach $product.features as $f_code => $f_value}
-                            <tr class="{if $features[$f_code].type == 'divider'}divider{/if}">
-                                <td class="name">
-                                    {$features[$f_code].name|escape}
-                                </td>
-
-                                {$_true_params = ["weight", "brand", "model", "width", "height", "depth", "color", "manufacturer"]}
-                                {$_is_good_param = ($f_code|in_array:$_true_params)}
-                                {$_itemprop = ""}
-                                {if $_is_good_param}
-                                    {$_itemprop = $f_code}
-                                {/if}
-
-                                <td class="value" itemprop="{$_itemprop|escape}">
-                                    {if is_array($f_value)}
-                                        {if $features[$f_code].type == 'color'}
-                                            {implode('<br /> ', $f_value)}
-                                        {else}
-                                            {implode(', ', $f_value)}
-                                        {/if}
-                                    {else}
-                                        {$f_value}
-                                    {/if}
-                                </td>
-                            </tr>
-                        {/foreach}
-                    </table>
+                    <div class="s-features-section js-features-section">
+                        {if !empty($_skus_features_html[$product.sku_id])}{$_skus_features_html[$product.sku_id]}{/if}
+                    </div>
                 </div>
             {/if}
 
@@ -270,6 +289,14 @@
         </section>
     {/if}
 
+    <script>
+        ( function($) {
+            initProductPage({
+                $wrapper: $("#js-product-page"),
+                skus_features_html: {$_skus_features_html|json_encode}
+            });
+        })(jQuery);
+    </script>
 </article>
 
 {/strip}

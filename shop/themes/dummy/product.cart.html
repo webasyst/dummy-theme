@@ -238,6 +238,7 @@
             $form: $("#s-product-form{if $_is_dialog}-dialog{/if}"),
             is_dialog: {if $_is_dialog}true{else}false{/if},
             currency: {json_encode($currency_info)},
+            skus: {$product.skus|json_encode},
             services: {if count($product.skus) > 1 or $product.sku_type}{json_encode($sku_services)}{else}false{/if},
             features: {if $product.sku_type}{json_encode($sku_features_selectable)}{else}false{/if},
             default_sku_features: {$default_sku_features|default:""|json_encode}
