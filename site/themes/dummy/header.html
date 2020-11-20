@@ -19,7 +19,8 @@
                 </div>
             {/if}
 
-            {if $wa->shop}
+            {if $wa->shop && (!method_exists($wa->shop, 'hasRoutes') || $wa->shop->hasRoutes())
+              && !empty($theme_settings.show_cart)}
                 {$_cart_total = $wa->shop->cart->total()}
                 {$_cart_count = $wa->shop->cart->count()}
                 {$_price_text = "[`Empty`]"}

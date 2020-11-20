@@ -468,6 +468,7 @@ var ProductPhotos = ( function($) {
         images = before.concat(after);
 
         $.swipebox( images, {
+            useSVG : false,
             hideBarsDelay: false
         });
 
