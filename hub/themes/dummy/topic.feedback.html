@@ -91,7 +91,7 @@
         {if $comments_allowed}
             {include file="comment.add.html" inline}
         {else}
-            {if $topic.badge.id == 'archived'}
+            {if !empty($topic.badge) && $topic.badge.id == 'archived'}
                 <p><em>[`This topic is in the archive. Posting new comments is disabled.`]</em></p>
             {else}
                 <p><em>[`Posting new comments is disabled for this topic.`]</em></p>

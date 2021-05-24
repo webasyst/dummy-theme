@@ -88,7 +88,7 @@
     {include file="./comments.html" topic=$topic comments=$comments inline}
 
     {* Add comment form *}
-    {if $topic.badge.id == 'archived'}
+    {if !empty($topic.badge) && $topic.badge.id == 'archived'}
         <p><em>[`This topic is in the archive. Posting new comments is disabled.`]</em></p>
     {else}
         {include file="comment.add.html" inline}

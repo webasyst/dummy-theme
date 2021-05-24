@@ -4,7 +4,7 @@
 
     {$add2cart_label = '[`Buy`]'}
     {if $wa->shop->cart->total() > 0}
-        {$add2cart_label = '[`Add to cart`]'}
+        {$add2cart_label = _wd('shop', 'Add to cart')}
     {/if}
 
     {if !empty($theme_settings.list_features)}
@@ -79,7 +79,13 @@
                                 </div>
 
                                 <div class="s-out-of-stock">
-                                    <strong>{if $wa->shop->settings('ignore_stock_count')}[`Pre-order only`]{else}[`Out of stock`]{/if}</strong>
+                                    <strong>
+                                        {if $wa->shop->settings('ignore_stock_count')}
+                                            {_wd('shop', 'Pre-order only')}
+                                        {else}
+                                            {_wd('shop', 'Out of stock')}
+                                        {/if}
+                                    </strong>
                                 </div>
 
                                 <meta itemprop="price" content="{shop_currency($product.price, null, null, 0)}">

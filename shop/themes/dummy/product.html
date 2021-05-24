@@ -177,7 +177,7 @@
                         <div class="s-tags-wrapper" id="s-product-tags">
                             [`Tags`]:&nbsp;
                             {foreach $product.tags as $t}
-                                <a href="{$wa->getUrl('/frontend/tag', ['tag' => urlencode($t)])}">{$t}</a>
+                                <a href="{$wa->getUrl('/frontend/tag', ['tag' => str_replace('%2F', '/', urlencode($t))])}">{$t}</a>
                             {/foreach}
                         </div>
                     {/if}
