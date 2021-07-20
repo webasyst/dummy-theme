@@ -16,7 +16,7 @@
                 <tr>
                     <th></th>
                     {$product_names = ''}
-                    {foreach $products as $p}
+                    {foreach $products as $p name=product_names}
                         <td width="{$td_width}%">
                             <a class="image-link" href="{$wa->getUrl('/frontend/product/', ['product_url' => $p.url])}">
                                 {$wa->shop->productImgHtml($p, '96x96', ['itemprop' => 'image', 'id' => 'product-image', 'default' => "`$wa_theme_url`img/dummy96.png", 'title' => $p.name|cat:' ':strip_tags($p.summary)|escape])}
@@ -46,14 +46,16 @@
                     <th>{$f.name}</th>
                     {foreach $products as $p}
                         <td>
-                            {if isset($p.features[$f_id])}
-                                {if is_array($p.features[$f_id])}
-                                    {implode('<br> ', $p.features[$f_id])}
+                            {if $f.type !== 'divider'}
+                                {if isset($p.features[$f_id])}
+                                    {if is_array($p.features[$f_id])}
+                                        {implode('<br> ', $p.features[$f_id])}
+                                    {else}
+                                        {$p.features[$f_id]}
+                                    {/if}
                                 {else}
-                                    {$p.features[$f_id]}
+                                    <span class="gray">&mdash;</span>
                                 {/if}
-                            {else}
-                                <span class="gray">&mdash;</span>
                             {/if}
                         </td>
                     {/foreach}
